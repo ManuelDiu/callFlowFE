@@ -5,8 +5,21 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        'principal': '#4318FF',
+        'texto': '#2B3674',
+        'textogris': '#A3AED0',
+        'borders': '#E0E5F2',
+      },
+      fontFamily: {
+        primaria: 'DM_SANS',
+      },
+      backgroundImage: {
+        'login': "url('/img/loginBG.svg')",
+        'callflowlogo': "url('/img/callflowLogo.svg')",
+      }
+    },
   },
   plugins: [],
-}
-
+};

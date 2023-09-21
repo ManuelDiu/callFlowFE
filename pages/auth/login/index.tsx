@@ -139,9 +139,7 @@ const Login: NextPage = () => {
                     </Link>
                   </div>
                 </div>
-              </div>
 
-              <div>
                 <Button
                   type="submit"
                   // action={() => console.log(register)}

@@ -61,7 +61,6 @@ function MyApp({ Component, pageProps }: AppProps) {
       </Head>
 
       <div className="flex h-full min-h-screen">
-          <Sidebar items={items} />
           <div className="bg-gray-100 flex-grow">
           <ApolloProvider client={client}>
             <Provider store={store}>

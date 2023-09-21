@@ -5,6 +5,7 @@ import tw from "twin.macro";
 type ButtonProps = {
   text?: string;
   action?: MouseEventHandler;
+  type?: "submit" | "button";
 };
 
 /* type ContainerVariant = 'normal' | 'checkbox'
@@ -25,12 +26,12 @@ const StyledInput = styled.section<ContainerProps>(() => [
   ({ variant = 'normal' }) => containerVariants[variant], // Grab the variant style via a prop
 ]) */
 
-const Button = ({ text, action=()=>null }: ButtonProps) => {
+const Button = ({ text, type = "button", action=()=>null }: ButtonProps) => {
   return (
     <div className="flex flex-col w-full">
       <button
         className="bg-principal text-white active:bg-principal/80 font-bold px-6 py-3 rounded-2xl shadow hover:shadow-lg outline-none focus:outline-none w-full ease-linear transition-all duration-150"
-        type="submit"
+        type={type}
         onClick={action}
       >{text}</button>
     </div>

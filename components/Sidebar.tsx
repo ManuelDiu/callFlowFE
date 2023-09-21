@@ -48,7 +48,7 @@ const Sidebar: React.FC<SidebarProps> = ({ items }) => {
   const router = useRouter();
 
   return (
-    <nav className="h-screen w-72 bg-white">
+    <nav className="h-screen min-w-[288px] w-72 bg-white">
       <SidebarLogoContainer>
         <span className="font-medium text-black">
           CALL <span className="font-black text-principal">FLOW</span>

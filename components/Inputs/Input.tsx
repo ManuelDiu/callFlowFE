@@ -29,13 +29,13 @@ const containerVariants = {
 }
 
 const StyledInput = styled.input<ContainerProps>(() => [
-  tw`border rounded-2xl px-5 py-4 w-full focus:border-2 outline-none ring-principal placeholder-textogris border-textogris bg-white`,
+  tw`border rounded-2xl px-5 py-4 w-full transition-all ring-2 ring-transparent outline-none ring-principal placeholder-textogris border-textogris bg-white`,
   ({ variant = 'normal' }) => containerVariants[variant], // Grab the variant style via a prop
 ])
 
 const Input = ({ label, placeholder, type = 'text', required = false, register=()=>null, inputFormName, autoComplete = 'off', ...otros }: InputProps) => {
     const id = generarId();
-  
+
     return (
       <div className="flex flex-col w-full">
         {label && (
@@ -45,7 +45,7 @@ const Input = ({ label, placeholder, type = 'text', required = false, register=(
         )}
         <StyledInput
           id={id}
-          className="border rounded-2xl px-5 py-4 text-md w-full focus:border-2 outline-none ring-principal placeholder-textogris border-textogris bg-white"
+          className="focus:ring-textogris"
           type={type}
           placeholder={placeholder}
           autoComplete={autoComplete}

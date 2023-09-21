@@ -31,7 +31,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <main className="min-h-screen flex flex-col font-primaria">
       <div className="flex h-full min-h-screen">
         <Sidebar items={items} />
-        <div className="bg-gray-100 flex-grow p-4">
+        <div className="bg-gray-100 flex-grow">
           <Component {...pageProps} />
         </div>
       </div>

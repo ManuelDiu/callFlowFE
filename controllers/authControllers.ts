@@ -22,3 +22,12 @@ export const checkToken = gql`
     }
   }
 `;
+
+export const resetPassword = gql`
+  mutation ResetPass($info: ResetPasswordInput!) {
+    resetPassword(info: $info) {
+      ok
+      message
+    }
+  }
+`;

@@ -10,6 +10,7 @@ import Sidebar from "../Sidebar";
 import { items } from "utils/sidebar";
 import styled from "styled-components";
 import tw from "twin.macro";
+import { ToastContainer } from "react-toastify";
 
 interface Props {
   children: any;
@@ -35,7 +36,7 @@ const CheckTokenWrapper = ({ children }: Props) => {
   const handleCheckToken = async () => {
     setChecking(true);
     if (isChecking) {
-        return;
+      return;
     }
     isChecking = true;
     const resp = await getUserInfo({
@@ -74,6 +75,20 @@ const CheckTokenWrapper = ({ children }: Props) => {
   return (
     <MainContent>
       {!isPublicPath && <Sidebar items={items} />}
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+      {/* Same as */}
+      <ToastContainer />
       <ContentPage>{children}</ContentPage>
     </MainContent>
   );

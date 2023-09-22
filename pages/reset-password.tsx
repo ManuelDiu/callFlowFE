@@ -71,9 +71,9 @@ const ResetPassword: NextPage = () => {
     });
 
     if (resp?.data?.resetPassword?.ok === false) {
-      toast.error("Error al cambiar la contraseña");
+      toast.error("Error al cambiar la contraseña " + resp?.data?.resetPassword?.message);
     } else {
-      toast.success("Contraseña cambiada correctamente " + resp?.data?.resetPassword?.message);
+      toast.success("Contraseña cambiada correctamente");
     }
   };
 

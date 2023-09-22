@@ -10,50 +10,15 @@ import { PiUserDuotone } from "react-icons/pi";
 import { PiUsersThreeDuotone } from "react-icons/pi";
 import { PiFilePlusLight } from "react-icons/pi";
 import { MdOutlineWorkOutline } from "react-icons/md";
-import appRoutes from "../routes/appRoutes";
+import 'react-toastify/dist/ReactToastify.css';
 
-import { useRouter } from "next/router";
-import { ApolloProvider, gql, useMutation } from "@apollo/client";
+import { ApolloProvider } from "@apollo/client";
 import { client } from "../apollo-server";
-import Sidebar from "@/components/Sidebar";
-import { useEffect } from "react";
 import { Provider } from "react-redux";
 import store from "@/store/store";
 import CheckTokenWrapper from "@/components/CheckTokenWrapper/CheckTokenWrapper";
-import { public_routes } from "utils/routes";
-
-const items = [
-  { title: "Inicio", icon: <AiFillHome size={24} />, href: "/" },
-  {
-    title: "Llamados",
-    icon: <PiClipboardTextDuotone size={24} />,
-    href: "/about",
-  },
-  { title: "Plantillas", icon: <ImInsertTemplate size={24} />, href: "/about" },
-  { title: "Postulantes", icon: <PiUserDuotone size={24} />, href: "/about" },
-  {
-    title: "Categorías",
-    icon: <MdOutlineCategory size={24} />,
-    href: "/about",
-  },
-  { title: "Cargos", icon: <MdOutlineWorkOutline size={24} />, href: "/about" },
-  {
-    title: "Usuarios",
-    icon: <PiUsersThreeDuotone size={24} />,
-    href: "/about",
-  },
-  {
-    title: "Tipos de Archivo",
-    icon: <PiFilePlusLight size={24} />,
-    href: "/about",
-  },
-];
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const { pathname } = useRouter();
-
-  const isPublicPath = public_routes.includes(pathname);
-
   return (
     <main className="min-h-screen flex flex-col font-primaria">
       <Head>

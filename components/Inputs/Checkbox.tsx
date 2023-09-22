@@ -31,7 +31,7 @@ const Checkbox = ({ label }: CheckboxProps) => {
     return (
         <div className="flex items-center">
       <div
-        className={`w-6 h-6 border-2 border-gray-400 rounded-md mr-2 ${
+        className={`w-6 cursor-pointer h-6 border-2 border-gray-400 rounded-md mr-2 ${
             checked ? 'bg-principal border-principal' : ''
         } transition-all duration-300 ease-in-out`}
         onClick={toggleChecked}

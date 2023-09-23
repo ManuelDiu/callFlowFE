@@ -9,15 +9,16 @@ import Button from "@/components/Buttons/Button";
 
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { loginValidationSchema } from "@/forms/LoginForm";
 import { gql, useMutation } from "@apollo/client";
 import OneLineError from "@/components/OneLineError/OneLineError";
 import { loginGraph } from "controllers/authControllers";
-import { useAuth } from "hooks/useAuth";
+import { useGlobal } from "hooks/useGlobal";
 
 import styled from "styled-components";
 import tw from "twin.macro";
 import Image from "next/image";
+import { loginValidationSchema } from "@/forms/LoginForm";
+import Spinner from "@/components/Spinner/Spinner";
 
 type LoginFormFields = {
   email: string;
@@ -71,7 +72,7 @@ const Login: NextPage = () => {
   });
   const [message, setMessage] = useState<string | null>(null);
 
-  const { handleSetToken } = useAuth();
+  const { handleSetToken, handleSetLoading } = useGlobal();
 
   const [login, { loading }] = useMutation(loginGraph, {
     errorPolicy: "ignore",
@@ -84,6 +85,7 @@ const Login: NextPage = () => {
   }, [errors])
 
   const onSubmitHandler = async (data: LoginFormFields) => {
+    handleSetLoading(true);
     const resp = await login({
       variables: {
         data: data,
@@ -96,6 +98,7 @@ const Login: NextPage = () => {
       const token = resp?.data?.login?.token;
       handleSetToken(token);
     }
+    handleSetLoading(false);
   };
 
   return (
@@ -134,7 +137,7 @@ const Login: NextPage = () => {
                 <div className="flex justify-between pt-2">
                   <Checkbox label="Recordar mi contraseña" />
                   <div className="font-medium text-principal select-none">
-                    <Link href={appRoutes.login()}>
+                    <Link href={appRoutes.forgetPassword()}>
                       ¿Olvidaste tu contraseña?
                     </Link>
                   </div>

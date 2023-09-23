@@ -14,11 +14,10 @@ import Button from "@/components/Buttons/Button";
 
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { loginValidationSchema } from "@/forms/LoginForm";
 import { gql, useMutation } from "@apollo/client";
 import OneLineError from "@/components/OneLineError/OneLineError";
 import { loginGraph, resetPassword } from "controllers/authControllers";
-import { useAuth } from "hooks/useAuth";
+import { useGlobal } from "hooks/useGlobal";
 import Input from "@/components/Inputs/Input";
 import { useRouter } from "next/router";
 import { resetPasswordValidation } from "@/forms/ResetPassword";
@@ -43,9 +42,9 @@ const ResetPassword: NextPage = () => {
   const { query } = useRouter();
   const token = query?.token;
 
-  const { handleSetToken } = useAuth();
+  const { handleSetLoading } = useGlobal();
 
-  const [resetPass, { loading }] = useMutation(resetPassword);
+  const [resetPass] = useMutation(resetPassword);
 
   useEffect(() => {
     if (errors.password?.message || errors.confirmPassword?.message) {
@@ -59,6 +58,7 @@ const ResetPassword: NextPage = () => {
     if (data?.password !== data?.confirmPassword) {
       setMessageError("Las contraseñas no coinciden");
     }
+    handleSetLoading(true);
 
     const resp = await resetPass({
       variables: {
@@ -69,6 +69,7 @@ const ResetPassword: NextPage = () => {
         },
       },
     });
+    handleSetLoading(false);
 
     if (resp?.data?.resetPassword?.ok === false) {
       toast.error("Error al cambiar la contraseña " + resp?.data?.resetPassword?.message);

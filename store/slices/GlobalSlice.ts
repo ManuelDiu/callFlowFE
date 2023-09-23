@@ -5,9 +5,11 @@ import { handleGetToken, handleStorageToken } from "utils/userUtils";
 const initialState: {
   userInfo: any;
   token: string | undefined,
+  loading: boolean,
 } = {
   userInfo: null,
   token: handleGetToken() || "",
+  loading: false,
 };
 
 export const GlobalSlice = createSlice({
@@ -20,6 +22,9 @@ export const GlobalSlice = createSlice({
     setToken(state, { payload }) {
       state.token = payload;
     },
+    setLoading(state, {payload}) {
+      state.loading = payload;
+    }
   },
   extraReducers: {},
 });
@@ -36,9 +41,14 @@ export const useGlobalActions = () => {
     dispatch(GlobalSlice.actions.setToken(token));
   };
 
+  const handleSetLoading = (loading: boolean) => {
+    dispatch(GlobalSlice.actions.setLoading(loading));
+  };
+
   return {
     handleSetUserInfo,
     handleSetToken,
+    handleSetLoading,
   };
 };
 

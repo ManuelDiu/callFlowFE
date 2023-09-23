@@ -2,9 +2,9 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { useGlobalActions } from "@/store/slices/GlobalSlice";
 
-export function useAuth() {
-  const { handleSetUserInfo, handleSetToken } = useGlobalActions();
-  const { userInfo, token } = useSelector(
+export function useGlobal() {
+  const { handleSetUserInfo, handleSetToken, handleSetLoading } = useGlobalActions();
+  const { userInfo, token, loading } = useSelector(
     (state: RootState) => state.GlobalSlice
   );
 
@@ -12,6 +12,8 @@ export function useAuth() {
     userInfo,
     handleSetUserInfo,
     token,
-    handleSetToken
+    loading,
+    handleSetToken,
+    handleSetLoading,
   };
 }

@@ -21,9 +21,6 @@ export const GlobalSlice = createSlice({
     setUserInfo(state, { payload }) {
       state.userInfo = payload;
     },
-    setIsLoading(state, { payload }) {
-      state.isLoading = payload;
-    },
     setToken(state, { payload }) {
       state.token = payload;
     },
@@ -41,10 +38,6 @@ export const useGlobalActions = () => {
     dispatch(GlobalSlice.actions.setUserInfo(userInfo));
   };
 
-  const handleSetLoading = (isLoading: boolean) => {
-    dispatch(GlobalSlice.actions.setIsLoading(isLoading));
-  };
-
   const handleSetToken = (token: string) => {
     handleStorageToken(token);
     dispatch(GlobalSlice.actions.setToken(token));
@@ -56,7 +49,6 @@ export const useGlobalActions = () => {
 
   return {
     handleSetUserInfo,
-    handleSetLoading,
     handleSetToken,
     handleSetLoading,
   };

@@ -26,7 +26,7 @@ export const items = [
   {
     title: "Usuarios",
     icon: <PiUsersThreeDuotone size={24} />,
-    href: "/about",
+    href: "/usuarios",
   },
   {
     title: "Tipos de Archivo",

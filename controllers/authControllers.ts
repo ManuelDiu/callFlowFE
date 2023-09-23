@@ -13,12 +13,14 @@ export const loginGraph = gql`
 export const checkToken = gql`
   mutation GetUserInfo($token: String) {
     checkToken(token: $token) {
-      biografia
       email
+      name
+      lastName
+      imageUrl
+      biografia
       roles
       itr
       telefono
-      name
     }
   }
 `;
@@ -31,7 +33,6 @@ export const resetPassword = gql`
     }
   }
 `;
-
 
 export const forgetPassword = gql`
   mutation ($data: ForgetPasswordInput!) {

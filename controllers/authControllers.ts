@@ -31,3 +31,13 @@ export const resetPassword = gql`
     }
   }
 `;
+
+
+export const forgetPassword = gql`
+  mutation ($data: ForgetPasswordInput!) {
+    forgetPassword(info: $data) {
+      ok
+      message
+    }
+  }
+`;

@@ -1,7 +1,7 @@
 import { checkToken } from "@/controllers/authControllers";
 import appRoutes from "@/routes/appRoutes";
 import { useMutation } from "@apollo/client";
-import { useAuth } from "hooks/useAuth";
+import { useGlobal } from "hooks/useGlobal";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { UsuarioInfo } from "types/usuario";
@@ -11,6 +11,7 @@ import { items } from "utils/sidebar";
 import styled from "styled-components";
 import tw from "twin.macro";
 import { ToastContainer } from "react-toastify";
+import Spinner from "../Spinner/Spinner";
 
 interface Props {
   children: any;
@@ -27,9 +28,10 @@ const ContentPage = styled.div`
 let isChecking = false;
 
 const CheckTokenWrapper = ({ children }: Props) => {
-  const { token, handleSetUserInfo, userInfo } = useAuth();
+  const { token, handleSetUserInfo, userInfo, loading, handleSetLoading } =
+    useGlobal();
   const [checking, setChecking] = useState<boolean>(true);
-  const [getUserInfo, { loading }] = useMutation(checkToken);
+  const [getUserInfo, { loading: loadingUserInfo }] = useMutation(checkToken);
   const { pathname, push } = useRouter();
   const isPublicPath = public_routes.includes(pathname);
 
@@ -68,12 +70,18 @@ const CheckTokenWrapper = ({ children }: Props) => {
     }
   }, [userInfo, token]);
 
+  useEffect(() => {
+    handleSetLoading(checking || loadingUserInfo);
+  }, [checking, loadingUserInfo]);
+
   if (checking) {
     return null;
   }
 
   return (
     <MainContent>
+      {loading && <Spinner />}
+
       {!isPublicPath && <Sidebar items={items} />}
       <ToastContainer
         position="top-right"

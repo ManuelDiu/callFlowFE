@@ -3,6 +3,7 @@ const appRoutes = {
     register: () => "/auth/register",
     home: () => "/",
     resetPassword: () => "/reset-password",
+    forgetPassword: () => "/forget-password",
 }
 
 export default appRoutes;

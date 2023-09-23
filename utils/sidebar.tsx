@@ -7,13 +7,14 @@ import { PiUserDuotone } from "react-icons/pi";
 import { PiUsersThreeDuotone } from "react-icons/pi";
 import { PiFilePlusLight } from "react-icons/pi";
 import { MdOutlineWorkOutline } from "react-icons/md";
+import appRoutes from "@/routes/appRoutes";
 
 export const items = [
-  { title: "Inicio", icon: <AiFillHome size={24} />, href: "/" },
+  { title: "Inicio", icon: <AiFillHome size={24} />, href: appRoutes.home() },
   {
     title: "Llamados",
     icon: <PiClipboardTextDuotone size={24} />,
-    href: "/about",
+    href: appRoutes.llamados(),
   },
   { title: "Plantillas", icon: <ImInsertTemplate size={24} />, href: "/about" },
   { title: "Postulantes", icon: <PiUserDuotone size={24} />, href: "/about" },

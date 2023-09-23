@@ -26,6 +26,8 @@
       "@/store/*": ["store/*"],
       "@/utils/*": ["utils/*"],
       "@/controllers/*": ["controllers/*"],
+      "@/hooks/*": ["hooks/*"],
+      "@/utils/*": ["utils/*"],
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

@@ -4,10 +4,12 @@ import { handleGetToken, handleStorageToken } from "utils/userUtils";
 
 const initialState: {
   userInfo: any;
+  isLoading: boolean,
   token: string | undefined,
   loading: boolean,
 } = {
   userInfo: null,
+  isLoading: false,
   token: handleGetToken() || "",
   loading: false,
 };

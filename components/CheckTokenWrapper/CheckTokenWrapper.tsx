@@ -12,6 +12,8 @@ import styled from "styled-components";
 import tw from "twin.macro";
 import { ToastContainer } from "react-toastify";
 import Spinner from "../Spinner/Spinner";
+import Breadcrumb from "@/components/Topbar/Breadcrumb";
+import ProfileBar from "@/components/Topbar/ProfileBar";
 
 interface Props {
   children: any;
@@ -23,6 +25,10 @@ const MainContent = styled.div`
 
 const ContentPage = styled.div`
   ${tw`w-full h-full max-h-full overflow-auto flex-grow`}
+`;
+
+const Topbar = styled.div`
+  ${tw`flex justify-between p-5 w-full h-max`}
 `;
 
 let isChecking = false;
@@ -97,7 +103,15 @@ const CheckTokenWrapper = ({ children }: Props) => {
       />
       {/* Same as */}
       <ToastContainer />
-      <ContentPage>{children}</ContentPage>
+      <ContentPage>
+        {/* {!isPublicPath && (
+          <Topbar>
+            <Breadcrumb title="asdasd" />
+            <ProfileBar />
+          </Topbar>
+        )} */}
+        {children}
+      </ContentPage>
     </MainContent>
   );
 };

@@ -11,6 +11,10 @@ const nextConfig = {
     });
     return config;
   },
+  images: {
+    domains: ['icon-library.com'],
+  },
+
 };
-  
+
 module.exports = nextConfig;

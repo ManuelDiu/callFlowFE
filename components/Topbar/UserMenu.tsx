@@ -1,5 +1,5 @@
 import React from "react";
-import { useAuth } from "@/hooks/useAuth";
+import { useGlobal } from "@/hooks/useGlobal";
 import Link from "next/link";
 import appRoutes from "@/routes/appRoutes";
 
@@ -8,7 +8,7 @@ type UserMenuProps = {
 };
 
 const UserMenu = ({ showUserMenu }: UserMenuProps) => {
-  const { handleLogout } = useAuth();
+  const { handleLogout } = useGlobal();
 
   return (
     <>

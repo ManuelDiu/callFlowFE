@@ -12,7 +12,7 @@ import NotificationMenu from "./NotificationMenu";
 import { PiBell, PiMoon } from "react-icons/pi";
 
 // Hooks
-import { useAuth } from "hooks/useAuth";
+import { useGlobal } from "@/hooks/useGlobal";
 
 const MainBarContainer = styled.div(() => [
   tw`flex justify-between items-center w-96 h-16 px-4 py-1 rounded-[30px] bg-white`,
@@ -25,7 +25,7 @@ const ProfileButtonContainer = styled.div(() => [
 ]);
 
 const ProfileBar: NextPage = () => {
-  const { userInfo } = useAuth();
+  const { userInfo } = useGlobal();
   const [searchbarContent, setSearchbarContent] = useState("");
   const [showUserMenu, setShowUserMenu] = useState<boolean>(false);
   const [hasNotifications, setHasNotifications] = useState<boolean>(true);

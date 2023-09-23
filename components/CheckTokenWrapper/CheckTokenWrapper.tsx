@@ -104,12 +104,12 @@ const CheckTokenWrapper = ({ children }: Props) => {
       {/* Same as */}
       <ToastContainer />
       <ContentPage>
-        {!isPublicPath && (
+        {/* {!isPublicPath && (
           <Topbar>
-            <Breadcrumb />
+            <Breadcrumb title="asdasd" />
             <ProfileBar />
           </Topbar>
-        )}
+        )} */}
         {children}
       </ContentPage>
     </MainContent>

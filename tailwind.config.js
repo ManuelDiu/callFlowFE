@@ -13,7 +13,7 @@ module.exports = {
         'borders': '#E0E5F2',
         "borders2": '#E9EDF7',
         "green": "#37B63C",
-        "red": "#FF1818"
+        "red1": "#FF1818"
       },
       fontFamily: {
         primaria: 'DM_SANS',

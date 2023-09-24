@@ -46,7 +46,7 @@ import ModalConfirmation from "@/components/Modal/components/ModalConfirmation";
 import { useUsersOrder } from "@/hooks/useUsersOrder";
 
 const Container = styled.div`
-  ${tw`w-full pb-5 h-auto p-5 py-0 flex gap-4 flex-col items-center justify-start`}
+  ${tw`w-full max-h-full pb-5 h-auto p-5 py-0 flex gap-4 flex-col items-center justify-start`}
 `;
 
 const ActionRow = styled.div`

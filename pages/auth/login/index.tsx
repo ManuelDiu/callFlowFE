@@ -48,7 +48,7 @@ const HalfScreenContainer = styled.div<ContainerProps>(() => [
 ]);
 
 const FirstHalfContainer = styled.div(() => [
-  tw`flex flex-col w-full px-40 gap-7`,
+  tw`flex flex-col w-[400px] p-0 gap-7`,
 ]);
 
 const FormContainer = styled.div(() => [tw`flex flex-col py-6 gap-5`]);

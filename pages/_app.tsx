@@ -19,6 +19,7 @@ import store from "@/store/store";
 import CheckTokenWrapper from "@/components/CheckTokenWrapper/CheckTokenWrapper";
 
 function MyApp({ Component, pageProps }: AppProps) {
+
   return (
     <main className="min-h-screen flex flex-col font-primaria">
       <Head>

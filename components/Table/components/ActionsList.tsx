@@ -12,7 +12,7 @@ interface Props {
 }
 
 const ButtonVariants = {
-  delete: tw`border-red`,
+  delete: tw`border-red2`,
   edit: tw`border-green`,
 };
 

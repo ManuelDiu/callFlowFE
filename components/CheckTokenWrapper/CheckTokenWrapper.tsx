@@ -27,7 +27,7 @@ const ContentPage = styled.div`
   ${tw`w-full h-full max-h-full overflow-auto flex-grow`}
 `;
 
-const Topbar = styled.div`
+export const Topbar = styled.div`
   ${tw`flex justify-between p-5 w-full h-max`}
 `;
 
@@ -99,6 +99,7 @@ const CheckTokenWrapper = ({ children }: Props) => {
         pauseOnFocusLoss
         draggable
         pauseOnHover
+        className="z-[5000000]"
         theme="light"
       />
       {/* Same as */}

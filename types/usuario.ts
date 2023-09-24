@@ -13,6 +13,7 @@ export type UsuarioInfo = {
 }
 
 export type UserList = {
+    id: number;
     email: string;
     name?: string;
     lastName?: string,
@@ -22,4 +23,6 @@ export type UserList = {
     telefono: string,
     llamados: number,
     activo?: boolean,
+    biografia?: string,
+    documento?: string,
 }

@@ -29,7 +29,7 @@ const ColTitle = styled.span`
 `;
 
 const Content = styled.div`
-  ${tw`w-full px-4 h-auto flex flex-col items-center justify-start`}
+  ${tw`w-full max-h-full overflow-auto px-4 h-auto flex flex-col items-center justify-start`}
 `;
 
 const Row = styled.div`

@@ -3,7 +3,7 @@ import tw from "twin.macro";
 import { RingLoader } from "react-spinners";
 
 const Container = styled.div`
-    ${tw`w-screen h-screen z-[500] fixed bg-black bg-opacity-50 flex items-center justify-center`}
+    ${tw`w-screen h-screen z-[500000] fixed bg-black bg-opacity-50 flex items-center justify-center`}
 `
 
 const Spinner = () => {

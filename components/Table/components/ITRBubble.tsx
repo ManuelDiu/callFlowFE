@@ -35,7 +35,7 @@ const ITRBubble = ({ itr }: Props) => {
   return (
     <Container>
       <Bubble style={{ backgroundColor: getBackgroundColor() }}></Bubble>
-      <Text>{itr}</Text>
+      <Text>{itr?.replace("_", " ")}</Text>
     </Container>
   );
 };

@@ -1,0 +1,1 @@
+export const DEFAULT_SELECT_ROLES_ERROR_MESSAGE = "Error, debes seleccionar al menos un rol"

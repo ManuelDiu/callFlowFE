@@ -83,8 +83,8 @@ const ResetPassword: NextPage = () => {
       <div className="w-full h-screen min-h-screen bg-white">
         <div className="flex w-full h-full">
           <div className="flex justify-center items-center w-1/2 h-full">
-            {token ? (
-              <div className="flex flex-col w-full px-48 gap-7">
+            {true ? (
+              <div className="flex flex-col w-[400px] gap-7">
                 <div>
                   <h1 className="font-extrabold text-texto">
                     Restablecer Contraseña
@@ -123,13 +123,12 @@ const ResetPassword: NextPage = () => {
                     </div>
                   </div>
 
-                  <div>
                     <Button
                       type="submit"
+                      sizeVariant="full"
                       // action={() => console.log(register)}
                       text="Restablecer Contraseña"
                     />
-                  </div>
                 </form>
               </div>
             ) : (

@@ -2,39 +2,73 @@ import React, { MouseEventHandler } from "react";
 import styled from "styled-components";
 import tw from "twin.macro";
 
+type ButtonVariant = "fill" | "outline" | "gray" | "green" | "yellow" | "red";
+
+type SizeVariant = "auto" | "full" | "fit";
+
+type RoundedVariant = "large" | "full";
+
 type ButtonProps = {
   text?: string;
   action?: MouseEventHandler;
   type?: "submit" | "button";
+  variant?: ButtonVariant;
+  sizeVariant?: SizeVariant;
+  className?: string;
+  rounded?: RoundedVariant;
+  icon?: any
 };
 
-/* type ContainerVariant = 'normal' | 'checkbox'
+const ButtonVariants = {
+  fill: tw`bg-principal active:bg-principal/80 border-transparent`,
+  outline: tw`border-principal text-principal`,
+  gray: tw`border-gray100 text-gray900 bg-white`,
+  green: tw`bg-modalButtons-green text-white border-0 ring-0`,
+  yellow: tw`bg-modalButtons-yellow text-white border-0 ring-0`,
+  red: tw`bg-modalButtons-red text-white border-0 ring-0`,
+};
 
-interface ContainerProps {
-  variant?: ContainerVariant
-}
+const SizeVariants = {
+  full: tw`w-full py-4 flex items-center justify-center`,
+  auto: tw`w-auto text-center flex items-center justify-center py-4`,
+  fit: tw`w-fit`,
+};
 
-const containerVariants: Record<ContainerVariant, TwStyle> = {
-  // Named class sets
-  normal: tw`bg-black text-white`,
-  checkbox: tw`bg-yellow-500 text-red-500`,
-}
+const RoundedVariants = {
+  large: tw`rounded-2xl`,
+  full: tw`rounded-full`,
+};
 
-const StyledInput = styled.section<ContainerProps>(() => [
-  // Return a function here
-  tw`flex w-full`,
-  ({ variant = 'normal' }) => containerVariants[variant], // Grab the variant style via a prop
-]) */
 
-const Button = ({ text, type = "button", action=()=>null }: ButtonProps) => {
+const ButtonComp = styled.button<{ variant: ButtonVariant; size: SizeVariant, rounded: RoundedVariant }>`
+  ${tw`text-white text-sm border-2 font-bold px-4 py-[8px] shadow flex flex-row gap-x-2 items-center justify-start outline-none focus:outline-none ease-linear transition-all duration-150`}
+  ${({ variant }) => ButtonVariants[variant]}
+  ${({ size }) => SizeVariants[size]}
+  ${({ rounded }) => RoundedVariants[rounded]}
+`;
+
+const Button = ({
+  text,
+  type = "button",
+  action = () => null,
+  variant = "fill",
+  sizeVariant = "auto",
+  className = "",
+  rounded = "full",
+  icon,
+}: ButtonProps) => {
   return (
-    <div className="flex flex-col w-full">
-      <button
-        className="bg-principal text-white active:bg-principal/80 font-bold px-6 py-3 rounded-2xl shadow hover:shadow-lg outline-none focus:outline-none w-full ease-linear transition-all duration-150"
-        type={type}
-        onClick={action}
-      >{text}</button>
-    </div>
+    <ButtonComp
+      className={className}
+      size={sizeVariant}
+      variant={variant}
+      type={type}
+      onClick={action}
+      rounded={rounded}
+    >
+      {icon && icon}
+      {text}
+    </ButtonComp>
   );
 };
 

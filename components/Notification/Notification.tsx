@@ -38,8 +38,8 @@ const Notification = ({
       <TextAndButtonsContainer>
         <p className="whitespace-normal">{text}</p>
         {usesButtons && <ButtonsContainer>
-          <Button text="Aceptar" />
-          <Button text="Cancelar" />
+          <Button text="Aceptar" variant="green" rounded="large" />
+          <Button text="Cancelar" variant="red" rounded="large" />
         </ButtonsContainer>}
       </TextAndButtonsContainer>
     </MainContainer>

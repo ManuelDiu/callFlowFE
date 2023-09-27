@@ -3,6 +3,7 @@ const appRoutes = {
     register: () => "/auth/register",
     home: () => "/",
     llamados: () => "/llamados",
+    categorias: () => "/categorias",
     crearLlamado: () => "/llamados/crear-llamado",
     resetPassword: () => "/reset-password",
     forgetPassword: () => "/forget-password",

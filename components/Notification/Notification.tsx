@@ -18,7 +18,7 @@ const TitleAndTimestampContainer = styled.div(() => [
   tw`flex justify-between items-center pr-3 `,
 ]);
 
-const TextAndButtonsContainer = styled.div(() => [tw`flex gap-5 `]);
+const TextAndButtonsContainer = styled.div(() => [tw`flex gap-5 justify-between `]);
 
 const ButtonsContainer = styled.div(() => [tw`flex flex-col gap-2 `]);
 
@@ -37,10 +37,10 @@ const Notification = ({
       </TitleAndTimestampContainer>
       <TextAndButtonsContainer>
         <p className="whitespace-normal">{text}</p>
-        <ButtonsContainer>
-          <Button text="Aceptar" />
-          <Button text="Cancelar" />
-        </ButtonsContainer>
+        {usesButtons && <ButtonsContainer>
+          <Button text="Aceptar" variant="green" rounded="large" />
+          <Button text="Cancelar" variant="red" rounded="large" />
+        </ButtonsContainer>}
       </TextAndButtonsContainer>
     </MainContainer>
   );

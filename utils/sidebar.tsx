@@ -21,7 +21,7 @@ export const items = [
   {
     title: "Categorías",
     icon: <MdOutlineCategory size={24} />,
-    href: "/about",
+    href: appRoutes.categorias(),
   },
   { title: "Cargos", icon: <MdOutlineWorkOutline size={24} />, href: "/about" },
   {

@@ -33,6 +33,6 @@ export const items = [
   {
     title: "Tipos de Archivo",
     icon: <PiFilePlusLight size={24} />,
-    href: "/about",
+    href: appRoutes.tiposArchivo(),
   },
 ];

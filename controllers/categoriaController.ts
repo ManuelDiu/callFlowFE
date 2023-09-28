@@ -21,6 +21,7 @@ export const updateCategory = gql`
   mutation UpdateCategory($data: UpdateCategoryInput!) {
     updateCategory(data: $data) {
       ok
+      message
       categoria {
         nombre
       }
@@ -31,6 +32,7 @@ export const deleteCategory = gql`
   mutation deleteCategory($data: DeleteCategoryInput!) {
     deleteCategory(data: $data) {
       ok
+      message
     }
   }
 `;

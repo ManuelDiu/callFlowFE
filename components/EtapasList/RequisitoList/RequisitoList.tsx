@@ -7,6 +7,7 @@ import { IoMdAdd } from "react-icons/io";
 import Text from "@/components/Table/components/Text";
 import { emptyRequisito, emptySubEtapa } from "@/utils/etapa";
 import { BsTrash3 } from "react-icons/bs";
+import Checkbox from "@/components/Inputs/Checkbox";
 
 const Container = styled.div`
   ${tw`w-full p-6 pt-8 relative h-auto flex flex-col items-center justify-start gap-y-4 bg-subEtapaItem rounded-2xl shadow-md`}
@@ -73,17 +74,19 @@ const RequisitoList = ({ requisitos, setRequisitos }: Props) => {
             className="flex-grow w-full"
             required
             onChange={(e: any) =>
-              handleChangeSubEtapaField(
-                requisito,
-                "puntaje",
-                e?.target?.value
-              )
+              handleChangeSubEtapaField(requisito, "puntaje", e?.target?.value)
             }
             value={requisito?.puntaje}
             // isInvalid={!!errors[crearLlamadoFormFields.referencia]?.message}
             // inputFormName={crearLlamadoFormFields.referencia}
           />
         </Row>
+        <Checkbox
+          label="Excluyente"
+          setValue={(val: any) =>
+            handleChangeSubEtapaField(requisito, "excluyente", val)
+          }
+        />
       </Container>
     );
   });

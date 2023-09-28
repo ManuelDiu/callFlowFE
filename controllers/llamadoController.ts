@@ -17,3 +17,12 @@ export const listarLlamados = gql`
     }
   }
 `;
+
+export const createLlamado = gql`
+  mutation CrearLlamado($crearLlamadoInfo2: CreateLlamadoInput) {
+    crearLlamado(info: $crearLlamadoInfo2) {
+      ok
+      message
+    }
+  }
+`;

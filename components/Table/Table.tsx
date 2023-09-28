@@ -91,13 +91,13 @@ const Table = ({ cols, title, data = [], others }: PropsTable) => {
             );
           })
         ) : (
-          <div className="w-full py-2 h-auto flex flex-col items-center py-2 justify-center gap-4">
+          <div className="w-full  h-auto flex flex-col items-center py-10 justify-center gap-4">
             <img
               src={NotFoundImage?.src}
-              className="object-cover h-[400px] w-auto"
+              className="object-cover h-[300px] w-auto"
             />
             <Text
-              className="!text-[24px] !leading-[24px] h-auto!"
+              className="!text-[20px] !leading-[24px] h-auto!"
               text={`Ooops..! , no se encontraron ${title}`}
             />
           </div>

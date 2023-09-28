@@ -4,6 +4,7 @@ import tw from "twin.macro";
 import { SlOptionsVertical } from "react-icons/sl";
 import { useState } from "react";
 import { OptionsItem } from "@/utils/utils";
+import { DEFAULT_USER_IMAGE } from "@/utils/userUtils";
 
 interface Props {
   userName?: string;
@@ -61,7 +62,7 @@ const UserInfoLine = ({
       <ImageContainer>
         <img
           className="w-full h-full rounded-full object-fill"
-          src={userImage}
+          src={userImage !== "" && userImage !== null ? userImage : DEFAULT_USER_IMAGE}
         />
       </ImageContainer>
       <TextContainer>

@@ -12,6 +12,7 @@ import Breadcrumb from "@/components/Topbar/Breadcrumb";
 import ProfileBar from "@/components/Topbar/ProfileBar";
 import WarningLine from "@/components/WarningLine/WarningLine";
 import { listarCargosList } from "@/controllers/cargoController";
+import { createLlamado } from "@/controllers/llamadoController";
 import { listarSolicitantes } from "@/controllers/userController";
 import { ITR } from "@/enums/ITR";
 import { TipoMiembro } from "@/enums/TipoMiembro";
@@ -24,7 +25,7 @@ import { useGlobal } from "@/hooks/useGlobal";
 import { formatCargosToDropdown } from "@/utils/cargo";
 import { emptyEtapa } from "@/utils/etapa";
 import { DEFAULT_USER_IMAGE, formatSolicitantes } from "@/utils/userUtils";
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -76,13 +77,15 @@ const AgregarLlamado = () => {
   const [selectedTribunales, setSelectedTribunales] = useState<TribunalInfo[]>(
     []
   );
+  const [handleCreateLlamado, { loading: loadingCreate }] =
+    useMutation(createLlamado);
   const [openPostulantesModal, setOpenPostulantesModal] = useState(false);
   const [openTribunalModal, setOpenTribunalModal] = useState(false);
   const [suggestions, setSuggestions] = useState<string[]>([]);
 
   useEffect(() => {
-    handleSetLoading(loadingSolicitantes || loadingCargos);
-  }, [loadingSolicitantes, loadingCargos]);
+    handleSetLoading(loadingSolicitantes || loadingCargos || loadingCreate);
+  }, [loadingSolicitantes, loadingCargos, loadingCreate]);
 
   const {
     formState: { errors },
@@ -105,7 +108,7 @@ const AgregarLlamado = () => {
     console.log(errors);
   }, [errors]);
 
-  const handleNext = (data: crearLlamadoForm) => {
+  const handleNext = async (data: crearLlamadoForm) => {
     let suggestionsItems = [];
 
     if (selectedTribunales?.length === 0) {
@@ -215,7 +218,7 @@ const AgregarLlamado = () => {
     });
 
     if (Number(sumOfAllEtapas) !== 100) {
-      suggestionsItems?.push("Error, la suma de todas las etapas debe ser 100")
+      suggestionsItems?.push("Error, la suma de todas las etapas debe ser 100");
     }
 
     if (suggestionsItems?.length > 0) {
@@ -223,13 +226,49 @@ const AgregarLlamado = () => {
       return;
     } else {
       const dataToSend = {
-        tribunales: selectedTribunales?.map((item) => item?.id),
-        postulantes: selectedPostulantes?.map((item) => item?.id),
+        tribunales: selectedTribunales?.map((item) => ({
+          id: Number(item?.id),
+          type: item?.type,
+          order: Number(item?.order),
+        })),
+        postulantes: selectedPostulantes?.map((item) => Number(item?.id)),
         llamadoInfo: data,
-        etapas: etapas,
+        etapas: etapas?.map((etapa) => {
+          return {
+            index: Number(etapa?.index),
+            nombre: etapa?.nombre,
+            plazoDiasMaximo: Number(etapa?.plazoDiasMaximo),
+            puntajeMinimo: Number(etapa?.puntajeMinimo),
+            subetapas: etapa?.subetapas?.map((subetapa) => ({
+              index: Number(subetapa?.index),
+              nombre: subetapa?.nombre,
+              subtotal: Number(subetapa?.subtotal),
+              puntajeMaximo: Number(subetapa?.puntajeMaximo),
+              requisitos: subetapa?.requisitos?.map((req) => ({
+                index: Number(req?.index),
+                nombre: req?.nombre,
+                puntaje: Number(req?.puntaje),
+                excluyente: Boolean(req?.excluyente),
+              })),
+            })),
+          };
+        }),
+      };
+      console.log("data to send", dataToSend);
+      try {
+        const respose = await handleCreateLlamado({
+          variables: {
+            crearLlamadoInfo2: dataToSend,
+          },
+        });
+        if (respose?.data?.crearLlamado?.ok === true) {
+          toast.success("Llamado creado correctamente");
+        } else {
+          toast.error(`Error al crear llamado, ${respose?.data?.crearLlamado?.message}`);
+        }
+      } catch (error: any) {
+        toast.error(error?.message || "Error al cerar llamado");
       }
-      console.log("dataToSend", dataToSend)
-      toast.success("Llamado creado correctamente");
     }
   };
 
@@ -360,7 +399,9 @@ const AgregarLlamado = () => {
         />
         <Checkbox
           label="Notificar a todos los miembros de CDP para el envio de emails."
-          setValue={(val: any) => setValue(crearLlamadoFormFields.enviarEmailTodos, val)}
+          setValue={(val: any) =>
+            setValue(crearLlamadoFormFields.enviarEmailTodos, val)
+          }
           helperText="*De lo contrario, se notificará solamente a las personas relacionadas al llamado (ITR)*"
         />
       </ContentInfo>

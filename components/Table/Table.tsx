@@ -9,6 +9,7 @@ interface PropsTable {
   cols: ColumnItem[];
   title: string;
   data?: any[];
+  others?: any;
 }
 
 const Container = styled.div`
@@ -43,7 +44,7 @@ const Cell = styled.div`
   ${tw`w-full h-full flex flex-col max-w-full truncate overflow-hidden bg-transparent pl-2`}
 `;
 
-const Table = ({ cols, title, data = [] }: PropsTable) => {
+const Table = ({ cols, title, data = [], others }: PropsTable) => {
   const { push } = useRouter();
 
   return (
@@ -102,6 +103,7 @@ const Table = ({ cols, title, data = [] }: PropsTable) => {
           </div>
         )}
       </Content>
+      {others}
     </Container>
   );
 };

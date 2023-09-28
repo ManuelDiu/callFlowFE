@@ -4,6 +4,7 @@ const appRoutes = {
     home: () => "/",
     llamados: () => "/llamados",
     usuarios: () => "/usuarios",
+    categorias: () => "/categorias",
     crearLlamado: () => "/llamados/crear-llamado",
     resetPassword: () => "/reset-password",
     forgetPassword: () => "/forget-password",

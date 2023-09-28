@@ -65,7 +65,7 @@ const ProfileBar: NextPage = () => {
       />
       <ButtonsContainer>
         <button
-          className={`flex justify-end p-2 rounded-full transition-all ${
+          className={`relative flex justify-end p-2 rounded-full transition-all ${
             showNotificationMenu && " bg-principal"
           }`}
           onClick={(e) => {
@@ -77,7 +77,7 @@ const ProfileBar: NextPage = () => {
         >
           {hasNotifications && (
             <div
-              className={`absolute bg-principal w-[8px] h-[8px] rounded-full ${
+              className={`absolute bg-principal w-[8px] h-[8px] rounded-full transition-all ${
                 showNotificationMenu && " bg-white"
               }`}
             />

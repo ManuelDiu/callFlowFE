@@ -14,7 +14,6 @@ interface Props {
 }
 
 const LlamadoProgress = ({ progress = 0 }: Props) => {
-  console.log("progress", progress)
 
   return (
     <Container>

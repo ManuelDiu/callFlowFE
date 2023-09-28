@@ -12,7 +12,7 @@ import Breadcrumb from "@/components/Topbar/Breadcrumb";
 import ProfileBar from "@/components/Topbar/ProfileBar";
 import WarningLine from "@/components/WarningLine/WarningLine";
 import { listarCargosList } from "@/controllers/cargoController";
-import { createLlamado } from "@/controllers/llamadoController";
+import { createLlamado, llamadoSubscriptionCreated } from "@/controllers/llamadoController";
 import { listarSolicitantes } from "@/controllers/userController";
 import { ITR } from "@/enums/ITR";
 import { TipoMiembro } from "@/enums/TipoMiembro";
@@ -25,7 +25,7 @@ import { useGlobal } from "@/hooks/useGlobal";
 import { formatCargosToDropdown } from "@/utils/cargo";
 import { emptyEtapa } from "@/utils/etapa";
 import { DEFAULT_USER_IMAGE, formatSolicitantes } from "@/utils/userUtils";
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation, useQuery, useSubscription } from "@apollo/client";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -254,7 +254,6 @@ const AgregarLlamado = () => {
           };
         }),
       };
-      console.log("data to send", dataToSend);
       try {
         const respose = await handleCreateLlamado({
           variables: {

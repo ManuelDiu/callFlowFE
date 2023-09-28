@@ -10,16 +10,16 @@ import { PiUserDuotone } from "react-icons/pi";
 import { PiUsersThreeDuotone } from "react-icons/pi";
 import { PiFilePlusLight } from "react-icons/pi";
 import { MdOutlineWorkOutline } from "react-icons/md";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 
 import { ApolloProvider } from "@apollo/client";
 import { client } from "../apollo-server";
 import { Provider } from "react-redux";
 import store from "@/store/store";
 import CheckTokenWrapper from "@/components/CheckTokenWrapper/CheckTokenWrapper";
+import SubscriptionGlobalWrapper from "@/components/SubscriptionGlobalWrapper/SubscriptionGlobalWrapper";
 
 function MyApp({ Component, pageProps }: AppProps) {
-
   return (
     <main className="min-h-screen flex flex-col font-primaria">
       <Head>
@@ -27,11 +27,13 @@ function MyApp({ Component, pageProps }: AppProps) {
       </Head>
 
       <div className="flex h-full min-h-screen">
-          <div className="bg-gray-100 flex-grow">
+        <div className="bg-gray-100 flex-grow">
           <ApolloProvider client={client}>
             <Provider store={store}>
               <CheckTokenWrapper>
-                <Component {...pageProps} />
+                <SubscriptionGlobalWrapper>
+                  <Component {...pageProps} />
+                </SubscriptionGlobalWrapper>
               </CheckTokenWrapper>
             </Provider>
           </ApolloProvider>

@@ -26,3 +26,21 @@ export const createLlamado = gql`
     }
   }
 `;
+
+export const llamadoSubscriptionCreated = gql`
+  subscription {
+    llamadoCreado {
+      id
+      ultimaModificacion
+      ref
+      postulantes
+      progreso
+      nombre
+      cupos
+      estado
+      cargo {
+        nombre
+      }
+    }
+  }
+`;

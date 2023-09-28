@@ -65,3 +65,25 @@ export const updateUserInfo = gql`
     }
   }
 `;
+
+export const listarSolicitantes = gql`
+  query {
+    listarSolicitantes {
+      name
+      lastName
+      imageUrl
+      id
+    }
+  }
+`;
+
+export const listarMiembrosTribunal = gql`
+  query {
+    listarMiembrosTribunal {
+      name
+      id
+      lastName
+      imageUrl
+    }
+  }
+`;

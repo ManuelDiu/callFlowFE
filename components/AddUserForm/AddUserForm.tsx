@@ -146,7 +146,7 @@ const AddUserForm = ({ setFile, normalErrors = [], selectedUser }: Props) => {
             { label: "Norte", value: ITR.norte },
             { label: "Centro Sur", value: ITR.centrosur },
           ]}
-          inputFormName={CreateUserFormFields.lastName}
+          inputFormName={CreateUserFormFields.itr}
         />
 
         <Dropdown
@@ -170,7 +170,7 @@ const AddUserForm = ({ setFile, normalErrors = [], selectedUser }: Props) => {
             { label: "Tribunal", value: Roles.tribunal },
             { label: "Cordinador", value: Roles.cordinador },
           ]}
-          inputFormName={CreateUserFormFields.lastName}
+          inputFormName={CreateUserFormFields.roles}
         />
 
         <Input

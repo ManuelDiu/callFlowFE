@@ -1,7 +1,10 @@
 import styled from "styled-components";
 import tw from "twin.macro";
 import { ColumnItem } from "types/table";
-
+import Text from "./components/Text";
+import NotFoundImage from "@/public/images/NotFound.svg";
+import Image from "next/image";
+import { useRouter } from "next/router";
 interface PropsTable {
   cols: ColumnItem[];
   title: string;
@@ -33,21 +36,28 @@ const Content = styled.div`
 `;
 
 const Row = styled.div`
-  ${tw`w-full flex flex-row max-w-full items-center py-4`}
+  ${tw`w-full py-4 transition-all px-1 rounded-md flex flex-row max-w-full items-center py-4`}
 `;
 
 const Cell = styled.div`
-  ${tw`w-full h-full flex flex-col max-w-full truncate overflow-hidden pl-2`}
+  ${tw`w-full h-full flex flex-col max-w-full truncate overflow-hidden bg-transparent pl-2`}
 `;
 
 const Table = ({ cols, title, data = [] }: PropsTable) => {
+  const { push } = useRouter();
+
   return (
     <Container>
       <Title>{title}</Title>
       <HeaderRow>
         {cols?.map((col) => {
           return (
-            <ColItem key={col?.key}>
+            <ColItem
+              className={
+                col?.customWidth ? `w-[${col?.customWidth}]!` : "!w-full"
+              }
+              key={col?.key}
+            >
               {col?.icon}
               <ColTitle>{col?.title}</ColTitle>
             </ColItem>
@@ -55,19 +65,42 @@ const Table = ({ cols, title, data = [] }: PropsTable) => {
         })}
       </HeaderRow>
       <Content>
-        {data?.map((item, index) => {
-          return (
-            <Row key={`row-${index}`}>
-              {cols?.map((col, indexCol) => {
-                return (
-                  <Cell key={`cell-${index}-${indexCol}`}>
-                    {item[col?.key]}
-                  </Cell>
-                );
-              })}
-            </Row>
-          );
-        })}
+        {data?.length > 0 ? (
+          data?.map((item, index) => {
+            return (
+              <Row
+                onClick={() =>
+                  item?.action
+                    ? item.action()
+                    : item?.href
+                    ? push(item?.href || "#")
+                    : null
+                }
+                className={item?.href || (item?.action && "itemRowTable cursor-pointer")}
+                key={`row-${index}`}
+              >
+                {cols?.map((col, indexCol) => {
+                  return (
+                    <Cell key={`cell-${index}-${indexCol}`}>
+                      {item[col?.key]}
+                    </Cell>
+                  );
+                })}
+              </Row>
+            );
+          })
+        ) : (
+          <div className="w-full py-2 h-auto flex flex-col items-center py-2 justify-center gap-4">
+            <img
+              src={NotFoundImage?.src}
+              className="object-cover h-[400px] w-auto"
+            />
+            <Text
+              className="!text-[24px] !leading-[24px] h-auto!"
+              text={`Ooops..! , no se encontraron ${title}`}
+            />
+          </div>
+        )}
       </Content>
     </Container>
   );

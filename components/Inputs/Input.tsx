@@ -18,6 +18,9 @@ type InputProps = {
   className?: string;
   isInvalid?: boolean;
   disabled?: boolean;
+  onChange?: any,
+  value?: any,
+  min?: number,
 };
 
 type ContainerVariant = "normal" | "checkbox" | "textarea";
@@ -34,12 +37,12 @@ const containerVariants = {
 };
 
 const StyledTextArea = styled.textarea<ContainerProps>(() => [
-  tw`border-[2px] rounded-2xl px-5 min-h-[120px] max-h-[120px] h-[120px] py-4 w-full transition-all ring-2 ring-transparent outline-none ring-principal placeholder-textogris bg-white`,
+  tw`border-[1px] text-sm rounded-2xl px-6 min-h-[120px] max-h-[120px] h-[120px] py-4 w-full transition-all ring-1 ring-transparent outline-none ring-principal placeholder-textogris bg-white`,
   ({ isInvalid }) => (isInvalid ? tw`border-red2` : "border-textogris"),
 ]);
 
 const StyledInput = styled.input<ContainerProps>(() => [
-  tw`border-[2px] rounded-2xl px-5 py-4 w-full transition-all ring-2 ring-transparent outline-none placeholder-textogris bg-white`,
+  tw`border-[1px] text-sm rounded-2xl px-6 py-4 w-full transition-all ring-1 ring-transparent outline-none placeholder-textogris bg-white`,
   ({ variant = "normal" }) => containerVariants[variant], // Gr
   ({ isInvalid }) => (isInvalid ? tw`ring-1 ring-red2` : "ring-transparent"),
 ]);
@@ -55,6 +58,7 @@ const Input = ({
   autoComplete = "off",
   variante,
   disabled = false,
+  onChange = () => null,
   ...otros
 }: InputProps) => {
   const id = generarId();
@@ -74,11 +78,12 @@ const Input = ({
         <StyledTextArea
           disabled={disabled}
           id={id}
-          className="focus:ring-textogris focus:border-transparent disabled:opacity-50"
+          className="focus:ring-principal focus:border-transparent placeholder-textogris disabled:opacity-50"
           type={type}
           isInvalid={isInvalid}
           placeholder={placeholder}
           autoComplete={autoComplete}
+          onChange={onChange}
           {...register(inputFormName)}
           {...otros}
         />
@@ -86,11 +91,12 @@ const Input = ({
         <StyledInput
           disabled={disabled}
           id={id}
-          className="focus:ring-textogris focus:border-transparent disabled:opacity-50"
+          className="focus:ring-principal focus:border-transparent placeholder-textogris disabled:opacity-50"
           type={type}
           isInvalid={isInvalid}
           placeholder={placeholder}
           autoComplete={autoComplete}
+          onChange={onChange}
           {...register(inputFormName)}
           {...otros}
         />

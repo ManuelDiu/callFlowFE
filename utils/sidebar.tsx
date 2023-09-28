@@ -1,4 +1,3 @@
-
 import { AiFillHome } from "react-icons/ai";
 import { PiClipboardTextDuotone } from "react-icons/pi";
 import { MdOutlineCategory } from "react-icons/md";
@@ -15,6 +14,7 @@ export const items = [
     title: "Llamados",
     icon: <PiClipboardTextDuotone size={24} />,
     href: appRoutes.llamados(),
+    validPath: [appRoutes.llamados(), appRoutes.agregarLlamado()],
   },
   { title: "Plantillas", icon: <ImInsertTemplate size={24} />, href: "/about" },
   { title: "Postulantes", icon: <PiUserDuotone size={24} />, href: "/about" },
@@ -28,6 +28,7 @@ export const items = [
     title: "Usuarios",
     icon: <PiUsersThreeDuotone size={24} />,
     href: "/usuarios",
+    ValidityState: [appRoutes.usuarios()],
   },
   {
     title: "Tipos de Archivo",

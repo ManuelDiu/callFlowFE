@@ -2,6 +2,7 @@ import styled from "styled-components";
 import tw from "twin.macro";
 import { GrClose } from "react-icons/gr";
 import Button from "../Buttons/Button";
+import clsx from "clsx";
 
 interface Props {
   title: string;
@@ -12,7 +13,8 @@ interface Props {
   onSubmit?: any;
   onCancel?: any;
   textok: string,
-  textcancel: string,
+  textcancel?: string,
+  className?: string,
 }
 
 const Container = styled.div`
@@ -32,11 +34,11 @@ const TitleContainer = styled.div`
 `;
 
 const Title = styled.span`
-  ${tw`text-texto text-2xl font-bold`}
+  ${tw`text-texto text-[28px] font-bold`}
 `;
 
 const Description = styled.span`
-  ${tw`text-textogris text-[14px] font-normal`}
+  ${tw`text-textogris w-full text-left text-[14px] font-normal`}
 `;
 
 const BottomActionsContainer = styled.div`
@@ -53,11 +55,12 @@ const Modal = ({
   bottomActiosn = true,
   textok,
   textcancel,
+  className,
 }: Props) => {
 
     return (
-    <Container className="modalOpen">
-      <ModalContainer>
+    <Container className={clsx("modalOpen")}>
+      <ModalContainer className={className}>
         <Content>
           <TitleContainer>
             <Title>{title}</Title>
@@ -74,12 +77,12 @@ const Modal = ({
 
         {bottomActiosn && (
           <BottomActionsContainer>
-            <Button
+            {textcancel && <Button
               variant="gray"
               sizeVariant="auto"
               text={textcancel}
               action={() => onCancel && onCancel()}
-            />
+            />}
             <Button
               variant="fill"
               sizeVariant="auto"

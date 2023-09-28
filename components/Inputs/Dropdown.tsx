@@ -5,13 +5,9 @@ import { FiChevronDown } from "react-icons/fi";
 import clsx from "clsx";
 import { GrClose } from "react-icons/gr";
 import Text from "../Table/components/Text";
+import { DropDownItem } from "@/utils/utils";
 
 const generarId = () => `input-${Math.random().toString(36).substring(2, 15)}`;
-
-type Item = {
-  label: string;
-  value: string;
-};
 
 type InputProps = {
   label?: string;
@@ -22,7 +18,7 @@ type InputProps = {
   autoComplete?: string;
   className?: string;
   multiSelect?: boolean;
-  items: Item[];
+  items: DropDownItem[];
   onChange: any;
   defaultValue?: any;
   isInvalid?: boolean;
@@ -46,8 +42,8 @@ const StyledInput = styled.input<ContainerProps>(() => [
 ]);
 
 const InputContainer = styled.div<{ isInvalid?: boolean }>`
-  ${tw`border-[1.5px] relative rounded-2xl flex ring ring-transparent flex-row items-center justify-start px-5 py-4 w-full transition-all ring-2 ring-transparent outline-none placeholder-textogris transition-all bg-white`}
-  ${({ isInvalid }) => (isInvalid ? tw`border-red2` : tw`border-textogris`)}
+  ${tw`border-[0.5px] relative rounded-2xl flex ring flex-row items-center justify-start px-5 py-4 w-full transition-all ring-0 ring-transparent outline-none placeholder-textogris transition-all bg-white`}
+  ${({ isInvalid }) => (isInvalid ? tw`border-red2` : tw`border-textogris/50`)}
 `;
 
 const ContainerExpanded = styled.div`

@@ -9,6 +9,7 @@ type SidebarItem = {
   title: string;
   icon: JSX.Element;
   href: string;
+  validPath?: string[]
 };
 
 type SidebarProps = {
@@ -62,14 +63,14 @@ const Sidebar: React.FC<SidebarProps> = ({ items }) => {
                 <ItemContainer>
                   <IconContainer
                     variant={
-                      router.pathname === item.href ? "principal" : "gris"
+                      item?.validPath?.includes(router.pathname) ? "principal" : "gris"
                     }
                   >
                     {item.icon}
                   </IconContainer>
                   <span
                     className={`font-semibold select-none ${
-                      router.pathname === item.href
+                      item?.validPath?.includes(router.pathname)
                         ? "text-texto"
                         : "text-textogris"
                     }`}

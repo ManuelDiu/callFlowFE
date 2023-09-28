@@ -28,7 +28,7 @@ const ContentPage = styled.div`
 `;
 
 export const Topbar = styled.div`
-  ${tw`flex justify-between p-5 w-full h-max`}
+  ${tw`flex justify-between py-5 w-full h-max`}
 `;
 
 let isChecking = false;

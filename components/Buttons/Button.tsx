@@ -31,7 +31,7 @@ const ButtonVariants = {
 const SizeVariants = {
   full: tw`w-full py-4 flex items-center justify-center`,
   auto: tw`w-auto text-center flex items-center justify-center py-4`,
-  fit: tw`w-fit`,
+  fit: tw`w-fit min-w-fit`,
 };
 
 const RoundedVariants = {

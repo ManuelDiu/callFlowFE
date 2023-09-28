@@ -80,3 +80,11 @@ h4 {
 .Toastify {
   z-index: 1111111111;
 }
+
+.itemRowTable {
+  background-color: transparent;
+}
+
+.itemRowTable:hover {
+  background-color: rgba(221, 221, 221, 0.473);
+}

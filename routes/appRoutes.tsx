@@ -8,6 +8,7 @@ const appRoutes = {
     crearLlamado: () => "/llamados/crear-llamado",
     resetPassword: () => "/reset-password",
     forgetPassword: () => "/forget-password",
+    tiposArchivo: () => "/tipos-archivo",
     llamadoInfo: (llamadoId: any) => `/llamados/${llamadoId}/info`,
     agregarLlamado: () => `/llamados/agregar-llamado`,
     postulantes: () => `postulantes`

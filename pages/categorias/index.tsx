@@ -277,7 +277,7 @@ const Categorias = () => {
                 />
               </FormProvider>
             }
-            description="Se procederá a agregar un nuevo usuario como miembro del tribunal, postulante o del Centro de Desarrollo de Personas (CDP) en el sistema. Una vez creado, se enviará un correo electrónico para la creación de una contraseña que permitirá el acceso a la plataforma."
+            description="Se procederá a crear una nueva categoría en el sistema."
           />
         </FormProvider>
       )}

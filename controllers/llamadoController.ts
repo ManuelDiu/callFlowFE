@@ -44,3 +44,12 @@ export const llamadoSubscriptionCreated = gql`
     }
   }
 `;
+
+export const disabledLlamados = gql`
+  mutation ($llamados: [Int]) {
+    deshabilitarLlamados(llamados: $llamados) {
+      message
+      ok
+    }
+  }
+`;

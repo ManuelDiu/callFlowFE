@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import tw from "twin.macro";
 
@@ -8,11 +8,16 @@ type CheckboxProps = {
   label?: string;
   setValue?: any,
   helperText?: string,
+  value?: any,
 };
 
-const Checkbox = ({ label, setValue, helperText }: CheckboxProps) => {
+const Checkbox = ({ label, setValue, helperText, value }: CheckboxProps) => {
   const id = generarId();
   const [checked, setChecked] = useState(false);
+
+  useEffect(() => {
+    setChecked(value === true);
+  }, [value])
 
   const toggleChecked = () => {
     setChecked(!checked);
@@ -20,7 +25,7 @@ const Checkbox = ({ label, setValue, helperText }: CheckboxProps) => {
   };
 
   return (
-    <div className="w-full flex flex-col items-start justify-start gap-1">
+    <div className="w-full transition-all flex flex-col items-start justify-start gap-1">
       <div className="flex items-center">
       <div
         className={`w-6 cursor-pointer h-6 border-2 border-gray-400 rounded-md mr-2 ${

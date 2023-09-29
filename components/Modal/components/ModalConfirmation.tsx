@@ -48,7 +48,7 @@ const IconContainer = styled.div`
 `;
 
 const Description = styled.span`
-  ${tw`text-textogris text-[14px] font-normal`}
+  ${tw`text-textogris w-full text-left text-[14px] font-normal`}
 `;
 
 const BottomActionsContainer = styled.div`

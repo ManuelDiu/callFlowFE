@@ -14,6 +14,7 @@ import moment from "moment";
 import LlamadoEstadoBubble from "@/components/LlamadoEstadoBubble/LlamadoEstadoBubble";
 import LlamadoProgress from "@/components/LlamadoProgress/LlamadoProgress";
 import appRoutes from "@/routes/appRoutes";
+import { EstadoLlamadoEnum } from "@/enums/EstadoLlamadoEnum";
 
 export const Columns: ColumnItem[] = [
   {
@@ -61,8 +62,17 @@ export const Columns: ColumnItem[] = [
 ];
 
 export const formatLlamadosToTable = (llamados: LlamadoList[] = []) => {
-  return llamados?.map((llamado) => {
+  const newOrder = [...llamados].sort((itemA: LlamadoList, itemB: LlamadoList) => {
+    if (itemA?.estado === EstadoLlamadoEnum.eliminado && itemB?.estado !== EstadoLlamadoEnum.eliminado) {
+      return 1;
+    } else {
+      return -1;
+    }
+  })
+
+  return newOrder?.map((llamado) => {
     return {
+      id: llamado?.id,
       nombre: <Text text={llamado?.nombre} />,
       estado: <LlamadoEstadoBubble estado={llamado?.estado} />,
       ultimaModificacion: <Text text={moment(llamado?.ultimaModificacion).format("DD, MMM, YYYY") } />,

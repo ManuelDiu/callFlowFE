@@ -162,7 +162,7 @@ const EtapasList = ({ etapas, setEtapas }: Props) => {
         <div className="w-full">
           {
             Number(sumOfSubetapas) < Number(etapa?.puntajeMinimo) &&
-            <OneLineError message={"La suma de las etapas debe ser mayor a el minimo de esta etapa"} />
+            <OneLineError message={"La suma de las subetapas debe ser mayor a el minimo de esta etapa"} />
           }
         </div>
         <SectionTitle>Subetapas</SectionTitle>

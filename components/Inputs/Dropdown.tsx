@@ -91,13 +91,15 @@ const Dropdown = ({
         })
       : [];
 
-  const [selectedValues, setSelectedValues] = useState<any[]>(defaultValuesFormatted);
+  const [selectedValues, setSelectedValues] = useState<any[]>(
+    defaultValuesFormatted
+  );
   const [query, setQuery] = useState("");
 
   const itemsWithId = items?.map((itm, index) => {
     return {
       ...itm,
-      id: index,
+      id: !itm?.id ? index : itm?.id,
     };
   });
 
@@ -161,6 +163,19 @@ const Dropdown = ({
               className="focus:ring-textogris"
               placeholder={placeholder}
               autoComplete={autoComplete}
+              onChange={(e) => {
+                const val = e?.target?.value;
+                setQuery(val);
+              }}
+            />
+          ) : typeof selectedValues[0]?.label === "string" ? (
+            <StyledInput
+              name={inputFormName}
+              id={id}
+              className="focus:ring-textogris"
+              placeholder={placeholder}
+              autoComplete={autoComplete}
+              value={selectedValues[0]?.label}
               onChange={(e) => {
                 const val = e?.target?.value;
                 setQuery(val);

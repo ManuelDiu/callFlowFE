@@ -12,7 +12,11 @@ import Breadcrumb from "@/components/Topbar/Breadcrumb";
 import ProfileBar from "@/components/Topbar/ProfileBar";
 import WarningLine from "@/components/WarningLine/WarningLine";
 import { listarCargosList } from "@/controllers/cargoController";
-import { createLlamado, llamadoSubscriptionCreated } from "@/controllers/llamadoController";
+import { listCategorias } from "@/controllers/categoriaController";
+import {
+  createLlamado,
+  llamadoSubscriptionCreated,
+} from "@/controllers/llamadoController";
 import { listarSolicitantes } from "@/controllers/userController";
 import { ITR } from "@/enums/ITR";
 import { TipoMiembro } from "@/enums/TipoMiembro";
@@ -33,6 +37,7 @@ import { toast } from "react-toastify";
 import styled from "styled-components";
 import tw from "twin.macro";
 import { Cargo } from "types/cargo";
+import { CategoriaItem } from "types/categoria";
 import { Etapa } from "types/etapa";
 import { Solicitante, SortUserInfo, TribunalInfo } from "types/usuario";
 
@@ -82,10 +87,22 @@ const AgregarLlamado = () => {
   const [openPostulantesModal, setOpenPostulantesModal] = useState(false);
   const [openTribunalModal, setOpenTribunalModal] = useState(false);
   const [suggestions, setSuggestions] = useState<string[]>([]);
+  const { data, loading: loadingCategorias } = useQuery<{
+    listCategorias: CategoriaItem[];
+  }>(listCategorias);
+  const [selectedCategorias, setSelectedCategorias] = useState<CategoriaItem[]>(
+    []
+  );
+
+  const categorias = data?.listCategorias || [];
+  
+  console.log("categorias", categorias)
 
   useEffect(() => {
-    handleSetLoading(loadingSolicitantes || loadingCargos || loadingCreate);
-  }, [loadingSolicitantes, loadingCargos, loadingCreate]);
+    handleSetLoading(
+      loadingSolicitantes || loadingCargos || loadingCreate || loadingCategorias
+    );
+  }, [loadingSolicitantes, loadingCargos, loadingCreate, loadingCategorias]);
 
   const {
     formState: { errors },
@@ -104,6 +121,8 @@ const AgregarLlamado = () => {
     ]);
   };
 
+  console.log("selectedCategries", selectedCategorias)
+
   useEffect(() => {
     console.log(errors);
   }, [errors]);
@@ -116,6 +135,13 @@ const AgregarLlamado = () => {
         "El llamado debe tener al menos un miembro del tribunal"
       );
     }
+
+    if (
+      selectedCategorias?.length === 0
+    ) {
+      suggestionsItems?.push("Agrega al menos una categoria al llamado");
+    }
+
     if (
       !selectedTribunales?.find((item) => item?.type === TipoMiembro.titular)
     ) {
@@ -253,6 +279,7 @@ const AgregarLlamado = () => {
             })),
           };
         }),
+        categorias: selectedCategorias?.map((cat) => Number(cat?.id))
       };
       try {
         const respose = await handleCreateLlamado({
@@ -263,7 +290,9 @@ const AgregarLlamado = () => {
         if (respose?.data?.crearLlamado?.ok === true) {
           toast.success("Llamado creado correctamente");
         } else {
-          toast.error(`Error al crear llamado, ${respose?.data?.crearLlamado?.message}`);
+          toast.error(
+            `Error al crear llamado, ${respose?.data?.crearLlamado?.message}`
+          );
         }
       } catch (error: any) {
         toast.error(error?.message || "Error al cerar llamado");
@@ -395,6 +424,25 @@ const AgregarLlamado = () => {
           required
           items={formatSolicitantes(solicitantesData?.listarSolicitantes)}
           inputFormName={crearLlamadoFormFields.solicitante}
+        />
+
+        <Dropdown
+          defaultValue={[]}
+          multiSelect
+          label="Categorias"
+          isInvalid={selectedCategorias?.length === 0}
+          placeholder="Seleccione categorias"
+          onChange={(val: any) => {
+            setSelectedCategorias(val);
+          }}
+          required
+          items={categorias?.map((cat) => {
+            return {
+              label: cat.nombre,
+              value: cat?.id,
+              id: cat?.id,
+            };
+          })}
         />
         <Checkbox
           label="Notificar a todos los miembros de CDP para el envio de emails."

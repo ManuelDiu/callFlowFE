@@ -27,9 +27,8 @@
       "@/utils/*": ["utils/*"],
       "@/controllers/*": ["controllers/*"],
       "@/hooks/*": ["hooks/*"],
-      "@/utils/*": ["utils/*"],
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/templates/test.js"],
   "exclude": ["node_modules"]
 }

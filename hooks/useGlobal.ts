@@ -5,8 +5,8 @@ import { handleRemoveToken } from "@/utils/userUtils";
 import appRoutes from "@/routes/appRoutes";
 
 export function useGlobal() {
-  const { handleSetUserInfo, handleSetToken, handleSetLoading } = useGlobalActions();
-  const { userInfo, token, loading } = useSelector(
+  const { handleSetUserInfo, handleSetToken, handleSetLoading, handleSetTemplate, handleClearTemplate } = useGlobalActions();
+  const { userInfo, token, loading, selectedTemplate } = useSelector(
     (state: RootState) => state.GlobalSlice
   );
   const handleLogout = () => {
@@ -22,5 +22,8 @@ export function useGlobal() {
     handleSetToken,
     handleSetLoading,
     handleLogout,
+    selectedTemplate,
+    handleSetTemplate,
+    handleClearTemplate,
   };
 }

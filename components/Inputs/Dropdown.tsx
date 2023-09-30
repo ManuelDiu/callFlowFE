@@ -90,10 +90,11 @@ const Dropdown = ({
           return val;
         })
       : [];
-
+    
   const [selectedValues, setSelectedValues] = useState<any[]>(
     defaultValuesFormatted
   );
+
   const [query, setQuery] = useState("");
 
   const itemsWithId = items?.map((itm, index) => {

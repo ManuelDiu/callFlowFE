@@ -13,6 +13,9 @@ const appRoutes = {
     agregarLlamado: () => `/llamados/agregar-llamado`,
     postulantes: () => `/postulantes`,
     cargos: () => `/cargos`,
+    agregarTemplate: () => `/template/agregar-template`,
+    selectTemplate: () => `/llamados/select-template`,
+    templates: () => `/template`,
 }
 
 export default appRoutes;

@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
+import { TemplateList } from "types/template";
 import { handleGetToken, handleStorageToken } from "utils/userUtils";
 
 const initialState: {
@@ -7,11 +8,13 @@ const initialState: {
   isLoading: boolean,
   token: string | undefined,
   loading: boolean,
+  selectedTemplate?: TemplateList | undefined,
 } = {
   userInfo: null,
   isLoading: false,
   token: handleGetToken() || "",
   loading: false,
+  selectedTemplate: undefined,
 };
 
 export const GlobalSlice = createSlice({
@@ -26,6 +29,12 @@ export const GlobalSlice = createSlice({
     },
     setLoading(state, {payload}) {
       state.loading = payload;
+    },
+    setTemplate(state, {payload}) {
+      state.selectedTemplate = payload;
+    },
+    clearTemplate(state) {
+      state.selectedTemplate = undefined;
     }
   },
   extraReducers: {},
@@ -47,10 +56,20 @@ export const useGlobalActions = () => {
     dispatch(GlobalSlice.actions.setLoading(loading));
   };
 
+  const handleSetTemplate = (template: TemplateList) => {
+    dispatch(GlobalSlice.actions.setTemplate(template));
+  };
+
+  const handleClearTemplate = () => {
+    dispatch(GlobalSlice.actions.clearTemplate());
+  };
+
   return {
     handleSetUserInfo,
     handleSetToken,
     handleSetLoading,
+    handleSetTemplate,
+    handleClearTemplate,
   };
 };
 

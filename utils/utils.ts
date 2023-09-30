@@ -11,3 +11,9 @@ export type OptionsItem = {
   onClick: any;
 };
 
+
+export type OptionSelectorItem =  {
+  label: string,
+  value: any,
+  image: any,
+}

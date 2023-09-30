@@ -14,9 +14,14 @@ export const items = [
     title: "Llamados",
     icon: <PiClipboardTextDuotone size={24} />,
     href: appRoutes.llamados(),
-    validPath: [appRoutes.llamados(), appRoutes.agregarLlamado()],
+    validPath: [appRoutes.llamados(), appRoutes.agregarLlamado(), appRoutes.selectTemplate()],
   },
-  { title: "Plantillas", icon: <ImInsertTemplate size={24} />, href: "/about" },
+  {
+    title: "Plantillas",
+    icon: <ImInsertTemplate size={24} />,
+    href: appRoutes.templates(),
+    validPath: [appRoutes.templates(), appRoutes.agregarTemplate()],
+  },
   { title: "Postulantes", icon: <PiUserDuotone size={24} />, href: "/about" },
   {
     title: "Categorías",
@@ -28,7 +33,7 @@ export const items = [
     title: "Usuarios",
     icon: <PiUsersThreeDuotone size={24} />,
     href: "/usuarios",
-    ValidityState: [appRoutes.usuarios()],
+    validPath: [appRoutes.usuarios()],
   },
   {
     title: "Tipos de Archivo",

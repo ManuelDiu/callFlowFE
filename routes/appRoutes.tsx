@@ -11,6 +11,9 @@ const appRoutes = {
     tiposArchivo: () => "/tipos-archivo",
     llamadoInfo: (llamadoId: any) => `/llamados/${llamadoId}/info`,
     agregarLlamado: () => `/llamados/agregar-llamado`,
+    agregarTemplate: () => `/template/agregar-template`,
+    selectTemplate: () => `/llamados/select-template`,
+    templates: () => `/template`,
     postulantes: () => `postulantes`
 }
 

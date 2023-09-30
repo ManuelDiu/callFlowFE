@@ -17,6 +17,7 @@ import {
   createLlamado,
   llamadoSubscriptionCreated,
 } from "@/controllers/llamadoController";
+import { getTemplateById } from "@/controllers/templateController";
 import { listarSolicitantes } from "@/controllers/userController";
 import { ITR } from "@/enums/ITR";
 import { TipoMiembro } from "@/enums/TipoMiembro";
@@ -39,6 +40,7 @@ import tw from "twin.macro";
 import { Cargo } from "types/cargo";
 import { CategoriaItem } from "types/categoria";
 import { Etapa } from "types/etapa";
+import { TemplateInfo } from "types/template";
 import { Solicitante, SortUserInfo, TribunalInfo } from "types/usuario";
 
 const Container = styled.div`
@@ -46,7 +48,7 @@ const Container = styled.div`
 `;
 
 const SectionTitle = styled.h2`
-  ${tw`text-2xl w-full text-left font-semibold text-texto`}
+  ${tw`text-2xl w-full flex flex-row items-center justify-start flex-wrap w-full text-left font-semibold text-texto`}
 `;
 
 const ContentInfo = styled.div`
@@ -61,7 +63,7 @@ const Row = styled.div`
   ${tw`flex w-full flex-row items-center justify-center gap-5`}
 `;
 
-const AgregarLlamado = () => {
+const AgregarTemplate = () => {
   const { data: solicitantesData, loading: loadingSolicitantes } = useQuery<{
     listarSolicitantes: Solicitante[];
   }>(listarSolicitantes);
@@ -74,7 +76,8 @@ const AgregarLlamado = () => {
     },
     resolver: yupResolver(crearLlamadoValidationSchema()),
   });
-  const { handleSetLoading } = useGlobal();
+  const { handleSetLoading, selectedTemplate } = useGlobal();
+  const selectedTemplateId = selectedTemplate?.id;
   const [etapas, setEtapas] = useState<Etapa[]>([]);
   const [selectedPostulantes, setSelectedPostulantes] = useState<
     SortUserInfo[]
@@ -84,8 +87,11 @@ const AgregarLlamado = () => {
   );
   const [handleCreateLlamado, { loading: loadingCreate }] =
     useMutation(createLlamado);
+  const [handleGetTempalteInfo, { loading: loadingTemplate }] =
+    useMutation(getTemplateById);
   const [openPostulantesModal, setOpenPostulantesModal] = useState(false);
   const [openTribunalModal, setOpenTribunalModal] = useState(false);
+  const [defaultCargo, setDefaultCargo] = useState<any>();
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const { data, loading: loadingCategorias } = useQuery<{
     listCategorias: CategoriaItem[];
@@ -95,21 +101,80 @@ const AgregarLlamado = () => {
   );
 
   const categorias = data?.listCategorias || [];
-  
-  console.log("categorias", categorias)
 
   useEffect(() => {
     handleSetLoading(
-      loadingSolicitantes || loadingCargos || loadingCreate || loadingCategorias
+      loadingSolicitantes ||
+        loadingCargos ||
+        loadingCreate ||
+        loadingCategorias ||
+        loadingTemplate
     );
-  }, [loadingSolicitantes, loadingCargos, loadingCreate, loadingCategorias]);
+  }, [
+    loadingSolicitantes,
+    loadingCargos,
+    loadingCreate,
+    loadingCategorias,
+    loadingTemplate,
+  ]);
 
   const {
     formState: { errors },
     register,
     setValue,
+    getValues,
     handleSubmit,
   } = agregarLlamadoForm;
+
+  const handleLoadInfoFromTemplate = async () => {
+    const resp = await handleGetTempalteInfo({
+      variables: {
+        templateId: selectedTemplateId,
+      },
+    });
+    if (!resp?.data?.getTemplateById?.id) {
+      toast.error("Error al cargar la informacion del template seleccionado");
+      return;
+    }
+    const templateInfo = resp?.data?.getTemplateById as TemplateInfo;
+
+    const formatEtapas = templateInfo?.etapa?.map((etapa, indexE) => {
+      return {
+        index: indexE,
+        nombre: etapa?.nombre,
+        plazoDiasMaximo: etapa?.plazoDias,
+        puntajeMinimo: etapa?.puntajeMin,
+        subetapas: etapa?.subetapas?.map((subetapa, indexSub) => {
+          return {
+            index: indexSub,
+            nombre: subetapa?.nombre,
+            subtotal: subetapa?.puntajeTotal,
+            puntajeMaximo: subetapa?.puntajeMaximo,
+            requisitos: subetapa?.requisitos?.map((req, indexReq) => {
+              return {
+                index: indexReq,
+                nombre: req?.nombre,
+                puntaje: req?.puntajeSugerido,
+                excluyente: req?.excluyente,
+              };
+            }),
+          };
+        }),
+      };
+    });
+    setEtapas(formatEtapas);
+    setDefaultCargo({
+      label: templateInfo?.cargo?.nombre,
+      value: templateInfo?.cargo?.id,
+    });
+    setValue(crearLlamadoFormFields.cargo, templateInfo?.cargo?.id);
+  };
+
+  useEffect(() => {
+    if (selectedTemplate) {
+      handleLoadInfoFromTemplate();
+    }
+  }, [selectedTemplateId]);
 
   const handleAddEmptyEtapa = () => {
     setEtapas([
@@ -121,12 +186,6 @@ const AgregarLlamado = () => {
     ]);
   };
 
-  console.log("selectedCategries", selectedCategorias)
-
-  useEffect(() => {
-    console.log(errors);
-  }, [errors]);
-
   const handleNext = async (data: crearLlamadoForm) => {
     let suggestionsItems = [];
 
@@ -136,9 +195,7 @@ const AgregarLlamado = () => {
       );
     }
 
-    if (
-      selectedCategorias?.length === 0
-    ) {
+    if (selectedCategorias?.length === 0) {
       suggestionsItems?.push("Agrega al menos una categoria al llamado");
     }
 
@@ -279,7 +336,7 @@ const AgregarLlamado = () => {
             })),
           };
         }),
-        categorias: selectedCategorias?.map((cat) => Number(cat?.id))
+        categorias: selectedCategorias?.map((cat) => Number(cat?.id)),
       };
       try {
         const respose = await handleCreateLlamado({
@@ -339,7 +396,18 @@ const AgregarLlamado = () => {
         </div>
       </div>
 
-      <SectionTitle>Datos del llamado</SectionTitle>
+      <SectionTitle>
+        Datos del llamado
+        {selectedTemplateId && (
+          <div className="w-auto ml-4 flex-grow flex flex-row items-center justify-start gap-2 ">
+            <div
+              style={{ background: selectedTemplate?.color }}
+              className={`w-[20px] h-[20px] min-w-[20px] rounded-full`}
+            ></div>
+            <span>Basado en template: {selectedTemplate?.nombre}</span>
+          </div>
+        )}
+      </SectionTitle>
       <ContentInfo>
         <Row>
           <Input
@@ -400,8 +468,8 @@ const AgregarLlamado = () => {
           ]}
           inputFormName={crearLlamadoFormFields.itr}
         />
-        <Dropdown
-          defaultValue={[]}
+        {!loadingCargos && !loadingTemplate && <Dropdown
+          defaultValue={[defaultCargo?.value || 0]}
           label="Cargo"
           isInvalid={!!errors[crearLlamadoFormFields.cargo]?.message}
           placeholder="Seleccione un cargo"
@@ -411,7 +479,7 @@ const AgregarLlamado = () => {
           required
           items={formatCargosToDropdown(cargosData?.listarCargos)}
           inputFormName={crearLlamadoFormFields.itr}
-        />
+        />}
 
         <Dropdown
           defaultValue={[]}
@@ -498,7 +566,7 @@ const AgregarLlamado = () => {
       {suggestions?.length > 0 && (
         <Modal
           textok={"Revisar"}
-          description="Permite agregar nuevos postulantes en un llamado, ya sea un nuevo postulante o uno ya existente en el sistema"
+          description="Ooops, parece que tienes items por revisar antes de crear el llamado"
           onSubmit={() => setSuggestions([])}
           setOpen={() => setSuggestions([])}
           content={
@@ -518,4 +586,4 @@ const AgregarLlamado = () => {
   );
 };
 
-export default AgregarLlamado;
+export default AgregarTemplate;

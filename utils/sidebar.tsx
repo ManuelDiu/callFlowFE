@@ -17,13 +17,13 @@ export const items = [
     validPath: [appRoutes.llamados(), appRoutes.agregarLlamado()],
   },
   { title: "Plantillas", icon: <ImInsertTemplate size={24} />, href: "/about" },
-  { title: "Postulantes", icon: <PiUserDuotone size={24} />, href: "/about" },
+  { title: "Postulantes", icon: <PiUserDuotone size={24} />, href: appRoutes.postulantes() },
   {
     title: "Categorías",
     icon: <MdOutlineCategory size={24} />,
     href: appRoutes.categorias(),
   },
-  { title: "Cargos", icon: <MdOutlineWorkOutline size={24} />, href: "/about" },
+  { title: "Cargos", icon: <MdOutlineWorkOutline size={24} />, href: appRoutes.cargos() },
   {
     title: "Usuarios",
     icon: <PiUsersThreeDuotone size={24} />,

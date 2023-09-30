@@ -161,7 +161,9 @@ const Categorias = () => {
         setSelectedCatToDelete(undefined);
         setShowDeleteModal(false);
       } else {
-        toast.error("Error al eliminar categoría.");
+        resp?.data?.deleteCategory.message
+          ? toast.error(resp?.data?.deleteCategory.message)
+          : toast.error("Error al eliminar categoría.");
       }
     }
   };
@@ -215,7 +217,9 @@ const Categorias = () => {
         toast.success("Categoría creada correctamente.", {});
         setShowCreateModal(false);
       } else {
-        toast.error("Error al crear categoría.");
+        resp?.data?.createCategory.message
+          ? toast.error(resp?.data?.createCategory.message)
+          : toast.error("Error al crear categoría.");
       }
 
       handleSetLoading(false);
@@ -233,7 +237,9 @@ const Categorias = () => {
         toast.success("Categoría actualizada correctamente.", {});
         setShowCreateModal(false);
       } else {
-        toast.error("Error al actualizar categoría.");
+        resp?.data?.updateCategory.message
+          ? toast.error(resp?.data?.updateCategory.message)
+          : toast.error("Error al actualizar categoria.");
       }
       handleSetLoading(false);
     }

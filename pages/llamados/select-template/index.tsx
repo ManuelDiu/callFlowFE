@@ -98,6 +98,11 @@ const SelectTemplate = () => {
   const handleSubmit = () => {
     if (selectedOpt?.value === 0 && !selectedTemplate) {
       setError("Debes seleccioanr un template");
+      return;
+    }
+    if (!selectedOpt) {
+      setError("Debes seleccioanr una opcion");
+      return;
     }
     if (selectedOpt?.value === 0 && selectedTemplate) {
         handleSetTemplate(selectedTemplate);

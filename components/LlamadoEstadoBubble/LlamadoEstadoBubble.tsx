@@ -1,4 +1,5 @@
 import { EstadoLlamadoEnum } from "@/enums/EstadoLlamadoEnum";
+import clsx from "clsx";
 import styled from "styled-components";
 import tw from "twin.macro";
 
@@ -34,12 +35,21 @@ const Text = styled.span`
 
 interface Props {
   estado?: EstadoLlamadoEnum;
+  customColor?: String;
 }
 
-const LlamadoEstadoBubble = ({ estado = EstadoLlamadoEnum.creado }: Props) => {
+const LlamadoEstadoBubble = ({
+  estado = EstadoLlamadoEnum.creado,
+  customColor,
+}: Props) => {
+  console.log("customColor", customColor)
 
+  let asd = "red"
   return (
-    <Container estado={estado}>
+    <Container
+         estado={estado}
+      style={customColor ? { background: `${customColor}`}: {}}
+    >
       <Bubble />
       <Text>{estado || "Creado"}</Text>
     </Container>

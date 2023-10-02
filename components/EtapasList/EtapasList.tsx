@@ -28,9 +28,10 @@ const SectionTitle = styled.h2`
 interface Props {
   etapas: Etapa[];
   setEtapas: any;
+  isView?: boolean;
 }
 
-const EtapasList = ({ etapas, setEtapas }: Props) => {
+const EtapasList = ({ etapas, setEtapas, isView = false }: Props) => {
   const handleChangeEtapaField = (
     etapaItem: Etapa,
     field: string,
@@ -106,26 +107,27 @@ const EtapasList = ({ etapas, setEtapas }: Props) => {
             onChange={(e: any) =>
               handleChangeEtapaField(etapa, "nombre", e?.target?.value)
             }
+            disabled={isView}
             value={etapa?.nombre}
             // isInvalid={!!errors[crearLlamadoFormFields.referencia]?.message}
             // inputFormName={crearLlamadoFormFields.referencia}
           />
           <Cell className="justify-end gap-4">
-            <BsTrash3
+            {!isView && <BsTrash3
               onClick={() => handleRemoveEtapa(etapa?.index)}
               className="opacity-0 transition-all group-hover:opacity-[100] cursor-pointer top-3 right-3"
               size={24}
               color="#DC2626"
-            />
+            />}
 
-            <Button
+            {!isView && <Button
               icon={<IoMdAdd color="#4318FF" size={24} />}
               text="Agregar subetapa"
               variant="outline"
               action={() => handleAddSubEtapa(etapa?.index)}
               className="!py-2 shadow-md !text-sm"
               sizeVariant="fit"
-            />
+            />}
           </Cell>
         </Row>
         <Row>
@@ -138,6 +140,7 @@ const EtapasList = ({ etapas, setEtapas }: Props) => {
             onChange={(e: any) =>
               handleChangeEtapaField(etapa, "plazoDiasMaximo", e?.target?.value)
             }
+            disabled={isView}
             value={etapa?.plazoDiasMaximo}
             // isInvalid={!!errors[crearLlamadoFormFields.referencia]?.message}
             // inputFormName={crearLlamadoFormFields.referencia}
@@ -151,6 +154,7 @@ const EtapasList = ({ etapas, setEtapas }: Props) => {
             onChange={(e: any) =>
               handleChangeEtapaField(etapa, "puntajeMinimo", e?.target?.value)
             }
+            disabled={isView}
             value={etapa?.puntajeMinimo}
             // isInvalid={!!errors[crearLlamadoFormFields.referencia]?.message}
             // inputFormName={crearLlamadoFormFields.referencia}
@@ -171,6 +175,7 @@ const EtapasList = ({ etapas, setEtapas }: Props) => {
             handleSetSubetapas(etapa?.index, values)
           }
           subetapas={etapa?.subetapas}
+          isView={isView}
         />
       </Container>
     );

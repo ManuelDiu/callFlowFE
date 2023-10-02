@@ -1,3 +1,4 @@
+import { Archivo } from "types/llamado";
 
 export type DropDownItem = {
   label: any;
@@ -17,3 +18,15 @@ export type OptionSelectorItem =  {
   value: any,
   image: any,
 }
+
+export type TabItem = {
+  title: string,
+  index: number,
+  content: any,
+}
+
+export const getFileType = (archivo: Archivo): any => {
+  const fileTipo = archivo.extension.split('/')[1] || "txt";
+  return fileTipo;
+}
+

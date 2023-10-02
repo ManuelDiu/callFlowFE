@@ -8,7 +8,7 @@ import { OptionsItem } from "@/utils/utils";
 interface Props {
   title: string;
   selectedUsers: any[];
-  onAddClick: any;
+  onAddClick?: any;
   onRemove?: any,
 }
 
@@ -32,15 +32,15 @@ const ListOfUsers = ({
   title,
   selectedUsers,
   onAddClick,
-  onRemove = () => null,
+  onRemove,
 }: Props) => {
   return (
     <Container>
       <Row>
         <Title>{title}</Title>
-        <PlusContainer onClick={() => onAddClick()}>
+        {onAddClick && <PlusContainer onClick={() => onAddClick()}>
           <BsPlusCircleFill size={26} color="#4318FF" />
-        </PlusContainer>
+        </PlusContainer>}
       </Row>
       {selectedUsers?.map((item, index) => {
         const optionsToItem: OptionsItem[] = [
@@ -57,7 +57,7 @@ const ListOfUsers = ({
             userImage={item?.imageUrl}
             userName={item?.name}
             userlastName={item?.lastName}
-            withDot
+            withDot={onRemove !== undefined && onRemove !== null}
             options={optionsToItem}
           />
         );

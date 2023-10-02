@@ -20,9 +20,10 @@ const Row = styled.div`
 interface Props {
   requisitos: Requisito[];
   setRequisitos: any;
+  isView?: boolean;
 }
 
-const RequisitoList = ({ requisitos, setRequisitos }: Props) => {
+const RequisitoList = ({ requisitos, setRequisitos, isView = false }: Props) => {
   const handleChangeSubEtapaField = (
     requisitoItem: Requisito,
     field: string,
@@ -47,14 +48,15 @@ const RequisitoList = ({ requisitos, setRequisitos }: Props) => {
   return requisitos?.map((requisito, index) => {
     return (
       <Container className="modalOpen group" key={`etapa-${index}`}>
-        <BsTrash3
+        {!isView && <BsTrash3
           onClick={() => handleRemoveRequisito(requisito?.index)}
           className="absolute opacity-0 transition-all group-hover:opacity-[100] cursor-pointer top-3 right-3"
           size={24}
           color="#DC2626"
-        />
+        />}
         <Row>
           <Input
+          disabled={isView}
             label="Nombre"
             placeholder="Ingrese un nombre de requisito"
             type="string"
@@ -76,6 +78,7 @@ const RequisitoList = ({ requisitos, setRequisitos }: Props) => {
             onChange={(e: any) =>
               handleChangeSubEtapaField(requisito, "puntaje", e?.target?.value)
             }
+            disabled={isView}
             value={requisito?.puntaje}
             // isInvalid={!!errors[crearLlamadoFormFields.referencia]?.message}
             // inputFormName={crearLlamadoFormFields.referencia}
@@ -83,6 +86,7 @@ const RequisitoList = ({ requisitos, setRequisitos }: Props) => {
         </Row>
         <Checkbox
           label="Excluyente"
+          disabled={isView}
           setValue={(val: any) =>
             handleChangeSubEtapaField(requisito, "excluyente", val)
           }

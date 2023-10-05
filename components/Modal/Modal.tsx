@@ -14,6 +14,7 @@ interface Props {
   onCancel?: any;
   textok: string,
   textcancel?: string,
+  modalClassname?: string;
   className?: string,
 }
 
@@ -22,7 +23,7 @@ const Container = styled.div`
 `;
 
 const ModalContainer = styled.div`
-  ${tw`lg:w-[900px] overflow-hidden md:w-[700px] mt-[5%] w-full flex flex-col items-center justify-start gap-[20px] h-fit bg-white shadow-md rounded-2xl z-[2]`}
+  ${tw`lg:w-[900px] overflow-visible md:w-[700px] mt-[5%] w-full flex flex-col items-center justify-start gap-[20px] h-fit bg-white shadow-md rounded-2xl z-[2]`}
 `;
 
 const Content = styled.div`
@@ -56,6 +57,7 @@ const Modal = ({
   textok,
   textcancel,
   className,
+  modalClassname,
 }: Props) => {
 
     return (

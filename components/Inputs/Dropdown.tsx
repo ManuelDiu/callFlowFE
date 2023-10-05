@@ -51,7 +51,7 @@ const ContainerExpanded = styled.div`
 `;
 
 const DropdownItem = styled.div`
-  ${tw`w-full h-auto px-2 py-1 rounded-md cursor-pointer transition-all bg-transparent text-texto`}
+  ${tw`w-full h-auto px-2 py-1 rounded-md cursor-pointer transition-all bg-transparent text-texto flex items-center justify-between`}
 `;
 
 const SelectedItems = styled.div`
@@ -213,11 +213,16 @@ const Dropdown = ({
               formatItems?.map((itm) => {
                 return (
                   <DropdownItem
-                    onClick={() => handleToggleItem(itm)}
-                    className="hover:bg-gray-100"
+                    onClick={() => !itm?.disabled && handleToggleItem(itm)}
+                    className={clsx("",
+                      itm?.disabled ? "opacity-40  !cursor-default" : "hover:bg-gray-100"
+                    )}
                     key={itm?.value}
                   >
                     {itm?.label}
+                    {
+                      itm?.customBadge && itm?.customBadge
+                    }
                   </DropdownItem>
                 );
               })

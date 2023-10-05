@@ -20,6 +20,22 @@ import { PostulanteList } from "types/postulante";
 import { DEFAULT_USER_IMAGE } from "./userUtils";
 import { TipoArchivoItem } from "types/tipoArchivo";
 
+export const ORDER_LLAMADO_STATUS = [
+  EstadoLlamadoEnum.creado,
+  EstadoLlamadoEnum.enRelevamiento,
+  EstadoLlamadoEnum.listoParaEstudioMerito,
+  EstadoLlamadoEnum.enEstudioMerito,
+  EstadoLlamadoEnum.listoParaEntrevistas,
+  EstadoLlamadoEnum.enEntrevias,
+  EstadoLlamadoEnum.listoParaPsicotecnico,
+  EstadoLlamadoEnum.enPsicotecnico,
+  EstadoLlamadoEnum.listoParaFirmarGrilla,
+  EstadoLlamadoEnum.enProcesoDeFrimaGrilla,
+  EstadoLlamadoEnum.listoParaFirmarActaFinal,
+  EstadoLlamadoEnum.enProcesoDeFrimaActaFinal,
+  EstadoLlamadoEnum.finalizado,
+];
+
 export const Columns: ColumnItem[] = [
   {
     title: "Nombre",
@@ -150,5 +166,4 @@ export const formatFileTypeToDropdown = (fileTypes: TipoArchivoItem[]) => {
       value: fileType.id
     }
   })
-
 }

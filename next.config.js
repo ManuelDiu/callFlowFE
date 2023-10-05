@@ -12,7 +12,7 @@ const nextConfig = {
     return config;
   },
   images: {
-    domains: ['icon-library.com'],
+    domains: ['icon-library.com', 'firebasestorage.googleapis.com'],
   },
 
 };

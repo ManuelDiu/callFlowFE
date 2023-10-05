@@ -22,8 +22,10 @@ import { BiPlus } from "react-icons/bi";
 import { useRouter } from "next/router";
 import appRoutes from "@/routes/appRoutes";
 import Dropdown from "@/components/Inputs/Dropdown";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { ITR } from "@/enums/ITR";
+import Modal from "@/components/Modal/Modal";
+import Input from "@/components/Inputs/Input";
 
 const Topbar = styled.div`
   ${tw`flex justify-between p-5 w-full h-max`}
@@ -53,6 +55,56 @@ const PostulantesContainer = styled.div`
 const Home: NextPage = () => {
   const router = useRouter();
   const [selectedITR, setSelectedITR] = useState<ITR | [] | "Todos">([]);
+
+  // El siguiente codigo es a modo de prueba del proceso de firma, luego eliminar.
+  const [showFirmarModal, setShowFirmarModal] = useState<boolean>(false);
+  const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
+
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+
+    if (file) {
+      setSelectedFile(file);
+    }
+  };
+
+  const firmarDocumento = () => {
+    if (selectedFile) {
+      const reader = new FileReader();
+
+      reader.onload = (event) => {
+        const binaryData = event.target?.result as ArrayBuffer;
+
+        const formData = new FormData();
+        formData.append("file", new Blob([binaryData]));
+
+        // Crear un objeto de opciones para la solicitud fetch
+        const requestOptions: RequestInit = {
+          method: "POST",
+          body: formData,
+          headers: {
+            "Content-Disposition": /*`"${selectedFile.name}"`*/ "archivoAFirmar",
+          },
+        };
+
+        // Realizar la solicitud fetch con las opciones personalizadas
+        fetch("https://firma.gub.uy/pp/api/externos/archivo", requestOptions)
+          .then((response) => response.json())
+          .then((data) => {
+            // Hacer algo con la respuesta de la API
+            console.log(data)
+          })
+          .catch((error) => {
+            // Manejar errores
+            console.log('ERROR> ', error)
+            console.log('file on ERROR> ', selectedFile)
+          });
+      };
+
+      reader.readAsArrayBuffer(selectedFile);
+    }
+  };
+
   return (
     <>
       <Head>
@@ -64,6 +116,23 @@ const Home: NextPage = () => {
         <ProfileBar />
       </Topbar>
       <MainContainer>
+        {showFirmarModal && (
+          <Modal
+            title="Firmar Archivo"
+            setOpen={setShowFirmarModal}
+            textok="Guardar"
+            onSubmit={firmarDocumento}
+            content={
+              <div className="">
+                <Input
+                  type="file"
+                  accept="application/pdf"
+                  onChange={handleFileChange}
+                />
+              </div>
+            }
+          />
+        )}
         <Notification
           title="¡Acción requerida!"
           text="El miembro del tribunal Jael cambió el estado del postulante Manuel de “No Cumple Requisitos“ a “Cumple Requisitos“ en el llamado “Llamado Pasantes UTEC”"

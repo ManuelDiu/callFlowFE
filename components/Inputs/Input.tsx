@@ -17,6 +17,7 @@ type InputProps = {
   autoComplete?: string;
   className?: string;
   isInvalid?: boolean;
+  accept?: string;
   disabled?: boolean;
   onChange?: any,
   value?: any,
@@ -58,6 +59,7 @@ const Input = ({
   autoComplete = "off",
   variante,
   disabled = false,
+  accept,
   onChange = () => null,
   ...otros
 }: InputProps) => {
@@ -98,6 +100,7 @@ const Input = ({
           autoComplete={autoComplete}
           onChange={onChange}
           {...register(inputFormName)}
+          accept={accept}
           {...otros}
         />
       )}

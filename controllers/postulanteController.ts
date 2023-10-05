@@ -20,6 +20,7 @@ export const createPostulante = gql`
     }
   }
 `;
+
 export const updatePostulante = gql`
   mutation updatePostulante($data: UpdatePostulanteInput!) {
     updatePostulante(data: $data) {
@@ -33,6 +34,7 @@ export const updatePostulante = gql`
     }
   }
 `;
+
 export const deletePostulante = gql`
   mutation deletePostulante($data: DeletePostulanteInput!) {
     deletePostulante(data: $data) {
@@ -41,6 +43,7 @@ export const deletePostulante = gql`
     }
   }
 `;
+
 export const createdPostulanteSubscription = gql`
   subscription PostulanteCreated {
     postulanteCreated {
@@ -53,5 +56,63 @@ export const createdPostulanteSubscription = gql`
       }
       operation
     }
+  }
+`;
+
+export const infoPostulanteEnLlamado = gql`
+  query infoPostulanteEnLlamado($llamadoId: Int!, $postulanteId: Int!) {
+    infoPostulanteEnLlamado(
+      llamadoId: $llamadoId
+      postulanteId: $postulanteId
+    ) {
+      id
+      postulante {
+        id
+        nombres
+        apellidos
+        documento
+        updatedAt
+      }
+      llamado {
+        id
+        nombre
+        referencia
+        cantidadHoras
+        cupos
+        itr
+        cargo {
+          id
+          nombre
+          tips
+          updatedAt
+        }
+        updatedAt
+      }
+      archivos {
+        id
+        nombre
+        url
+        extension
+        tipoArchivo {
+          nombre
+          origen
+        }
+      }
+      estadoActual {
+        id
+        nombre
+        updatedAt
+      }
+      updatedAt
+    }
+  }
+`;
+
+export const cambiarEstadoPostulanteLlamado = gql`
+  mutation cambiarEstadoPostulanteLlamado($data: CambiarEstadoPostulanteLlamadoInput!) {
+    cambiarEstadoPostulanteLlamado(data: $data) {
+    ok
+    message
+  }
   }
 `;

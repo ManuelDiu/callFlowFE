@@ -7,6 +7,7 @@ export const listarPostulantes = gql`
       nombres
       id
       documento
+      updatedAt
     }
   }
 `;

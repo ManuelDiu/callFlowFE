@@ -173,7 +173,9 @@ const TiposArchivo = () => {
         setSelectedTArchToDelete(undefined);
         setShowDeleteModal(false);
       } else {
-        toast.error("Error al eliminar el tipo de archivo.");
+        resp?.data?.deleteTipoArchivo.message
+          ? toast.error(resp?.data?.deleteTipoArchivo.message)
+          : toast.error("Error al eliminar tipo de archivo.");
       }
     }
   };

@@ -16,6 +16,7 @@ const appRoutes = {
     agregarTemplate: () => `/template/agregar-template`,
     selectTemplate: () => `/llamados/select-template`,
     templates: () => `/template`,
+    llamadoInfoPage: (llamadoId?: any) => `/llamados/${llamadoId ? llamadoId : `[llamadoId]`}/info`
 }
 
 export default appRoutes;

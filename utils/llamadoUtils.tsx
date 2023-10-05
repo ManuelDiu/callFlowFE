@@ -8,13 +8,17 @@ import { HiOutlineKey } from "react-icons/hi";
 import { MdNumbers, MdOutlineWorkOutline } from "react-icons/md";
 import { PiUsersThreeBold } from "react-icons/pi";
 import { GiProgression } from "react-icons/gi";
-import { LlamadoList } from "types/llamado";
+import { LlamadoList, LlamadoPostulante, TribunalLlamado } from "types/llamado";
 import Text from "@/components/Table/components/Text";
 import moment from "moment";
 import LlamadoEstadoBubble from "@/components/LlamadoEstadoBubble/LlamadoEstadoBubble";
 import LlamadoProgress from "@/components/LlamadoProgress/LlamadoProgress";
 import appRoutes from "@/routes/appRoutes";
 import { EstadoLlamadoEnum } from "@/enums/EstadoLlamadoEnum";
+import { EtapaList } from "types/template";
+import { PostulanteList } from "types/postulante";
+import { DEFAULT_USER_IMAGE } from "./userUtils";
+import { TipoArchivoItem } from "types/tipoArchivo";
 
 export const Columns: ColumnItem[] = [
   {
@@ -81,7 +85,70 @@ export const formatLlamadosToTable = (llamados: LlamadoList[] = []) => {
       cargo: <Text text={llamado?.cargo?.nombre} />,
       postulantes: <Text text={llamado?.postulantes?.toString() || "0"} />,
       progreso: <LlamadoProgress progress={llamado?.progreso || 0} />,
-      href: appRoutes.llamadoInfo(llamado?.id)
+      href: appRoutes.llamadoInfoPage(llamado?.id)
     };
   });
 };
+
+
+export const formatEtapas = (etapas: EtapaList[]) => {
+  const formatEtapas = etapas?.map((etapa, indexE) => {
+    return {
+      index: indexE,
+      nombre: etapa?.nombre,
+      plazoDiasMaximo: etapa?.plazoDias,
+      puntajeMinimo: etapa?.puntajeMin,
+      subetapas: etapa?.subetapas?.map((subetapa, indexSub) => {
+        return {
+          index: indexSub,
+          nombre: subetapa?.nombre,
+          subtotal: subetapa?.puntajeTotal,
+          puntajeMaximo: subetapa?.puntajeMaximo,
+          requisitos: subetapa?.requisitos?.map((req, indexReq) => {
+            return {
+              index: indexReq,
+              nombre: req?.nombre,
+              puntaje: req?.puntajeSugerido,
+              excluyente: req?.excluyente,
+            };
+          }),
+        };
+      }),
+    };
+  });
+  return formatEtapas;
+}
+
+export const formatPostulantes = (postulantes: LlamadoPostulante[]) => {
+  return postulantes?.map((postulante, index) => {
+    console.log("postulante", postulante)
+    return {
+      index: index,
+      imageUrl: DEFAULT_USER_IMAGE,
+      name: `${postulante.postulante.nombres} ${postulante.postulante.apellidos}`,
+      lastName: postulante.postulante.documento,
+    };
+  });
+};
+
+export const formatTribunales = (tribunales: TribunalLlamado[]) => {
+  return tribunales?.map((tribunal, index) => {
+    return {
+      index: index,
+      imageUrl: tribunal?.usuario?.imageUrl || DEFAULT_USER_IMAGE,
+      name: `${tribunal?.usuario?.name} ${tribunal?.usuario?.lastName}`,
+      lastName: `Tribunal - ${tribunal.orden} ${tribunal.tipoMiembro}`,
+    };
+  });
+};
+
+
+export const formatFileTypeToDropdown = (fileTypes: TipoArchivoItem[]) => {
+  return fileTypes?.map((fileType) => {
+    return {
+      label: fileType.nombre,
+      value: fileType.id
+    }
+  })
+
+}

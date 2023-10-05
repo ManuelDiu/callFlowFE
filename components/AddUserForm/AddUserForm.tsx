@@ -123,7 +123,7 @@ const AddUserForm = ({ setFile, normalErrors = [], selectedUser }: Props) => {
         <Input
           label="Correo electronico"
           placeholder="Ingrese un email"
-          disabled={selectedUser !== undefined || selectedUser !== null}
+          disabled={selectedUser !== undefined && selectedUser !== null}
           type="email"
           register={register}
           required

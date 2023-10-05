@@ -30,9 +30,10 @@ const SectionTitle = styled.h2`
 interface Props {
   subetapas: SubEtapa[];
   setSubEtapas: any;
+  isView?: boolean;
 }
 
-const SubEtapaList = ({ subetapas, setSubEtapas }: Props) => {
+const SubEtapaList = ({ subetapas, setSubEtapas, isView = false }: Props) => {
   const handleChangeSubEtapaField = (
     subEtapaItem: SubEtapa,
     field: string,
@@ -101,6 +102,7 @@ const SubEtapaList = ({ subetapas, setSubEtapas }: Props) => {
             type="string"
             className="flex-grow w-full"
             required
+            disabled={isView}
             onChange={(e: any) =>
               handleChangeSubEtapaField(subEtapa, "nombre", e?.target?.value)
             }
@@ -109,21 +111,21 @@ const SubEtapaList = ({ subetapas, setSubEtapas }: Props) => {
             // inputFormName={crearLlamadoFormFields.referencia}
           />
           <Cell className="justify-end gap-4">
-            <BsTrash3
+            {!isView && <BsTrash3
               onClick={() => handleRemoveEtapa(subEtapa?.index)}
               className="opacity-0 transition-all group-hover:opacity-[100] cursor-pointer top-3 right-3"
               size={24}
               color="#DC2626"
-            />
+            />}
 
-            <Button
+           {!isView && <Button
               icon={<IoMdAdd color="#4318FF" size={24} />}
               text="Agregar requisito"
               variant="outline"
               action={() => handleAddRequisito(subEtapa?.index)}
               className="!py-2 shadow-md !text-sm"
               sizeVariant="fit"
-            />
+            />}
           </Cell>
         </Row>
         <Row>
@@ -134,6 +136,7 @@ const SubEtapaList = ({ subetapas, setSubEtapas }: Props) => {
             min={0}
             className="flex-grow w-full"
             required
+            disabled={isView}
             onChange={(e: any) =>
               handleChangeSubEtapaField(
                 subEtapa,
@@ -158,6 +161,7 @@ const SubEtapaList = ({ subetapas, setSubEtapas }: Props) => {
           setRequisitos={(val: any) =>
             handleSetRequisitos(subEtapa?.index, val)
           }
+          isView={isView}
           requisitos={subEtapa?.requisitos}
         />
       </Container>

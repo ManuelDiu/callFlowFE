@@ -52,7 +52,7 @@ const Llamados: NextPage = () => {
 
   useEffect(() => {
     setSelectedItemsToDelete([]);
-  }, [deleteOpen])
+  }, [deleteOpen]);
 
   const rows = formatLlamadosToTable(data?.listarLlamados || []);
 

@@ -11,10 +11,11 @@ const appRoutes = {
     tiposArchivo: () => "/tipos-archivo",
     llamadoInfo: (llamadoId: any) => `/llamados/${llamadoId}/info`,
     agregarLlamado: () => `/llamados/agregar-llamado`,
+    postulantes: () => `/postulantes`,
+    cargos: () => `/cargos`,
     agregarTemplate: () => `/template/agregar-template`,
     selectTemplate: () => `/llamados/select-template`,
     templates: () => `/template`,
-    postulantes: () => `postulantes`,
     llamadoInfoPage: (llamadoId?: any) => `/llamados/${llamadoId ? llamadoId : `[llamadoId]`}/info`
 }
 

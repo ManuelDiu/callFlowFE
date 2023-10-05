@@ -1,5 +1,6 @@
 export type Cargo = {
-    id: number,
+    id?: number,
     nombre: string,
     tips: string,
+    updatedAt: string,
 }

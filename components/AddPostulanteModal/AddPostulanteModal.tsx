@@ -116,7 +116,7 @@ const AddPostulanteModal = ({
       setOpen={setOpen}
       content={handleRenderContent()}
       title="Agregar postulante"
-      className="!mt-[20%]"
+      className="!overflow-visible"
     />
   );
 };

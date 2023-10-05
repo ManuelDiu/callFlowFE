@@ -11,6 +11,8 @@ import moment from "moment";
 import { EtapaList } from "types/template";
 import { formatEtapas, formatPostulantes, formatTribunales } from "@/utils/llamadoUtils";
 import ListOfUsers from "../ListOfUsers/ListOfUsers";
+import { useState } from "react";
+import ChnageStatusModal from "../ChangeStatusModal/ChangeStatusModal";
 
 const Container = styled.div`
   ${tw`w-full h-auto flex flex-col items-start justify-start gap-4`}
@@ -73,6 +75,9 @@ interface Props {
 }
 
 const LlamadoInfoContent = ({ llamadoInfo }: Props) => {
+  const [openCambiarEstadoModal, setOpenCambarEstadoModal] = useState(false);
+
+
   const handleGenerateGrilla = () => {
     // generate grilla and download it
   };
@@ -110,19 +115,23 @@ const LlamadoInfoContent = ({ llamadoInfo }: Props) => {
 
   return (
     <Container>
+      {openCambiarEstadoModal && <ChnageStatusModal 
+        llamadoInfo={llamadoInfo}
+        setOpen={setOpenCambarEstadoModal}
+      />}
       <IndicatorsContainer>
         <IndicatorItem>
           <IndicatorBadge style={{ background: "#0FBB00" }} />
-          <IndicatorText>Cumple plazo dias</IndicatorText>
+          <IndicatorText>Etapa cumple plazo dias</IndicatorText>
         </IndicatorItem>
         <IndicatorItem>
           <IndicatorBadge style={{ background: "#E5E84F" }} />
 
-          <IndicatorText>Proximo a cumplir plazo dias</IndicatorText>
+          <IndicatorText>Etapa proximo a cumplir plazo dias</IndicatorText>
         </IndicatorItem>
         <IndicatorItem>
           <IndicatorBadge style={{ background: "#F55F5F" }} />
-          <IndicatorText>Excede plazo dias</IndicatorText>
+          <IndicatorText>Etapa excede plazo dias</IndicatorText>
         </IndicatorItem>
       </IndicatorsContainer>
       <ActionsContainer>
@@ -135,7 +144,7 @@ const LlamadoInfoContent = ({ llamadoInfo }: Props) => {
           icon={<TbArrowsExchange color="#4318FF" size={18} />}
           variant="outline"
           text="Cambiar estado"
-          action={handleGenerateGrilla}
+          action={() => setOpenCambarEstadoModal(!openCambiarEstadoModal)}
         />
         <Button
           icon={<BiCalendar color="#4318FF" size={18} />}

@@ -46,7 +46,7 @@ const SubEtapaList = ({ subetapas, setSubEtapas, isView = false }: Props) => {
           [field]: value,
         };
       }
-      return subetapas;
+      return subetapa;
     });
     setSubEtapas(newSubEtapas);
   };
@@ -57,10 +57,10 @@ const SubEtapaList = ({ subetapas, setSubEtapas, isView = false }: Props) => {
         return {
           ...subEtapa,
           requisitos: [
-            ...subEtapa?.requisitos,
+            ...subEtapa?.requisitos || [],
             {
               ...emptyRequisito,
-              index: subEtapa?.requisitos?.length + 1,
+              index: subEtapa?.requisitos?.length + 1 || 0,
             },
           ],
         };

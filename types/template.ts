@@ -23,6 +23,7 @@ export type SubEtapaList = {
 };
 
 export type EtapaList = {
+  id?: number;
   nombre: string;
   plazoDias: number;
   puntajeMin: number;

@@ -97,6 +97,7 @@ export const getLlamadoInfoById = gql`
         descripcion
       }
       etapas {
+        id
         total
         puntajeMin
         plazoDias
@@ -117,6 +118,7 @@ export const getLlamadoInfoById = gql`
         nombre
       }
       etapaActual {
+        id
         total
         puntajeMin
         plazoDias
@@ -166,6 +168,15 @@ export const addFileToLlamado = gql`
     addFileToLlamado(info: $dataFile) {
       message
       ok
+    }
+  }
+`;
+
+export const cambiarEstadoLlamado = gql`
+  mutation CambiarEstadoLlamado($info: CambiarEstadoLlamadoInput) {
+    cambiarEstadoLlamado(info: $info) {
+      ok
+      message
     }
   }
 `;

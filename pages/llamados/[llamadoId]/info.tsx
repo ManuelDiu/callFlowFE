@@ -12,7 +12,7 @@ import { formatEtapas } from "@/utils/llamadoUtils";
 import { TabItem } from "@/utils/utils";
 import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import tw from "twin.macro";
 import { FullLlamadoInfo } from "types/llamado";
@@ -22,11 +22,11 @@ const Container = styled.div`
 `;
 
 const EtapaListContent = styled.div`
-  ${tw`w-full h-auto flex items-center justify-center mt-5`}
+  ${tw`w-full h-auto flex items-center flex-col gap-4 justify-center mt-5`}
 `;
 
 const LlamadoInfo = () => {
-  const { query, pathname } = useRouter();
+  const { query } = useRouter();
   const llamadoId = Number(query?.llamadoId || 0);
 
   const { data, loading } = useQuery<{ getLlamadoById?: FullLlamadoInfo }>(
@@ -41,7 +41,6 @@ const LlamadoInfo = () => {
 
   const isLoading = loading;
   const llamadoInfo = data?.getLlamadoById;
-  console.log("llamadoInfo arriba", llamadoInfo)
   const notExistsLlamado = !llamadoInfo?.id;
 
   useEffect(() => {

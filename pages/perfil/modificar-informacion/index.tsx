@@ -45,7 +45,7 @@ const BGImage = styled.div`
 `;
 
 const UserImageAndName = styled.div`
-  ${tw`flex flex-col items-center justify-center w-full p-5 pt-0`}
+  ${tw`flex flex-col items-center justify-center w-full p-5 pt-0 -mt-[100px]`}
 `;
 
 const BlurredCircle = styled.div`

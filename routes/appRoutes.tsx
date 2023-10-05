@@ -14,8 +14,10 @@ const appRoutes = {
     agregarTemplate: () => `/template/agregar-template`,
     selectTemplate: () => `/llamados/select-template`,
     templates: () => `/template`,
-    postulantes: () => `postulantes`,
-    llamadoInfoPage: (llamadoId?: any) => `/llamados/${llamadoId ? llamadoId : `[llamadoId]`}/info`
+    postulantes: () => `/postulantes`,
+    modificarInfoPerfil: () => `/perfil/modificar-informacion`,
+    llamadoInfoPage: (llamadoId?: any) => `/llamados/${llamadoId ? llamadoId : `[llamadoId]`}/info`,
+    postulanteInLlamadoInfo: (llamadoId?: any, postulanteId?: any) => `/llamados/${llamadoId ? llamadoId : '[llamadoId]'}/postulante/${postulanteId ? postulanteId : `[postulanteId]`}`,
 }
 
 export default appRoutes;

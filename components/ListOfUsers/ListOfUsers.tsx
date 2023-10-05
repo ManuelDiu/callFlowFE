@@ -52,7 +52,7 @@ const ListOfUsers = ({
 
         return (
           <UserInfoLine
-            className="shadow-md w-full rounded-2xl p-4"
+            className="shadow-md w-full rounded-2xl p-4 cursor-pointer"
             key={`userInfoLine-${index}`}
             userImage={item?.imageUrl}
             userName={item?.name}

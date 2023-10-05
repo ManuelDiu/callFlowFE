@@ -86,6 +86,7 @@ const Dropdown = ({
   const defaultValuesFormatted =
     defaultValue && defaultValue?.length > 0
       ? defaultValue?.map((item: any) => {
+        console.log("item", item)
           const val = items?.find((itm) => itm?.value === item);
           return val;
         })
@@ -234,9 +235,9 @@ const Dropdown = ({
       </div>
       {multiSelect && (
         <SelectedItems>
-          {selectedValues?.map((item) => {
+          {selectedValues?.map((item, index) => {
             return (
-              <SelectedItemTag key={`${item?.id}-key`}>
+              <SelectedItemTag key={`${index}-key`}>
                 {item?.label}
                 <GrClose
                   className="cursor-pointer"

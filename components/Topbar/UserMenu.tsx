@@ -18,7 +18,7 @@ const UserMenu = ({ showUserMenu }: UserMenuProps) => {
           "transition-all absolute top-[90px] bg-white text-base z-10 float-right py-2 list-none text-left rounded shadow-lg min-w-48"
         }
       >
-        <Link href={appRoutes.home()}>
+        <Link href={appRoutes.modificarInfoPerfil()}>
           <a className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700">
             Mi Perfil
           </a>

@@ -1,10 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
 import { TemplateList } from "types/template";
+import { UserList } from "types/usuario";
 import { handleGetToken, handleStorageToken } from "utils/userUtils";
 
 const initialState: {
-  userInfo: any;
+  userInfo: UserList | null;
   isLoading: boolean,
   token: string | undefined,
   loading: boolean,

@@ -92,3 +92,16 @@ div {
 .itemRowTable:hover {
   background-color: rgba(221, 221, 221, 0.473);
 }
+
+.userColor {
+  color: #4318FF!important;
+  margin-left: 4px;
+  margin-right: 4px;
+
+}
+
+.estadoColor {
+  color: #8EA501!important;
+  margin-left: 4px;
+  margin-right: 4px;
+}

@@ -20,10 +20,18 @@ export type LlamadoList = {
   progreso: number;
 };
 
+export type Cambio = {
+  cambio: boolean,
+  nombre: EstadoLlamadoEnum,
+  id: number,
+}
+
 export type HistorialLlamado = {
   id: number;
   descripcion: string;
   usuario: UserList;
+  createdAt?: string;
+  cambio?: Cambio;
 };
 
 export type Archivo = {

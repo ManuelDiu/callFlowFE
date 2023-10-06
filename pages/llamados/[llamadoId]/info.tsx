@@ -1,6 +1,7 @@
 import { Topbar } from "@/components/CheckTokenWrapper/CheckTokenWrapper";
 import EtapasList from "@/components/EtapasList/EtapasList";
 import FileLlamado from "@/components/FileLlamado/FileLlamado";
+import HistorialLlamado from "@/components/HistorialLlamado/HistorialLlamado";
 import LlamadoInfoContent from "@/components/LlamadoInfoContent/LlamadoInfoContent";
 import NotFoundPage from "@/components/NotFoundPage/NotFoundPage";
 import Tabs from "@/components/Tabs/Tabs";
@@ -66,7 +67,7 @@ const LlamadoInfo = () => {
     {
       index: 2,
       title: "Historial",
-      content: null,
+      content: <HistorialLlamado historiales={llamadoInfo?.historiales || []} />,
     },
     {
       index: 3,

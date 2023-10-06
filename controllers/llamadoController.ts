@@ -93,7 +93,13 @@ export const getLlamadoInfoById = gql`
           imageUrl
           id
         }
+        cambio {
+          cambio
+          nombre
+          id
+        }
         id
+        createdAt
         descripcion
       }
       etapas {

@@ -72,7 +72,7 @@ const FileLlamado = ({ llamadoInfo }: Props) => {
   const archivosFirma = llamadoInfo?.archivosFirma;
   const { downloadFile } = useDownloadFile();
   const client = useApolloClient();
-  const { handleSetLoading } = useGlobal();
+  const { handleSetLoading, isAdmin } = useGlobal();
   const [openConfirmationDelete, setOpenConfirmationDelete] =
     useState<boolean>();
   const [selectedArchivoToDelete, setSelectedArchivoToDelete] =
@@ -122,12 +122,12 @@ const FileLlamado = ({ llamadoInfo }: Props) => {
     <Container>
       <Row>
         <Title>Archivos llamado</Title>
-        <Button
+        {isAdmin && <Button
           action={() => setOpenModalAdd(!openModalAdd)}
           icon={<AiOutlinePlus color="white" size={20} />}
           variant="fill"
           text="Agregar archivo"
-        />
+        />}
       </Row>
 
       <Subtitle>Archivos con firma</Subtitle>

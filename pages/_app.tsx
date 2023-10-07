@@ -12,14 +12,18 @@ import { PiFilePlusLight } from "react-icons/pi";
 import { MdOutlineWorkOutline } from "react-icons/md";
 import "react-toastify/dist/ReactToastify.css";
 
-import { ApolloProvider } from "@apollo/client";
+import { ApolloProvider, useQuery } from "@apollo/client";
 import { client } from "../apollo-server";
 import { Provider } from "react-redux";
 import store from "@/store/store";
 import CheckTokenWrapper from "@/components/CheckTokenWrapper/CheckTokenWrapper";
 import SubscriptionGlobalWrapper from "@/components/SubscriptionGlobalWrapper/SubscriptionGlobalWrapper";
+import { useRouter } from "next/router";
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const { pathname } = useRouter();
+
+  console.log(pathname)
   return (
     <main className="min-h-screen flex flex-col font-primaria">
       <Head>

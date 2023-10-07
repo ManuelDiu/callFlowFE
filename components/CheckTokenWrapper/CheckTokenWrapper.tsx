@@ -5,15 +5,17 @@ import { useGlobal } from "hooks/useGlobal";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { UsuarioInfo } from "types/usuario";
-import { public_routes } from "utils/routes";
+import { public_routes, tribunal_routes } from "utils/routes";
 import Sidebar from "../Sidebar";
-import { items } from "utils/sidebar";
+import { items, itemsTribunalOrCordinador } from "utils/sidebar";
 import styled from "styled-components";
 import tw from "twin.macro";
 import { ToastContainer } from "react-toastify";
 import Spinner from "../Spinner/Spinner";
 import Breadcrumb from "@/components/Topbar/Breadcrumb";
 import ProfileBar from "@/components/Topbar/ProfileBar";
+import { Roles } from "@/enums/Roles";
+import NotFoundPage from "../NotFoundPage/NotFoundPage";
 
 interface Props {
   children: any;
@@ -40,6 +42,10 @@ const CheckTokenWrapper = ({ children }: Props) => {
   const [getUserInfo, { loading: loadingUserInfo }] = useMutation(checkToken);
   const { pathname, push } = useRouter();
   const isPublicPath = public_routes.includes(pathname);
+  const [invalidPath, setIsInvalidPath] = useState(false);
+  const isAdmin = userInfo?.roles?.includes(Roles.admin);
+  const isTribunal = userInfo?.roles?.includes(Roles.tribunal);
+  const isCordinador = userInfo?.roles?.includes(Roles.cordinador);
 
   const handleCheckToken = async () => {
     setChecking(true);
@@ -80,6 +86,15 @@ const CheckTokenWrapper = ({ children }: Props) => {
     handleSetLoading(checking || loadingUserInfo);
   }, [checking, loadingUserInfo]);
 
+  useEffect(() => {
+    if ((isTribunal || isCordinador) && !isAdmin) {
+      const isValidPath = tribunal_routes.includes(pathname);
+      setIsInvalidPath(!isValidPath);
+    } else {
+      setIsInvalidPath(false);
+    }
+  }, [pathname, isTribunal, isCordinador]);
+
   if (checking) {
     return null;
   }
@@ -88,7 +103,7 @@ const CheckTokenWrapper = ({ children }: Props) => {
     <MainContent>
       {loading && <Spinner />}
 
-      {!isPublicPath && <Sidebar items={items} />}
+      {!isPublicPath && <Sidebar items={isAdmin ? items : itemsTribunalOrCordinador} />}
       <ToastContainer
         position="top-right"
         autoClose={5000}
@@ -111,7 +126,7 @@ const CheckTokenWrapper = ({ children }: Props) => {
             <ProfileBar />
           </Topbar>
         )} */}
-        {children}
+        {invalidPath ? <NotFoundPage /> : children}
       </ContentPage>
     </MainContent>
   );

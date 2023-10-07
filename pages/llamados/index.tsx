@@ -36,7 +36,7 @@ const Llamados: NextPage = () => {
   const { data, loading: loadingLlamados } = useQuery<{
     listarLlamados: LlamadoList[];
   }>(listarLlamados);
-  const { handleSetLoading } = useGlobal();
+  const { handleSetLoading, isAdmin } = useGlobal();
   const { push } = useRouter();
   const [deleteOpen, setDeleteOption] = useState(false);
   const [openDeleteConfirmModal, setOpenDeleteConfirmModal] = useState(false);
@@ -91,7 +91,7 @@ const Llamados: NextPage = () => {
               className="w-auto"
             />
           )}
-          <Button
+          {isAdmin && <Button
             variant="outline"
             icon={<BiTrash size={20} fontWeight={700} color="#4318FF" />}
             text={
@@ -99,14 +99,14 @@ const Llamados: NextPage = () => {
             }
             action={() => setDeleteOption(!deleteOpen)}
             className="w-auto"
-          />
-          <Button
+          />}
+          {isAdmin && <Button
             variant="fill"
             icon={<BiPlus size={20} fontWeight={700} color="white" />}
             text="Agregar Llamado"
             action={() => push(appRoutes.selectTemplate())}
             className="w-auto"
-          />
+          />}
         </ActionRow>
         <Table
           multiDisabled={deleteOpen}

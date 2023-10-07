@@ -13,6 +13,7 @@ import { formatEtapas, formatPostulantes, formatTribunales } from "@/utils/llama
 import ListOfUsers from "../ListOfUsers/ListOfUsers";
 import { useState } from "react";
 import ChnageStatusModal from "../ChangeStatusModal/ChangeStatusModal";
+import { useGlobal } from "@/hooks/useGlobal";
 
 const Container = styled.div`
   ${tw`w-full h-auto flex flex-col items-start justify-start gap-4`}
@@ -76,7 +77,7 @@ interface Props {
 
 const LlamadoInfoContent = ({ llamadoInfo }: Props) => {
   const [openCambiarEstadoModal, setOpenCambarEstadoModal] = useState(false);
-
+  const { isAdmin } = useGlobal();
 
   const handleGenerateGrilla = () => {
     // generate grilla and download it
@@ -135,23 +136,23 @@ const LlamadoInfoContent = ({ llamadoInfo }: Props) => {
         </IndicatorItem>
       </IndicatorsContainer>
       <ActionsContainer>
-        <Button
+        {isAdmin && <Button
           icon={<AiOutlineFileAdd color="white" size={18} />}
           text="Generar Grilla"
           action={handleGenerateGrilla}
-        />
+        />}
         <Button
           icon={<TbArrowsExchange color="#4318FF" size={18} />}
           variant="outline"
           text="Cambiar estado"
           action={() => setOpenCambarEstadoModal(!openCambiarEstadoModal)}
         />
-        <Button
+        {isAdmin && <Button
           icon={<BiCalendar color="#4318FF" size={18} />}
           variant="outline"
           text="Disponibilidad tribunal"
           action={handleGenerateGrilla}
-        />
+        />}
       </ActionsContainer>
 
       <LlamadoInfoContainer>

@@ -20,7 +20,7 @@ const Container = styled.div`
 `;
 
 const ItemHistorial = styled.div`
-  ${tw`w-full h-auto flex flex-row items-center justify-start relative gap-3 px-6 py-8`}
+  ${tw`w-full h-auto flex flex-row flex-wrap max-w-full items-center justify-start relative gap-3 px-6 py-8`}
 `;
 
 const TimeText = styled.div`

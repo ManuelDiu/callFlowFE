@@ -9,7 +9,7 @@ import { MdOutlineWorkOutline } from "react-icons/md";
 import appRoutes from "@/routes/appRoutes";
 
 export const items = [
-  { title: "Inicio", icon: <AiFillHome size={24} />, href: appRoutes.home() },
+  { title: "Inicio", icon: <AiFillHome size={24} />, href: appRoutes.home(), validPath: [appRoutes.home()] },
   {
     title: "Llamados",
     icon: <PiClipboardTextDuotone size={24} />,
@@ -39,5 +39,15 @@ export const items = [
     title: "Tipos de Archivo",
     icon: <PiFilePlusLight size={24} />,
     href: appRoutes.tiposArchivo(),
+  },
+];
+
+export const itemsTribunalOrCordinador = [
+  { title: "Inicio", icon: <AiFillHome size={24} />, href: appRoutes.home(), validPath: [appRoutes.home()] },
+  {
+    title: "Llamados",
+    icon: <PiClipboardTextDuotone size={24} />,
+    href: appRoutes.llamados(),
+    validPath: [appRoutes.llamados(), appRoutes.agregarLlamado(), appRoutes.selectTemplate(), appRoutes.llamadoInfoPage()],
   },
 ];

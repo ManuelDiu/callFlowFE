@@ -13,7 +13,10 @@ const useGlobalLlamadosSubscription = () => {
   );
   const { data, loading: loadingLlamados } = useQuery<{
     listarLlamados: LlamadoList[];
-  }>(listarLlamados);
+    
+  }>(listarLlamados, {
+    fetchPolicy: 'cache-and-network',
+  });
 
   const client = useApolloClient();
 

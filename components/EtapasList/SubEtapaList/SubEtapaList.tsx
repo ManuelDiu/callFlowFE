@@ -153,7 +153,7 @@ const SubEtapaList = ({ subetapas, setSubEtapas, isView = false }: Props) => {
         <div className="w-full">
           {
             Number(sumOfRequisitos) > Number(subEtapa?.puntajeMaximo) &&
-            <OneLineError message={"La suma de los requisitos no puede superar el maximo"} />
+            <OneLineError message={"La suma de los puntajes de los requisitos no puede superar el máximo de la subetapa."} />
           }
         </div>
         <SectionTitle>Requisitos</SectionTitle>

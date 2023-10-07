@@ -15,4 +15,5 @@ export const tribunal_routes = [
   appRoutes.llamados(),
   appRoutes.postulanteInLlamadoInfo(),
   appRoutes.llamadoInfoPage(),
+  appRoutes.modificarInfoPerfil(),
 ];

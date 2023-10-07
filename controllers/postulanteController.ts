@@ -109,10 +109,23 @@ export const infoPostulanteEnLlamado = gql`
 `;
 
 export const cambiarEstadoPostulanteLlamado = gql`
-  mutation cambiarEstadoPostulanteLlamado($data: CambiarEstadoPostulanteLlamadoInput!) {
+  mutation cambiarEstadoPostulanteLlamado(
+    $data: CambiarEstadoPostulanteLlamadoInput!
+  ) {
     cambiarEstadoPostulanteLlamado(data: $data) {
-    ok
-    message
+      ok
+      message
+    }
   }
+`;
+
+export const cambiarEstadoPostulanteLlamadoTribunal = gql`
+  mutation cambiarEstadoPostulanteLlamadoTribunal(
+    $data: CambiarEstadoPostulanteLlamadoInput!
+  ) {
+    cambiarEstadoPostulanteLlamadoTribunal(data: $data) {
+      ok
+      message
+    }
   }
 `;

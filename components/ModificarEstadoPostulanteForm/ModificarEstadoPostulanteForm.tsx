@@ -13,7 +13,7 @@ import { EstadoPostulanteEnum } from "@/enums/EstadoPostulanteEnum";
 
 interface Props {
   normalErrors?: string[];
-  estadoActual: EstadoPostulanteEnum;
+  estadoActual?: EstadoPostulanteEnum;
 }
 
 const Container = styled.div`
@@ -33,26 +33,21 @@ const ModificarEstadoPostulanteForm = ({
   });
 
   const {
-    register,
     setValue,
     formState: { errors },
   } = useFormContext();
 
-  useEffect(() => {
-    if (estadoActual) {
-      setValue(CambiarEstadoPostulanteFormFields.nuevoEstado, estadoActual);
-    }
-  }, [estadoActual]);
-
   const formatErrors = errors as any;
 
+  const values = [
+    { label: "Cumple requisitos", value: EstadoPostulanteEnum.cumpleRequisito },
+    { label: "En duda", value: EstadoPostulanteEnum.enDua },
+    { label: "No cumple requisitos", value: EstadoPostulanteEnum.noCumpleRequisito },
+  ];
   return (
     <FormProvider {...cambiarEstadoPostulForm}>
       <Container>
         <Dropdown
-          defaultValue={
-            estadoActual ? [estadoActual] : []
-          }
           label="Nuevo estado"
           isInvalid={!!errors[CambiarEstadoPostulanteFormFields.nuevoEstado]?.message}
           placeholder="Seleccione el nuevo estado para el postulante"
@@ -60,11 +55,7 @@ const ModificarEstadoPostulanteForm = ({
             setValue(CambiarEstadoPostulanteFormFields.nuevoEstado, val?.value)
           }
           required
-          items={[
-            { label: "Cumple requisitos", value: EstadoPostulanteEnum.cumpleRequisito },
-            { label: "En duda", value: EstadoPostulanteEnum.enDua },
-            { label: "No cumple requisitos", value: EstadoPostulanteEnum.noCumpleRequisito },
-          ]}
+          items={values.filter((val) => val.value !== estadoActual )}
           inputFormName={CambiarEstadoPostulanteFormFields.nuevoEstado}
         />
       </Container>

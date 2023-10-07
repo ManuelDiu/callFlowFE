@@ -12,6 +12,7 @@ import tw from "twin.macro";
 import {
   infoPostulanteEnLlamado,
   cambiarEstadoPostulanteLlamado,
+  cambiarEstadoPostulanteLlamadoTribunal,
 } from "@/controllers/postulanteController";
 import { PostulanteLlamadoFull } from "types/postulante";
 import Image from "next/image";
@@ -32,6 +33,10 @@ import ModificarEstadoPostulanteForm from "@/components/ModificarEstadoPostulant
 import { EstadoPostulanteEnum } from "@/enums/EstadoPostulanteEnum";
 import { toast } from "react-toastify";
 import LlamadoInfoCard from "@/components/LlamadoInfoCard/LlamadoInfoCard";
+import { Roles } from "@/enums/Roles";
+import ModalConfirmation from "@/components/Modal/components/ModalConfirmation";
+import AvatarSelector from "@/components/Inputs/AvatarSelector";
+import { DEFAULT_USER_IMAGE } from "@/utils/userUtils";
 
 const colorVariants: any = {
   [EstadoPostulanteEnum.cumpleRequisito]: tw`bg-green`,
@@ -60,11 +65,15 @@ const BGImage = styled.div`
 `;
 
 const NameAndStats = styled.div`
-  ${tw`flex flex-col items-center justify-start w-full my-5`}
+  ${tw`flex flex-col items-center justify-start w-full my-5 -mt-[100px]`}
 `;
 
-const LlamadoInfoSection = styled.section`
-  ${tw`flex flex-col items-start justify-center w-full px-10 py-6 gap-4 bg-white rounded-3xl shadow-md`}
+const BlurredCircle = styled.div`
+  ${tw`flex justify-center items-center min-w-[200px] w-[200px] h-[200px] rounded-full backdrop-blur-3xl`}
+`;
+
+const ImageSelectorContainer = styled.div`
+  ${tw`relative min-w-[180px] w-[100px] h-[180px]`}
 `;
 
 const List = styled.div`
@@ -104,7 +113,9 @@ const TagEstado = styled.span<{ estado: EstadoPostulanteEnum }>`
   ${({ estado }) => colorVariants[estado]}
 `;
 
-const LlamadoInfo = () => {
+const PostulanteInLlamadoInfo = () => {
+  const { userInfo, handleSetLoading } = useGlobal();
+  const [showInfoModal, setShowInfoModal] = useState(false);
   const [showChangeStateModal, setShowChangeStateModal] = useState(false);
   const { query } = useRouter();
   const llamadoId = Number(query?.llamadoId || 0);
@@ -120,7 +131,9 @@ const LlamadoInfo = () => {
   });
   const [normalErrors, setNormalErrors] = useState<string[]>([]);
   const [cambiarEstadoPostulante] = useMutation(cambiarEstadoPostulanteLlamado);
-  const { handleSetLoading } = useGlobal();
+  const [cambiarEstadoPostulanteTribunal] = useMutation(
+    cambiarEstadoPostulanteLlamadoTribunal
+  );
 
   const cambiarEstadoPostulForm = useForm<CambiarEstadoPostulanteForm>({
     resolver: yupResolver(cambiarEstadoPostulanteValidationSchema()),
@@ -155,14 +168,15 @@ const LlamadoInfo = () => {
       return;
     }
     setNormalErrors([]);
-    handleSetLoading(true);
 
-    if (true) {
+    if (userInfo?.roles.find((rol) => rol === Roles.admin)) {
+      handleSetLoading(true);
       const resp = await cambiarEstadoPostulante({
         variables: {
           data: {
             llamadoId: llamadoId,
             postulanteId: postulanteId,
+            solicitanteId: userInfo?.id,
             nuevoEstado: data?.nuevoEstado,
           },
         },
@@ -171,10 +185,40 @@ const LlamadoInfo = () => {
       if (resp?.data?.cambiarEstadoPostulanteLlamado?.ok === true) {
         toast.success("Estado transicionado correctamente.", {});
         setShowChangeStateModal(false);
+        reset();
       } else {
         resp?.data?.cambiarEstadoPostulanteLlamado.message
           ? toast.error(resp?.data?.cambiarEstadoPostulanteLlamado.message)
           : toast.error("Error al tansicionar de estado.");
+      }
+
+      handleSetLoading(false);
+    } else if (userInfo?.roles.find((rol) => rol === Roles.tribunal)) {
+      handleSetLoading(true);
+      const resp = await cambiarEstadoPostulanteTribunal({
+        variables: {
+          data: {
+            llamadoId: llamadoId,
+            postulanteId: postulanteId,
+            solicitanteId: userInfo?.id,
+            nuevoEstado: data?.nuevoEstado,
+          },
+        },
+      });
+
+      if (resp?.data?.cambiarEstadoPostulanteLlamadoTribunal?.ok === true) {
+        toast.success(
+          "Solicitud de cambio de estado enviada correctamente.",
+          {}
+        );
+        setShowInfoModal(true);
+        reset();
+      } else {
+        resp?.data?.cambiarEstadoPostulanteLlamadoTribunal.message
+          ? toast.error(
+              resp?.data?.cambiarEstadoPostulanteLlamadoTribunal.message
+            )
+          : toast.error("Error al solicitar transición de estado.");
       }
 
       handleSetLoading(false);
@@ -183,14 +227,16 @@ const LlamadoInfo = () => {
 
   return (
     <Container>
-      {/* TODO: Controlar roles para ver si es necesaria la aprobación del cambio, y mostrar otro modal */}
       {showChangeStateModal && (
         <FormProvider {...cambiarEstadoPostulForm}>
           <Modal
             textok={"Cambiar estado"}
             textcancel="Cancelar"
             onSubmit={handleSubmit(handleNext)}
-            onCancel={() => setShowChangeStateModal(false)}
+            onCancel={() => {
+              setShowChangeStateModal(false);
+              reset();
+            }}
             setOpen={setShowChangeStateModal}
             title="Transicionar estado del postulante en el llamado"
             content={
@@ -201,9 +247,26 @@ const LlamadoInfo = () => {
                 />
               </FormProvider>
             }
-            description="Se procederá a crear un nuevo tipo de archivo en el sistema."
+            description={
+              "Se transicionará el estado actual del postulante en este llamado, a uno de los que selecciones a continuación."
+            }
           />
         </FormProvider>
+      )}
+      {showInfoModal && (
+        <ModalConfirmation
+          variant="yellow"
+          textok="Entendido"
+          textcancel="Cancelar"
+          onSubmit={() => {
+            setShowInfoModal(false);
+            setShowChangeStateModal(false);
+          }}
+          onCancel={() => setShowInfoModal(false)}
+          setOpen={setShowInfoModal}
+          title="Esta acción requiere aprobación de CDP"
+          description="Recuerda que el cambio de estado será efectivo una vez que CDP lo apruebe."
+        />
       )}
       <Topbar>
         <Breadcrumb title={`Información del postulante en el llamado`} />
@@ -222,6 +285,20 @@ const LlamadoInfo = () => {
               />
             </BGImage>
             <NameAndStats>
+              <BlurredCircle>
+                <ImageSelectorContainer>
+                  <Image
+                    src={DEFAULT_USER_IMAGE}
+                    alt="Imagen posutlante"
+                    objectFit="fill"
+                    layout="fill"
+                  />
+                  {/* <AvatarSelector
+                    defaultImage={DEFAULT_USER_IMAGE}
+                    setFile={setSelectedFile}
+                  /> */}
+                </ImageSelectorContainer>
+              </BlurredCircle>
               <span className="text-2xl font-bold">{`${postulanteInfo?.nombres} ${postulanteInfo?.apellidos}`}</span>
               <span className="text-textogris text-lg font-medium">
                 Postulante
@@ -304,4 +381,4 @@ const LlamadoInfo = () => {
   );
 };
 
-export default LlamadoInfo;
+export default PostulanteInLlamadoInfo;

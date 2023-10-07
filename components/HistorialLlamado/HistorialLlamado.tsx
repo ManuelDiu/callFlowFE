@@ -5,6 +5,14 @@ import { HistorialLlamado } from "types/llamado";
 import htmlParser from "html-react-parser";
 import moment from "moment";
 import Button from "../Buttons/Button";
+import { useMutation } from "@apollo/client";
+import {
+  cambiarCambioLlamado,
+  getLlamadoInfoById,
+} from "@/controllers/llamadoController";
+import { useGlobal } from "@/hooks/useGlobal";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
 moment.locale("es");
 
 const Container = styled.div`
@@ -12,7 +20,7 @@ const Container = styled.div`
 `;
 
 const ItemHistorial = styled.div`
-  ${tw`w-full h-auto flex flex-row items-center justify-start gap-3 px-6 py-8`}
+  ${tw`w-full h-auto flex flex-row items-center justify-start relative gap-3 px-6 py-8`}
 `;
 
 const TimeText = styled.div`
@@ -43,17 +51,31 @@ const ActionsContainer = styled.div`
   ${tw`w-full flex-grow h-auto flex flex-col items-end justify-center gap-4`}
 `;
 
+const BadgeText = styled.div<{isSuccess: boolean}>`
+  ${tw`text-sm font-medium px-4 py-1 rounded-lg transition-all absolute right-4 top-4`}
+  ${({ isSuccess }) => isSuccess ? tw`!bg-modalButtons-green text-white` : tw`bg-[#ffa5a3] text-[##fa0500]`}
+`;
+
 interface Props {
   historiales: HistorialLlamado[];
+  llamadoId: Number;
 }
 
-const HistorialLlamadoComp = ({ historiales }: Props) => {
+const HistorialLlamadoComp = ({ historiales, llamadoId }: Props) => {
+  const [cambiarCambioHistorialItem, { loading }] =
+    useMutation(cambiarCambioLlamado);
+  const { handleSetLoading } = useGlobal();
+
   const formatHistoriales = historiales?.map((item) => {
     return {
       ...item,
       fecha: moment(Number(item?.createdAt)).fromNow(),
     };
   });
+
+  useEffect(() => {
+    handleSetLoading(loading);
+  }, [loading]);
 
   const datosPorDia = {} as any;
 
@@ -78,13 +100,36 @@ const HistorialLlamadoComp = ({ historiales }: Props) => {
     }
   );
 
-  const handleToggleItem = (item: HistorialLlamado, accept: boolean) => {
+  const handleToggleItem = async (item: HistorialLlamado, accept: boolean) => {
     // enviar al back
-    const dataToSend = {
-      historialItemId: item?.id,
-      cambioId: item?.cambio?.id,
+    try {
+      const dataToSend = {
+        historialItemId: item?.id,
+        cambioId: item?.cambio?.id,
+        accept: accept,
+      };
+      const resp = await cambiarCambioHistorialItem({
+        variables: {
+          info: dataToSend,
+        },
+        refetchQueries: [
+          {
+            query: getLlamadoInfoById,
+            variables: {
+              llamadoId: Number(llamadoId),
+            },
+          },
+        ],
+      });
+      if (resp?.data?.cambiarCambioLlamado?.ok) {
+        toast.success("Estado actualizado correctamente");
+      } else {
+        toast.success("Error al actualizar estado");
+      }
+    } catch (error: any) {
+      toast.success(error?.message || "Error al actualizar estado");
     }
-  }
+  };
 
   return (
     <Container>
@@ -105,12 +150,31 @@ const HistorialLlamadoComp = ({ historiales }: Props) => {
                     <ItemLine />
                   </TimeText>
                   <Text>{htmlParser(item?.descripcion)}</Text>
-                  {item?.cambio && !item?.cambio?.cambio && (
+                  {item?.cambio && (item?.cambio?.cambio === null || item?.cambio?.cambio === undefined) && (
                     <ActionsContainer>
-                      <Button action={() => handleToggleItem(item, true)} className="w-[200px]" text=" Aceptar" variant="green" rounded="large" />
-                      <Button action={() => handleToggleItem(item,false)} className="w-[200px]" text="Cancelar" variant="red" rounded="large" />
+                      <Button
+                        action={() => handleToggleItem(item, true)}
+                        className="!w-[140px]"
+                        text=" Aceptar"
+                        variant="green"
+                        rounded="large"
+                      />
+                      <Button
+                        action={() => handleToggleItem(item, false)}
+                        className="!w-[140px]"
+                        text="Cancelar"
+                        variant="red"
+                        rounded="large"
+                      />
                     </ActionsContainer>
                   )}
+                  {
+                    item?.cambio && (item?.cambio?.cambio !== null && item?.cambio?.cambio !== undefined) && <BadgeText isSuccess={item?.cambio?.cambio === true}>
+                      {
+                        item?.cambio?.cambio ? "Aceptado" : "Rechazado"
+                      }
+                    </BadgeText>
+                  }
                 </ItemHistorial>
               );
             })}

@@ -67,7 +67,7 @@ const LlamadoInfo = () => {
     {
       index: 2,
       title: "Historial",
-      content: <HistorialLlamado historiales={llamadoInfo?.historiales || []} />,
+      content: <HistorialLlamado llamadoId={llamadoInfo?.id} historiales={llamadoInfo?.historiales || []} />,
     },
     {
       index: 3,

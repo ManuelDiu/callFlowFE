@@ -194,3 +194,12 @@ export const cambiarCambioLlamado = gql`
     }
   }
 `;
+
+export const renunciarLlamado = gql`
+  mutation ($info: RenunciarLlamadoInput) {
+    renunciarLlamado(info: $info) {
+      message
+      ok
+    }
+  }
+`;

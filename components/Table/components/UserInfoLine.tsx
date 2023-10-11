@@ -11,12 +11,13 @@ interface Props {
   userlastName?: string;
   userImage: string | undefined;
   className?: string;
+  label?: any;
   withDot?: boolean;
   options?: OptionsItem[];
 }
 
 const Container = styled.div`
-  ${tw`w-full h-auto max-w-full overflow-visible flex flex-row items-center justify-start gap-1`}
+  ${tw`w-full h-auto max-w-full relative overflow-visible flex flex-row items-center justify-start gap-1`}
 `;
 
 const ImageContainer = styled.div`
@@ -48,6 +49,7 @@ const OptionLabel = styled.p`
 `;
 
 const UserInfoLine = ({
+  label,
   userImage,
   userName,
   userlastName,
@@ -56,7 +58,7 @@ const UserInfoLine = ({
   options,
 }: Props) => {
   const [openOptions, setOpenOptions] = useState(false);
-
+  console.log("label", label)
   return (
     <Container className={className}>
       <ImageContainer>
@@ -93,6 +95,9 @@ const UserInfoLine = ({
           />
         </DotContainer>
       )}
+      {label && <div className="absolute right-4 top-4">
+        {label}
+        </div>}
     </Container>
   );
 };

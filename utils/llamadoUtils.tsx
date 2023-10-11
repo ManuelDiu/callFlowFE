@@ -139,6 +139,7 @@ export const formatPostulantes = (postulantes: LlamadoPostulante[]) => {
   return postulantes?.map((postulante, index) => {
     console.log("postulante", postulante)
     return {
+      id: postulante.postulante.id,
       index: index,
       imageUrl: DEFAULT_USER_IMAGE,
       name: `${postulante.postulante.nombres} ${postulante.postulante.apellidos}`,

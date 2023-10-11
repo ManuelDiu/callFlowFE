@@ -14,6 +14,7 @@ import ListOfUsers from "../ListOfUsers/ListOfUsers";
 import { useState } from "react";
 import ChnageStatusModal from "../ChangeStatusModal/ChangeStatusModal";
 import { useGlobal } from "@/hooks/useGlobal";
+import ListOfPostulantes from "../ListOfPostulantes/ListOfPostulantes";
 
 const Container = styled.div`
   ${tw`w-full h-auto flex flex-col items-start justify-start gap-4`}
@@ -212,8 +213,9 @@ const LlamadoInfoContent = ({ llamadoInfo }: Props) => {
         </LlamadoInfoContentLines>
       </LlamadoInfoContainer>
 
-      <ListOfUsers
+      <ListOfPostulantes
         title="Listado de postulantes"
+        llamadoId={llamadoInfo?.id}
         selectedUsers={formatPostulantes(llamadoInfo?.postulantes)}
       />
       <ListOfUsers

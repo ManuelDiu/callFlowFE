@@ -172,7 +172,7 @@ const AddTribunalModal = ({
       onCancel={() => setOpen(false)}
       setOpen={setOpen}
       content={handleRenderContent()}
-      title="Agregar postulante"
+      title="Agregar miembro del tribunal"
       className="!mt-[20%]"
     />
   );

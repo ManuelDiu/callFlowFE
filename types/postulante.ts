@@ -40,3 +40,21 @@ export type PostulanteLlamadoFull = {
   estadoActual: EstadoData;
   updatedAt: string;
 };
+
+export type EtapaPostulante = {
+  id?: number,
+  nombre: string;
+  plazoDias: number;
+  puntajeMin: number;
+  total: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export type PostulanteLlamadoResumed = {
+  id: number;
+  postulante: PostulanteList;
+  estadoActual: EstadoData;
+  etapa: EtapaPostulante;
+  updatedAt: string;
+};

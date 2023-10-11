@@ -18,6 +18,7 @@ const appRoutes = {
     templates: () => `/template`,
     modificarInfoPerfil: () => `/perfil/modificar-informacion`,
     llamadoInfoPage: (llamadoId?: any) => `/llamados/${llamadoId ? llamadoId : `[llamadoId]`}/info`,
+    completarGrillaPostulante: (llamadoId?: any, postulanteId?: any) => `/llamados/${llamadoId ? llamadoId : `[llamadoId]`}/completar-grilla-postulante/${postulanteId ? postulanteId : `[postulanteId]`}`,
     postulanteInLlamadoInfo: (llamadoId?: any, postulanteId?: any) => `/llamados/${llamadoId ? llamadoId : '[llamadoId]'}/postulante/${postulanteId ? postulanteId : `[postulanteId]`}`,
 }
 

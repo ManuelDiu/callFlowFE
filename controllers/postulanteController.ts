@@ -108,6 +108,35 @@ export const infoPostulanteEnLlamado = gql`
   }
 `;
 
+export const getPostulantesByLlamadoId = gql`
+  query GetPostulantesByLlamadoId($llamadoId: Int!) {
+    getPostulantesByLlamadoId(llamadoId: $llamadoId) {
+      postulante {
+        id
+        nombres
+        apellidos
+        documento
+        updatedAt
+      }
+      estadoActual {
+        id
+        nombre
+        updatedAt
+      }
+      etapa {
+        id
+        nombre
+        plazoDias
+        puntajeMin
+        total
+        createdAt
+        updatedAt
+      }
+      updatedAt
+    }
+  }
+`;
+
 export const cambiarEstadoPostulanteLlamado = gql`
   mutation cambiarEstadoPostulanteLlamado(
     $data: CambiarEstadoPostulanteLlamadoInput!

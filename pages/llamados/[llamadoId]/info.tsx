@@ -2,6 +2,8 @@ import { Topbar } from "@/components/CheckTokenWrapper/CheckTokenWrapper";
 import EtapasList from "@/components/EtapasList/EtapasList";
 import FileLlamado from "@/components/FileLlamado/FileLlamado";
 import HistorialLlamado from "@/components/HistorialLlamado/HistorialLlamado";
+import PostulantesListContent from "@/components/ListOfPostulantes/PostulantesListContent/PostulantesListContent";
+import ListOfUsers from "@/components/ListOfUsers/ListOfUsers";
 import LlamadoInfoContent from "@/components/LlamadoInfoContent/LlamadoInfoContent";
 import NotFoundPage from "@/components/NotFoundPage/NotFoundPage";
 import Tabs from "@/components/Tabs/Tabs";
@@ -9,7 +11,7 @@ import Breadcrumb from "@/components/Topbar/Breadcrumb";
 import ProfileBar from "@/components/Topbar/ProfileBar";
 import { getLlamadoInfoById } from "@/controllers/llamadoController";
 import { useGlobal } from "@/hooks/useGlobal";
-import { formatEtapas } from "@/utils/llamadoUtils";
+import { formatEtapas, formatPostulantes } from "@/utils/llamadoUtils";
 import { TabItem } from "@/utils/utils";
 import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
@@ -80,6 +82,15 @@ const LlamadoInfo = () => {
       content: <EtapaListContent>
         <EtapasList isView etapas={formattedEtapas} setEtapas={null} />
       </EtapaListContent>,
+    },
+    {
+      index: 5,
+      title: "Postulantes",
+      content: <PostulantesListContent
+      title="Listado de postulantes"
+      llamadoId={llamadoId}
+      postulantes={formatPostulantes(llamadoInfo?.postulantes)}
+    />,
     },
   ];
 

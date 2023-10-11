@@ -15,6 +15,8 @@ export function useGlobal() {
     window.location.href = appRoutes.login();
   };
   const isAdmin = userInfo?.roles?.includes(Roles.admin);
+  const isSolicitante = userInfo?.roles?.includes(Roles.cordinador);
+
 
   return {
     userInfo,
@@ -28,5 +30,6 @@ export function useGlobal() {
     handleSetTemplate,
     handleClearTemplate,
     isAdmin,
+    isSolicitante,
   };
 }

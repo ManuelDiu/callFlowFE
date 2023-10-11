@@ -9,12 +9,20 @@ import UserInfoLine from "../Table/components/UserInfoLine";
 import LlamadoEstadoBubble from "../LlamadoEstadoBubble/LlamadoEstadoBubble";
 import moment from "moment";
 import { EtapaList } from "types/template";
-import { formatEtapas, formatPostulantes, formatTribunales } from "@/utils/llamadoUtils";
+import {
+  formatEtapas,
+  formatPostulantes,
+  formatTribunales,
+} from "@/utils/llamadoUtils";
 import ListOfUsers from "../ListOfUsers/ListOfUsers";
 import { useState } from "react";
 import ChnageStatusModal from "../ChangeStatusModal/ChangeStatusModal";
 import { useGlobal } from "@/hooks/useGlobal";
 import ListOfPostulantes from "../ListOfPostulantes/ListOfPostulantes";
+import VerDisponibilidadModal from "../VerDisponibilidadModal/VerDisponibilidadModal";
+import { TipoMiembro } from "@/enums/TipoMiembro";
+import { Roles } from "@/enums/Roles";
+import RenunciarLlamadoModal from "../RenunciarLlamadoModal/RenunciarLlamadoModal";
 
 const Container = styled.div`
   ${tw`w-full h-auto flex flex-col items-start justify-start gap-4`}
@@ -78,7 +86,21 @@ interface Props {
 
 const LlamadoInfoContent = ({ llamadoInfo }: Props) => {
   const [openCambiarEstadoModal, setOpenCambarEstadoModal] = useState(false);
-  const { isAdmin } = useGlobal();
+  const [verDisponibilidad, setVerDisponibilidad] = useState(false);
+  const [openRenunciarLlamadoModal, setOpenRenunciarLlamadoModal] =
+    useState(false);
+
+  const { userInfo } = useGlobal();
+  const miembrosTribunal = llamadoInfo.miembrosTribunal || [];
+
+  const isMiembro =
+    typeof miembrosTribunal?.find(
+      (item) =>
+        item?.usuario?.id === userInfo?.id &&
+        item?.tipoMiembro === TipoMiembro.titular
+    ) !== "undefined";
+
+  const { isAdmin, isSolicitante } = useGlobal();
 
   const handleGenerateGrilla = () => {
     // generate grilla and download it
@@ -117,10 +139,12 @@ const LlamadoInfoContent = ({ llamadoInfo }: Props) => {
 
   return (
     <Container>
-      {openCambiarEstadoModal && <ChnageStatusModal 
-        llamadoInfo={llamadoInfo}
-        setOpen={setOpenCambarEstadoModal}
-      />}
+      {openCambiarEstadoModal && (
+        <ChnageStatusModal
+          llamadoInfo={llamadoInfo}
+          setOpen={setOpenCambarEstadoModal}
+        />
+      )}
       <IndicatorsContainer>
         <IndicatorItem>
           <IndicatorBadge style={{ background: "#0FBB00" }} />
@@ -137,23 +161,39 @@ const LlamadoInfoContent = ({ llamadoInfo }: Props) => {
         </IndicatorItem>
       </IndicatorsContainer>
       <ActionsContainer>
-        {isAdmin && <Button
-          icon={<AiOutlineFileAdd color="white" size={18} />}
-          text="Generar Grilla"
-          action={handleGenerateGrilla}
-        />}
+        {isAdmin && (
+          <Button
+            icon={<AiOutlineFileAdd color="white" size={18} />}
+            text="Generar Grilla"
+            action={handleGenerateGrilla}
+          />
+        )}
+        {isAdmin ||
+          (isMiembro && (
+            <Button
+              icon={<TbArrowsExchange color="#4318FF" size={18} />}
+              variant="outline"
+              text="Cambiar estado"
+              action={() => setOpenCambarEstadoModal(!openCambiarEstadoModal)}
+            />
+          ))}
+
+        {isMiembro && (
+          <Button
+            variant="red"
+            text="Renunciar al llamado"
+            action={() =>
+              setOpenRenunciarLlamadoModal(!openRenunciarLlamadoModal)
+            }
+          />
+        )}
+
         <Button
-          icon={<TbArrowsExchange color="#4318FF" size={18} />}
-          variant="outline"
-          text="Cambiar estado"
-          action={() => setOpenCambarEstadoModal(!openCambiarEstadoModal)}
-        />
-        {isAdmin && <Button
           icon={<BiCalendar color="#4318FF" size={18} />}
           variant="outline"
           text="Disponibilidad tribunal"
-          action={handleGenerateGrilla}
-        />}
+          action={() => setVerDisponibilidad(!verDisponibilidad)}
+        />
       </ActionsContainer>
 
       <LlamadoInfoContainer>
@@ -222,6 +262,21 @@ const LlamadoInfoContent = ({ llamadoInfo }: Props) => {
         title="Miembros del tribunal"
         selectedUsers={formatTribunales(llamadoInfo?.miembrosTribunal)}
       />
+
+      {verDisponibilidad && (
+        <VerDisponibilidadModal
+          isMiembro={isMiembro}
+          llamadoId={llamadoInfo?.id}
+          setOpen={setVerDisponibilidad}
+        />
+      )}
+
+      {openRenunciarLlamadoModal && isMiembro && (
+        <RenunciarLlamadoModal
+          llamadoId={llamadoInfo?.id}
+          setOpen={setOpenRenunciarLlamadoModal}
+        />
+      )}
     </Container>
   );
 };

@@ -59,6 +59,7 @@ const ListOfUsers = ({
             userlastName={item?.lastName}
             withDot={onRemove !== undefined && onRemove !== null}
             options={optionsToItem}
+            label={item?.label}
           />
         );
       })}

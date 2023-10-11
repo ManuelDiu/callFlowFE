@@ -155,6 +155,9 @@ export const formatTribunales = (tribunales: TribunalLlamado[]) => {
       imageUrl: tribunal?.usuario?.imageUrl || DEFAULT_USER_IMAGE,
       name: `${tribunal?.usuario?.name} ${tribunal?.usuario?.lastName}`,
       lastName: `Tribunal - ${tribunal.orden} ${tribunal.tipoMiembro}`,
+      label: tribunal?.motivoRenuncia !== "" && <div style={{ background: "rgb(248 113 113 / var(--tw-bg-opacity))"}} className="px-3 font-medium py-2 rounded-full text-white shadow-sm">
+        Renincio
+      </div>
     };
   });
 };

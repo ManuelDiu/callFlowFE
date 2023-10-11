@@ -227,7 +227,7 @@ const Usuarios = () => {
         toast.success("Usuario agregado correctamente", {});
         setShowAddModal(false);
       } else {
-        toast.error("Error al agergar usuario");
+        toast.error("Error al agergar usuario, tal vez el email ya exista");
       }
 
       handleSetLoading(false);

@@ -42,9 +42,6 @@ const LlamadoEstadoBubble = ({
   estado = EstadoLlamadoEnum.creado,
   customColor,
 }: Props) => {
-  console.log("customColor", customColor)
-
-  let asd = "red"
   return (
     <Container
          estado={estado}

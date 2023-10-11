@@ -43,7 +43,7 @@ const Description = styled.span`
 `;
 
 const BottomActionsContainer = styled.div`
-  ${tw`w-full h-auto flex gap-2 flex-row items-center justify-end py-3 px-6 bg-buttonActionsModal`}
+  ${tw`w-full h-auto rounded-br-2xl rounded-bl-2xl flex gap-2 flex-row items-center justify-end py-3 px-6 bg-buttonActionsModal`}
 `;
 
 const Modal = ({

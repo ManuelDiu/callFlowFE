@@ -60,14 +60,14 @@ const Sidebar: React.FC<SidebarProps> = ({ items }) => {
     >
       <div
         onClick={() => setExpanded(!expanded)}
-        className="w-auto cursor-pointer h-auto absolute bg-indigo-100 z-10 top-5 -right-5 p-4 flex items-center justify-start rounded-full shadow-md"
+        className="w-auto cursor-pointer h-auto absolute bg-indigo-50 z-10 top-5 -right-5 p-4 flex items-center justify-start rounded-full shadow-md"
       >
         <MdKeyboardArrowRight
           color="black"
           size={25}
           className={clsx(
             "transition-all transform",
-            expanded ? "rotate-0" : "rotate-180"
+            expanded ? "rotate-180" : "rotate-0"
           )}
         />
       </div>

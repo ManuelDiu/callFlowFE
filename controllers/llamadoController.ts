@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client";
 
 export const listarLlamados = gql`
-  query listarLlamados {
-    listarLlamados {
+  query listarLlamados($filters: ListarLlamadoInputQuery) {
+    listarLlamados(filters: $filters) {
       id
       ultimaModificacion
       ref

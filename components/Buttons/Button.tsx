@@ -21,7 +21,7 @@ type ButtonProps = {
 
 const ButtonVariants = {
   fill: tw`bg-principal active:bg-principal/80 border-transparent`,
-  outline: tw`border-principal text-principal`,
+  outline: tw`border-principal text-principal transition-all hover:bg-principal hover:text-white hover:border-transparent`,
   gray: tw`border-gray100 text-gray900 bg-white`,
   green: tw`bg-modalButtons-green text-white border-0 ring-0`,
   yellow: tw`bg-modalButtons-yellow text-white border-0 ring-0`,

@@ -17,7 +17,7 @@ interface Props {
 }
 
 const Container = styled.div`
-  ${tw`w-full h-auto max-w-full relative overflow-visible flex flex-row items-center justify-start gap-1`}
+  ${tw`w-full max-w-[230px] h-auto max-w-full relative overflow-visible flex flex-row items-center justify-start gap-1`}
 `;
 
 const ImageContainer = styled.div`
@@ -25,15 +25,15 @@ const ImageContainer = styled.div`
 `;
 
 const TextContainer = styled.div`
-  ${tw`w-full flex-grow h-auto flex flex-col items-start mt-[2px] max-w-full overflow-hidden justify-center`}
+  ${tw`w-full max-w-full overflow-hidden truncate flex-grow h-auto flex flex-col items-start mt-[2px] max-w-full overflow-hidden justify-center`}
 `;
 
 const Name = styled.span`
-  ${tw`text-[18px] text-texto font-bold leading-[16px] max-w-full w-full flex-grow truncate overflow-hidden`}
+  ${tw`text-[18px] !max-w-[160px] truncate overflow-hidden text-texto font-bold leading-[16px] max-w-full w-full flex-grow truncate overflow-hidden`}
 `;
 
 const LastName = styled.span`
-  ${tw`text-[14px] text-textogris font-bold max-w-full truncate overflow-hidden`}
+  ${tw`text-[14px] !max-w-[160px] truncate overflow-hidden text-textogris font-bold max-w-full truncate overflow-hidden`}
 `;
 
 const DotContainer = styled.button`

@@ -86,7 +86,6 @@ const Dropdown = ({
   const defaultValuesFormatted =
     defaultValue && defaultValue?.length > 0
       ? defaultValue?.map((item: any, index: number) => {
-        console.log("item", item)
           const val = items?.find((itm) => itm?.value === item);
           return {...val, id: index};
         })

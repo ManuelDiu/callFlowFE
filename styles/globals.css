@@ -81,6 +81,20 @@ div {
     opacity: 1;
   }
 }
+
+.filterOpen {
+  animation:filterOppen 150ms linear ;
+}
+
+@keyframes filterOppen {
+  from {
+    right: -500px;
+  }
+  to {
+    right: 0;
+  }
+}
+
 .Toastify {
   z-index: 1111111111;
 }

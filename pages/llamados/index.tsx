@@ -23,9 +23,12 @@ import appRoutes from "@/routes/appRoutes";
 import Modal from "@/components/Modal/Modal";
 import ModalConfirmation from "@/components/Modal/components/ModalConfirmation";
 import { toast } from "react-toastify";
+import { AiOutlineFilter } from "react-icons/ai";
+import LlamadoFiltro from "@/components/LlamadoFiltro/LlamadoFiltro";
+import useLlamadoFilters from "@/hooks/useLlamadoFilters";
 
 const Container = styled.div`
-  ${tw`w-full max-h-full pb-5 h-auto p-5 py-0 flex gap-4 flex-col items-center justify-start`}
+  ${tw`w-full overflow-hidden max-h-full pb-5 h-auto p-5 py-0 flex gap-4 flex-col items-center justify-start`}
 `;
 
 const ActionRow = styled.div`
@@ -33,10 +36,19 @@ const ActionRow = styled.div`
 `;
 
 const Llamados: NextPage = () => {
-  const { data, loading: loadingLlamados } = useQuery<{
+  const { filtersToBackend, getFiltrosLength } = useLlamadoFilters();
+
+  const {
+    data,
+    loading: loadingLlamados,
+    refetch,
+  } = useQuery<{
     listarLlamados: LlamadoList[];
-  }>(listarLlamados);
+  }>(listarLlamados, {
+    variables: {},
+  });
   const { handleSetLoading, isAdmin } = useGlobal();
+  const [openFilters, setOpenFilters] = useState(false);
   const { push } = useRouter();
   const [deleteOpen, setDeleteOption] = useState(false);
   const [openDeleteConfirmModal, setOpenDeleteConfirmModal] = useState(false);
@@ -91,22 +103,33 @@ const Llamados: NextPage = () => {
               className="w-auto"
             />
           )}
-          {isAdmin && <Button
-            variant="outline"
-            icon={<BiTrash size={20} fontWeight={700} color="#4318FF" />}
-            text={
-              !deleteOpen ? "Habilitar seleccion" : "Deshabilitar seleccion"
-            }
-            action={() => setDeleteOption(!deleteOpen)}
-            className="w-auto"
-          />}
-          {isAdmin && <Button
+          {isAdmin && (
+            <Button
+              variant="outline"
+              icon={<BiTrash size={20} fontWeight={700} color="#4318FF" />}
+              text={
+                !deleteOpen ? "Habilitar seleccion" : "Deshabilitar seleccion"
+              }
+              action={() => setDeleteOption(!deleteOpen)}
+              className="w-auto"
+            />
+          )}
+          {isAdmin && (
+            <Button
+              variant="fill"
+              icon={<BiPlus size={20} fontWeight={700} color="white" />}
+              text="Agregar Llamado"
+              action={() => push(appRoutes.selectTemplate())}
+              className="w-auto"
+            />
+          )}
+          <Button
             variant="fill"
-            icon={<BiPlus size={20} fontWeight={700} color="white" />}
-            text="Agregar Llamado"
-            action={() => push(appRoutes.selectTemplate())}
+            icon={<AiOutlineFilter size={20} fontWeight={700} color="white" />}
+            text={`${getFiltrosLength()} Filtros aplicados`}
+            action={() => setOpenFilters(!openFilters)}
             className="w-auto"
-          />}
+          />
         </ActionRow>
         <Table
           multiDisabled={deleteOpen}
@@ -126,6 +149,20 @@ const Llamados: NextPage = () => {
             textok="Si, deshabilitar"
             variant="red"
             textcancel="Cancelar"
+          />
+        )}
+
+        {openFilters && (
+          <LlamadoFiltro
+            refetch={() =>
+              {
+                console.log("filters", filtersToBackend)
+                refetch({
+                  filters: filtersToBackend,
+                })
+              }
+            }
+            setOpen={setOpenFilters}
           />
         )}
       </Container>

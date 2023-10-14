@@ -100,6 +100,11 @@ const LlamadoInfoContent = ({ llamadoInfo }: Props) => {
         item?.tipoMiembro === TipoMiembro.titular
     ) !== "undefined";
 
+    const renuncio = miembrosTribunal?.find(
+      (item) =>
+        item?.usuario?.id === userInfo?.id
+    )?.motivoRenuncia !== "";
+
   const { isAdmin, isSolicitante } = useGlobal();
 
   const handleGenerateGrilla = () => {
@@ -178,7 +183,7 @@ const LlamadoInfoContent = ({ llamadoInfo }: Props) => {
             />
           ))}
 
-        {isMiembro && (
+        {isMiembro && !renuncio && (
           <Button
             variant="red"
             text="Renunciar al llamado"

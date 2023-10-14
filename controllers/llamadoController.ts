@@ -46,7 +46,7 @@ export const llamadoSubscriptionCreated = gql`
 `;
 
 export const disabledLlamados = gql`
-  mutation ($llamados: [Int]) {
+  mutation($llamados: [Int]) {
     deshabilitarLlamados(llamados: $llamados) {
       message
       ok
@@ -55,7 +55,7 @@ export const disabledLlamados = gql`
 `;
 
 export const getLlamadoInfoById = gql`
-  query ($llamadoId: Int) {
+  query($llamadoId: Int) {
     getLlamadoById(llamadoId: $llamadoId) {
       solicitante {
         telefono
@@ -169,14 +169,54 @@ export const getLlamadoInfoById = gql`
   }
 `;
 
+export const getEtapaActualPostInLlamado = gql`
+  query getEtapaActualPostInLlamado($llamadoId: Int!, $postulanteId: Int!) {
+    getEtapaActualPostInLlamado(
+      llamadoId: $llamadoId
+      postulanteId: $postulanteId
+    ) {
+      id
+      nombre
+      plazoDias
+      total
+      currentEtapa
+      cantEtapas
+      puntajeMin
+      subetapas {
+        id
+        nombre
+        subtotal
+        puntajeMaximo
+        requisitos {
+          id
+          nombre
+          puntajeSugerido
+          puntaje
+          excluyente
+        }
+      }
+    }
+  }
+`;
+
+export const avanzarEtapaPostulanteInLlamado = gql`
+  mutation avanzarEtapaPostulanteInLlamado($data: AvanzarEtapaInput) {
+    avanzarEtapaPostulanteInLlamado(data: $data) {
+      ok
+      message
+    }
+  }
+`;
+
 export const addFileToLlamado = gql`
-  mutation ($dataFile: AddFileLlamadoInput) {
+  mutation($dataFile: AddFileLlamadoInput) {
     addFileToLlamado(info: $dataFile) {
       message
       ok
     }
   }
 `;
+
 
 export const cambiarEstadoLlamado = gql`
   mutation CambiarEstadoLlamado($info: CambiarEstadoLlamadoInput) {
@@ -188,7 +228,7 @@ export const cambiarEstadoLlamado = gql`
 `;
 
 export const cambiarCambioLlamado = gql`
-  mutation ($info: LlamadoChangeCambioInput) {
+  mutation($info: LlamadoChangeCambioInput) {
     cambiarCambioLlamado(info: $info) {
       message
     }
@@ -196,7 +236,7 @@ export const cambiarCambioLlamado = gql`
 `;
 
 export const renunciarLlamado = gql`
-  mutation ($info: RenunciarLlamadoInput) {
+  mutation($info: RenunciarLlamadoInput) {
     renunciarLlamado(info: $info) {
       message
       ok

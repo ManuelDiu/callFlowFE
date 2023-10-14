@@ -69,6 +69,13 @@ div {
     /*DEFAULT: background: #555;*/
 }
 
+/* cfg para sacar las "flechitas de los inputs" */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 .modalOpen {
   animation:animationModal 150ms linear ;
 }

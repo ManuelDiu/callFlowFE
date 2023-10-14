@@ -158,3 +158,12 @@ export const cambiarEstadoPostulanteLlamadoTribunal = gql`
     }
   }
 `;
+
+export const guardarPuntajesPostulanteEnLlamado = gql`
+  mutation guardarPuntajesPostulanteEnLlamado($data: DataGrillaInput!) {
+    guardarPuntajesPostulanteEnLlamado(data: $data) {
+      message
+      ok
+    }
+  }
+`;

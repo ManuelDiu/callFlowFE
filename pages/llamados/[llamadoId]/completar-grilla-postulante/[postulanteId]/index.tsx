@@ -11,58 +11,33 @@ import tw from "twin.macro";
 
 import {
   infoPostulanteEnLlamado,
-  cambiarEstadoPostulanteLlamado,
-  cambiarEstadoPostulanteLlamadoTribunal,
+  guardarPuntajesPostulanteEnLlamado,
 } from "@/controllers/postulanteController";
+import {
+  getEtapaActualPostInLlamado,
+  avanzarEtapaPostulanteInLlamado,
+} from "@/controllers/llamadoController";
 import { PostulanteLlamadoFull } from "types/postulante";
 import Image from "next/image";
 import Button from "@/components/Buttons/Button";
-import { useForm } from "react-hook-form";
-import {
-  CambiarEstadoPostulanteForm,
-  cambiarEstadoPostulanteValidationSchema,
-} from "@/forms/CambiarEstadoPostulanteForm";
-import { yupResolver } from "@hookform/resolvers/yup";
 import { EstadoPostulanteEnum } from "@/enums/EstadoPostulanteEnum";
 import { toast } from "react-toastify";
-import { Roles } from "@/enums/Roles";
 import ModalConfirmation from "@/components/Modal/components/ModalConfirmation";
 import { DEFAULT_USER_IMAGE } from "@/utils/userUtils";
-import EtapasList from "@/components/EtapasList/EtapasList";
-import { formatEtapas } from "@/utils/llamadoUtils";
+import SubEtapaListGrilla from "@/components/EtapasList/SubEtapaList/SubEtapaListGrilla";
+import {
+  AvanzarEtapaPostulanteData,
+  DataGrilla,
+  EtapaGrilla,
+  RequisitoGrillaInput,
+  SubEtapaGrilla,
+} from "types/etapa";
 
 const colorVariants: any = {
   [EstadoPostulanteEnum.cumpleRequisito]: tw`bg-green`,
   [EstadoPostulanteEnum.enDua]: tw`bg-yellow-700`,
   [EstadoPostulanteEnum.noCumpleRequisito]: tw`bg-red-600`,
 };
-
-const etapas = [
-  {
-    id: 2,
-    total: 100,
-    puntajeMin: 30,
-    plazoDias: 5,
-    nombre: "Etapa 1",
-    subetapas: [
-      {
-        requisitos: [
-          {
-            puntajeSugerido: 50,
-            nombre: "Requisitooo 1",
-            excluyente: false,
-            __typename: "RequisitoList",
-          },
-        ],
-        puntajeTotal: 0,
-        puntajeMaximo: 50,
-        nombre: "subetapa 1",
-        __typename: "SubEtapaList",
-      },
-    ],
-    __typename: "EtapaList",
-  },
-];
 
 const Container = styled.div`
   ${tw`w-full px-5 pb-4 h-auto flex flex-col items-center justify-start gap-4`}
@@ -92,10 +67,26 @@ const SaveButtons = styled.div`
   ${tw`flex justify-around w-full`}
 `;
 
+const EtapaContainer = styled.div`
+  ${tw`w-full relative pt-8 p-6 h-auto flex flex-col items-center justify-start gap-y-4 bg-white rounded-2xl shadow-md`}
+`;
+
+const SectionTitle = styled.h2`
+  ${tw`text-2xl w-full text-left font-semibold text-texto`}
+`;
+
+enum saveOptions {
+  guardar = "GUARDAR",
+  guardarYAvanzar = "GUARDAR Y AVANZAR",
+}
+
 const PostulanteInLlamadoInfo = () => {
   const { userInfo, handleSetLoading } = useGlobal();
+  const [guardarPuntajes] = useMutation(guardarPuntajesPostulanteEnLlamado);
+  const [avanzarEtapaPostulante] = useMutation(avanzarEtapaPostulanteInLlamado);
   const [showConfirmGuardarModal, setShowConfirmGuardarModal] = useState(false);
   const [showConfirmAvanzarModal, setShowConfirmAvanzarModal] = useState(false);
+  const [errores, setErrores] = useState<boolean>(false);
   const { query } = useRouter();
   const llamadoId = Number(query?.llamadoId || 0);
   const postulanteId = Number(query?.postulanteId || 0);
@@ -108,35 +99,34 @@ const PostulanteInLlamadoInfo = () => {
       postulanteId: postulanteId,
     },
   });
-  const [normalErrors, setNormalErrors] = useState<string[]>([]);
-  const [cambiarEstadoPostulante] = useMutation(cambiarEstadoPostulanteLlamado);
-  const [cambiarEstadoPostulanteTribunal] = useMutation(
-    cambiarEstadoPostulanteLlamadoTribunal
-  );
 
-  const cambiarEstadoPostulForm = useForm<CambiarEstadoPostulanteForm>({
-    resolver: yupResolver(cambiarEstadoPostulanteValidationSchema()),
+  const { data: etapaData, loading: etapaDataLoading } = useQuery<{
+    getEtapaActualPostInLlamado?: EtapaGrilla;
+  }>(getEtapaActualPostInLlamado, {
+    variables: {
+      llamadoId: llamadoId,
+      postulanteId: postulanteId,
+    },
   });
 
-  const { handleSubmit, reset } = cambiarEstadoPostulForm;
+  const [subetapas, setSubetapas] = useState<SubEtapaGrilla[] | []>([]);
 
-  const isLoading = loading;
   const postulanteInLlamadoInfo = data?.infoPostulanteEnLlamado;
-  const postulanteInfo = data?.infoPostulanteEnLlamado?.postulante;
-  const llamadoInfo = data?.infoPostulanteEnLlamado?.llamado;
-  const archivos = data?.infoPostulanteEnLlamado?.archivos;
-  const estadoActual = postulanteInLlamadoInfo?.estadoActual?.nombre;
+  const etapa = etapaData?.getEtapaActualPostInLlamado;
+
   const notExistsPostulanteInLlamado = !postulanteInLlamadoInfo?.id;
 
-  // TODO: Tomar etapas del back, y eliminar la colección local.
-  const formattedEtapas = formatEtapas(etapas);
-  const [currentEtapas, setCurrentEtapas] = useState(etapas);
+  useEffect(() => {
+    if (etapa) {
+      setSubetapas(etapa.subetapas);
+    }
+  }, [etapa]);
 
   useEffect(() => {
-    handleSetLoading(isLoading);
-  }, [isLoading]);
+    handleSetLoading(loading || etapaDataLoading);
+  }, [loading, etapaDataLoading]);
 
-  if (isLoading) {
+  if (loading || etapaDataLoading) {
     return null;
   }
 
@@ -144,69 +134,114 @@ const PostulanteInLlamadoInfo = () => {
     return <NotFoundPage />;
   }
 
-  const handleNext = async (data: CambiarEstadoPostulanteForm) => {
-    let allErrs: string[] = [];
-    if (allErrs?.length > 0) {
-      setNormalErrors(allErrs);
+  const handleGuardarPuntajes = async (saveOperation: saveOptions) => {
+    if (errores) {
       return;
     }
-    setNormalErrors([]);
-
-    if (userInfo?.roles.find((rol) => rol === Roles.admin)) {
-      handleSetLoading(true);
-      const resp = await cambiarEstadoPostulante({
-        variables: {
-          data: {
-            llamadoId: llamadoId,
-            postulanteId: postulanteId,
-            solicitanteId: userInfo?.id,
-            nuevoEstado: data?.nuevoEstado,
-          },
-        },
-      });
-
-      if (resp?.data?.cambiarEstadoPostulanteLlamado?.ok === true) {
-        toast.success("Estado transicionado correctamente.", {});
-        reset();
-      } else {
-        resp?.data?.cambiarEstadoPostulanteLlamado.message
-          ? toast.error(resp?.data?.cambiarEstadoPostulanteLlamado.message)
-          : toast.error("Error al tansicionar de estado.");
-      }
-
-      handleSetLoading(false);
-    } else if (userInfo?.roles.find((rol) => rol === Roles.tribunal)) {
-      handleSetLoading(true);
-      const resp = await cambiarEstadoPostulanteTribunal({
-        variables: {
-          data: {
-            llamadoId: llamadoId,
-            postulanteId: postulanteId,
-            solicitanteId: userInfo?.id,
-            nuevoEstado: data?.nuevoEstado,
-          },
-        },
-      });
-
-      if (resp?.data?.cambiarEstadoPostulanteLlamadoTribunal?.ok === true) {
-        toast.success(
-          "Solicitud de cambio de estado enviada correctamente.",
-          {}
-        );
-        setShowConfirmGuardarModal(true);
-        reset();
-      } else {
-        resp?.data?.cambiarEstadoPostulanteLlamadoTribunal.message
-          ? toast.error(
-              resp?.data?.cambiarEstadoPostulanteLlamadoTribunal.message
+    const dataToSend: DataGrilla = {
+      llamadoId: llamadoId,
+      postulanteId: postulanteId,
+      requisitos:
+        subetapas
+          ?.map((currSub) =>
+            currSub?.requisitos?.map(
+              (currReq) =>
+                ({
+                  id: currReq?.id,
+                  nuevoPuntaje: Number(currReq?.puntaje || 0),
+                } as RequisitoGrillaInput)
             )
-          : toast.error("Error al solicitar transición de estado.");
-      }
-
+          )
+          .flat() || [],
+    };
+    handleSetLoading(true);
+    let options;
+    if (saveOperation === saveOptions.guardar) {
+      options = {
+        variables: {
+          data: dataToSend,
+        },
+        refetchQueries: [
+          {
+            query: infoPostulanteEnLlamado,
+            variables: {
+              llamadoId: Number(llamadoId),
+              postulanteId: Number(postulanteId),
+            },
+          },
+          {
+            query: getEtapaActualPostInLlamado,
+            variables: {
+              llamadoId: Number(llamadoId),
+              postulanteId: Number(postulanteId),
+            },
+          },
+        ],
+      };
+    } else if (saveOperation === saveOptions.guardarYAvanzar) {
+      // Opciones sin refetch ya q hago el refetch en el otro api call.
+      options = {
+        variables: {
+          data: dataToSend,
+        },
+      };
+    }
+    const resp = await guardarPuntajes(options);
+    if (resp?.data?.guardarPuntajesPostulanteEnLlamado?.ok === true) {
+      toast.success(
+        "Se guardaron correctamente los puntajes para este postulante en este llamado."
+      );
       handleSetLoading(false);
+      setShowConfirmGuardarModal(false);
+    } else {
+      resp?.data?.guardarPuntajesPostulanteEnLlamado.message
+        ? toast.error(resp?.data?.guardarPuntajesPostulanteEnLlamado.message)
+        : toast.error("Error al intentar guardar los puntajes del postulante.");
+      handleSetLoading(false);
+      return;
+    }
+
+    if (saveOperation === saveOptions.guardarYAvanzar) {
+      const dataAvanzar: AvanzarEtapaPostulanteData = {
+        llamadoId: llamadoId,
+        postulanteId: postulanteId,
+        currentEtapa: Number(etapa?.currentEtapa || 0)
+      };
+      const resp = await avanzarEtapaPostulante({
+        variables: {
+          data: dataAvanzar,
+        },
+        refetchQueries: [
+          {
+            query: infoPostulanteEnLlamado,
+            variables: {
+              llamadoId: Number(llamadoId),
+              postulanteId: Number(postulanteId),
+            },
+          },
+          {
+            query: getEtapaActualPostInLlamado,
+            variables: {
+              llamadoId: Number(llamadoId),
+              postulanteId: Number(postulanteId),
+            },
+          },
+        ],
+      });
+      if (resp?.data?.avanzarEtapaPostulanteInLlamado?.ok === true) {
+        toast.success("Se avanzó la etapa del postulante en el llamado.");
+        handleSetLoading(false);
+        setShowConfirmAvanzarModal(false);
+      } else {
+        resp?.data?.avanzarEtapaPostulanteInLlamado.message
+          ? toast.error(resp?.data?.avanzarEtapaPostulanteInLlamado.message)
+          : toast.error(
+              "Error al intentar avanzar la etapa del postulante en el llamado."
+            );
+        handleSetLoading(false);
+      }
     }
   };
-
   return (
     <Container>
       {showConfirmGuardarModal && (
@@ -215,6 +250,7 @@ const PostulanteInLlamadoInfo = () => {
           textok="Guardar"
           textcancel="Cancelar"
           onSubmit={() => {
+            handleGuardarPuntajes(saveOptions.guardar);
             setShowConfirmGuardarModal(false);
           }}
           onCancel={() => setShowConfirmGuardarModal(false)}
@@ -229,6 +265,7 @@ const PostulanteInLlamadoInfo = () => {
           textok="Guardar"
           textcancel="Cancelar"
           onSubmit={() => {
+            handleGuardarPuntajes(saveOptions.guardarYAvanzar);
             setShowConfirmAvanzarModal(false);
           }}
           onCancel={() => setShowConfirmAvanzarModal(false)}
@@ -254,41 +291,55 @@ const PostulanteInLlamadoInfo = () => {
               />
             </ImageContainer>
           </BlurredCircle>
-          <span className="text-texto text-lg font-semibold">Manuel Diu</span>
+          <span className="text-texto text-lg font-semibold">{`${postulanteInLlamadoInfo?.postulante?.nombres} ${postulanteInLlamadoInfo?.postulante?.apellidos}`}</span>
         </NameAndImage>
         <div className="flex justify-between w-full">
           <div className="flex flex-col self-start">
             <span className="font-black text-2xl text-texto">
-              Etapa 1 - Estudio de Méritos
+              {etapa?.nombre}
             </span>
             <span className="font-medium text-lg text-textogris">
-              Etapa 1 / 3
+              {`Etapa ${etapa?.currentEtapa} / ${etapa?.cantEtapas}`}
             </span>
           </div>
           <div className="flex flex-col self-end">
             <span className="text-end font-semibold text-xl text-texto">
-              Puntaje Mínimo: <span className="text-red-600">50</span>
+              Puntaje Mínimo:
+              <span className="text-red-600"> {etapa?.puntajeMin}</span>
             </span>
             <span className="text-end font-semibold text-xl text-texto">
-              Puntaje actual del postulante en la etapa:{" "}
-              <span className="text-green">45</span>
+              Puntaje actual del postulante en la etapa:
+              <span className="text-green"> {etapa?.total}</span>
             </span>
           </div>
         </div>
       </MainContainer>
       <EtapaListContent>
-        <EtapasList etapas={formattedEtapas} setEtapas={setCurrentEtapas} />
+        <EtapaContainer className="modalOpen group">
+          <SectionTitle>Subetapa</SectionTitle>
+          <SubEtapaListGrilla
+            setSubEtapas={(values: any) => setSubetapas(values)}
+            subetapas={subetapas}
+            setErrores={setErrores}
+          />
+        </EtapaContainer>
       </EtapaListContent>
       <SaveButtons>
         <Button
           variant="outline"
           text="Guardar puntajes"
           action={() => setShowConfirmGuardarModal(true)}
+          disabled={errores}
+          className={errores ? "cursor-not-allowed opacity-40" : ""}
+          title={errores ? "Corrige los errores antes de continuar." : ""}
         />
         <Button
           variant="fill"
           text="Guardar puntajes y avanzar etapa"
           action={() => setShowConfirmAvanzarModal(true)}
+          disabled={errores}
+          className={errores ? "cursor-not-allowed opacity-40" : ""}
+          title={errores ? "Corrige los errores antes de continuar." : ""}
         />
       </SaveButtons>
     </Container>

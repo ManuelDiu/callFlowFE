@@ -17,6 +17,8 @@ type ButtonProps = {
   className?: string;
   rounded?: RoundedVariant;
   icon?: any
+  disabled?: boolean
+  title?: string;
 };
 
 const ButtonVariants = {
@@ -56,6 +58,8 @@ const Button = ({
   className = "",
   rounded = "full",
   icon,
+  disabled = false,
+  title = "",
 }: ButtonProps) => {
   return (
     <ButtonComp
@@ -65,6 +69,8 @@ const Button = ({
       type={type}
       onClick={action}
       rounded={rounded}
+      disabled={disabled}
+      title={title}
     >
       {icon && icon}
       {text}

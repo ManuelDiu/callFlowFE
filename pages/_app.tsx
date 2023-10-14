@@ -19,6 +19,7 @@ import store from "@/store/store";
 import CheckTokenWrapper from "@/components/CheckTokenWrapper/CheckTokenWrapper";
 import SubscriptionGlobalWrapper from "@/components/SubscriptionGlobalWrapper/SubscriptionGlobalWrapper";
 import { useRouter } from "next/router";
+import DisableNumberInputScroll from "@/utils/disableInputScroll";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const { pathname } = useRouter();
@@ -30,6 +31,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
 
+      <DisableNumberInputScroll />
       <div className="flex h-full min-h-screen">
         <div className="bg-gray-100 flex-grow">
           <ApolloProvider client={client}>

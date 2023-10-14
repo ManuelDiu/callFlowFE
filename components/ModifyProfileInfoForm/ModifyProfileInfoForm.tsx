@@ -20,7 +20,7 @@ import { UserList } from "types/usuario";
 
 interface Props {
   normalErrors?: string[];
-  userInfo: UserList | null;
+  userInfo: UserList | undefined;
 }
 
 const Container = styled.div`
@@ -60,6 +60,7 @@ const ModifyProfileInfoForm = ({
       setValue(ModifyProfileInfoFormFields.email, userInfo.email);
       setValue(ModifyProfileInfoFormFields.lastName, userInfo.lastName);
       setValue(ModifyProfileInfoFormFields.name, userInfo.name);
+      setValue(ModifyProfileInfoFormFields.itr, userInfo.itr);
       setValue(ModifyProfileInfoFormFields.telefono, userInfo.telefono);
       setValue(ModifyProfileInfoFormFields.documento, userInfo?.documento);
     }
@@ -126,7 +127,7 @@ const ModifyProfileInfoForm = ({
           defaultValue={userInfo?.itr ? [userInfo?.itr] : []}
           label="ITR"
           isInvalid={!!errors[ModifyProfileInfoFormFields.itr]?.message}
-          placeholder="Seleccione un ITR"
+          placeholder={userInfo ? userInfo.itr :"Seleccione un ITR"}
           onChange={(val: any) =>
             setValue(ModifyProfileInfoFormFields.itr, val?.value)
           }
@@ -140,7 +141,7 @@ const ModifyProfileInfoForm = ({
           inputFormName={ModifyProfileInfoFormFields.itr}
         />
 
-        <Dropdown
+        {/* <Dropdown
           defaultValue={userInfo?.roles || []}
           label="Roles"
           placeholder="Seleccione roles"
@@ -162,7 +163,7 @@ const ModifyProfileInfoForm = ({
             { label: "Cordinador", value: Roles.cordinador },
           ]}
           inputFormName={ModifyProfileInfoFormFields.roles}
-        />
+        /> */}
 
         <Input
           label="Biografia"

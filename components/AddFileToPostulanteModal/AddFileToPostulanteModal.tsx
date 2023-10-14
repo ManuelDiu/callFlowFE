@@ -18,9 +18,11 @@ import { formatFileTypeToDropdown } from "@/utils/llamadoUtils";
 import useUploadImage from "@/hooks/useUploadImage";
 import { useRouter } from "next/router";
 import {
-  addFileToLlamado,
   getLlamadoInfoById,
 } from "@/controllers/llamadoController";
+import {
+  addFileToPostulante, infoPostulanteEnLlamado,
+} from "@/controllers/postulanteController";
 import { toast } from "react-toastify";
 import ModalConfirmation from "../Modal/components/ModalConfirmation";
 import { Archivo } from "types/llamado";
@@ -28,6 +30,8 @@ import { Archivo } from "types/llamado";
 interface Props {
   setOpen: any;
   archivos: Archivo[];
+  postulanteId: number;
+  llamadoId: number;
 }
 
 const Container = styled.div`
@@ -42,10 +46,9 @@ const ErrorContainer = styled.span`
   ${tw`w-full h-auto flex flex-row items-center justify-start`}
 `;
 
-const AddFileLlamadoModal = ({ setOpen, archivos }: Props) => {
-  const { handleSetLoading } = useGlobal();
+const AddFilePostulanteModal = ({ setOpen, archivos, postulanteId, llamadoId }: Props) => {
+  const { handleSetLoading, userInfo } = useGlobal();
   const { query } = useRouter();
-  const llamadoId = query?.llamadoId;
   const [error, setError] = useState<string | null>(null);
   const [name, setName] = useState("");
   const [formSubmitted, setFormSubmitted] = useState(false);
@@ -55,7 +58,7 @@ const AddFileLlamadoModal = ({ setOpen, archivos }: Props) => {
     listTiposArchivo: TipoArchivoItem[];
   }>(listTiposArchivo);
   const { handleUpload } = useUploadImage();
-  const [handleAddFile] = useMutation(addFileToLlamado);
+  const [handleAddFile] = useMutation(addFileToPostulante);
   const [existsWithSameType, setExistsWithSameType] = useState(false);
 
   const fileTypes = data?.listTiposArchivo;
@@ -64,7 +67,7 @@ const AddFileLlamadoModal = ({ setOpen, archivos }: Props) => {
   );
 
   const fileTypesLlamado =
-    fileTypes?.filter((item) => item?.origen === TipoArchivoOrigen.llamado) ||
+    fileTypes?.filter((item) => item?.origen === TipoArchivoOrigen.postulante) ||
     [];
 
   useEffect(() => {
@@ -86,7 +89,7 @@ const AddFileLlamadoModal = ({ setOpen, archivos }: Props) => {
     try {
       setFormSubmitted(true);
       if (!selectedFile || !name || name === "" || !selectedFileType) {
-        setError("Completa los campos requeridos para continuar");
+        setError("Completa los campos requeridos para continuar.");
         return;
       }
       setError(null);
@@ -97,7 +100,9 @@ const AddFileLlamadoModal = ({ setOpen, archivos }: Props) => {
         url: fileLink,
         extension: selectedFile.type,
         tipoArchivo: selectedFileType,
+        postulanteId: Number(postulanteId || 0),
         llamadoId: Number(llamadoId || 0),
+        solicitanteId: Number(userInfo?.id || 0),
       };
       const resp = await handleAddFile({
         variables: {
@@ -105,14 +110,15 @@ const AddFileLlamadoModal = ({ setOpen, archivos }: Props) => {
         },
         refetchQueries: [
           {
-            query: getLlamadoInfoById,
+            query: infoPostulanteEnLlamado,
             variables: {
-              llamadoId: Number(llamadoId),
+                llamadoId: llamadoId,
+                postulanteId: postulanteId,
             },
           },
         ],
       });
-      if (resp?.data?.addFileToLlamado?.ok === true) {
+      if (resp?.data?.addFileToPostulante?.ok === true) {
         toast.success("Archivo agregado correctamente");
         setOpen(false);
       } else {
@@ -144,7 +150,7 @@ const AddFileLlamadoModal = ({ setOpen, archivos }: Props) => {
           defaultValue={[]}
           label="Seleccione un tipo"
           isInvalid={formSubmitted && !selectedFileType}
-          placeholder="Seleccione la categoría de este archivo"
+          placeholder="Seleccione la categoría para este archivo"
           onChange={(val: any) => setSelectedFileType(val?.value)}
           required
           items={formatFileTypeToDropdown(fileTypesLlamado)}
@@ -168,13 +174,13 @@ const AddFileLlamadoModal = ({ setOpen, archivos }: Props) => {
     <>
       <Modal
         textok={"Agregar"}
-        description="Permite agregar nuevos archivos en un llamado, con cualquier extensión."
+        description="Permite agregar nuevos archivos al postulante en este llamado, con cualquier extensión."
         textcancel="Cancelar"
         onSubmit={() => handleValidate()}
         onCancel={() => setOpen(false)}
         setOpen={setOpen}
         content={handleRenderContent()}
-        title="Agregar Archivo"
+        title="Agregar archivo al posutlante"
         className=""
       />
       {existsWithSameType && (
@@ -185,12 +191,12 @@ const AddFileLlamadoModal = ({ setOpen, archivos }: Props) => {
           onSubmit={() => handleNext()}
           onCancel={() => setExistsWithSameType(false)}
           setOpen={setExistsWithSameType}
-          title="¿Estás seguro que deseas agregar este tipo de archivo?"
-          description={`Al parecer el llamado ya tiene un archivo con el tipo archivo de nombre '${selectedFileTypeInfo?.nombre}', ¿deseas agregarlo de todas formas?`}
+          title="Estas seguro que deseas agregar este tipo de archivo?"
+          description={`Al parecer el postulante ya tiene un archivo con el tipo archivo de nombre '${selectedFileTypeInfo?.nombre}', ¿deseas agregarlo de todas formas?`}
         />
       )}
     </>
   );
 };
 
-export default AddFileLlamadoModal;
+export default AddFilePostulanteModal;

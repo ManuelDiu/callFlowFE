@@ -8,7 +8,6 @@ export type ModifyProfileInfoForm = {
   documento: string;
   telefono: string;
   email: string;
-  roles: Roles[];
   itr: any;
   biografia?: string;
 };
@@ -19,7 +18,6 @@ export enum ModifyProfileInfoFormFields {
   documento = "documento",
   telefono = "telefono",
   email = "email",
-  roles = "roles",
   itr = "itr",
   biografia = "biografia",
 }
@@ -31,7 +29,6 @@ export const defaultValues = {
   documento: "",
   telefono: "",
   email: "",
-  roles: [],
   itr: ITR.este,
   biografia: "",
 };
@@ -47,7 +44,6 @@ export const createModifyProfileInfoValidationSchema = () =>
       .email("Correo inválido")
       .trim()
       .required("El email es requerido."),
-    roles: yup.array().required("Los roles son requeridos."),
     itr: yup
       .string()
       .oneOf(["Suroeste", "Norte", "Este", "Centro_Sur"])

@@ -167,3 +167,12 @@ export const guardarPuntajesPostulanteEnLlamado = gql`
     }
   }
 `;
+
+export const addFileToPostulante = gql`
+  mutation($dataFile: AddFilePostulanteInput) {
+    addFileToPostulante(info: $dataFile) {
+      message
+      ok
+    }
+  }
+`;

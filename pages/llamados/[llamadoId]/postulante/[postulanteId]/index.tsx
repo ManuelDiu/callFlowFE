@@ -37,6 +37,9 @@ import { Roles } from "@/enums/Roles";
 import ModalConfirmation from "@/components/Modal/components/ModalConfirmation";
 import AvatarSelector from "@/components/Inputs/AvatarSelector";
 import { DEFAULT_USER_IMAGE } from "@/utils/userUtils";
+import { AiOutlinePlus } from "react-icons/ai";
+import AddFileLlamadoModal from "@/components/AddFileToPostulanteModal/AddFileToPostulanteModal";
+import AddFilePostulanteModal from "@/components/AddFileToPostulanteModal/AddFileToPostulanteModal";
 
 const colorVariants: any = {
   [EstadoPostulanteEnum.cumpleRequisito]: tw`bg-green`,
@@ -117,6 +120,7 @@ const PostulanteInLlamadoInfo = () => {
   const { userInfo, handleSetLoading } = useGlobal();
   const [showInfoModal, setShowInfoModal] = useState(false);
   const [showChangeStateModal, setShowChangeStateModal] = useState(false);
+  const [openModalAdd, setOpenModalAdd] = useState<boolean>();
   const { query } = useRouter();
   const llamadoId = Number(query?.llamadoId || 0);
   const postulanteId = Number(query?.postulanteId || 0);
@@ -180,6 +184,15 @@ const PostulanteInLlamadoInfo = () => {
             nuevoEstado: data?.nuevoEstado,
           },
         },
+        refetchQueries: [
+          {
+            query: infoPostulanteEnLlamado,
+            variables: {
+              llamadoId: Number(llamadoId),
+              postulanteId: Number(postulanteId),
+            },
+          },
+        ],
       });
 
       if (resp?.data?.cambiarEstadoPostulanteLlamado?.ok === true) {
@@ -322,9 +335,17 @@ const PostulanteInLlamadoInfo = () => {
           </TopSection>
           <LlamadoInfoCard llamadoInfo={llamadoInfo} />
           <div className="flex flex-col gap-2 items-center justify-center w-full">
-            <span className="self-start text-xl text-texto font-bold">
-              Archivos del postulante en este llamado
-            </span>
+            <div className="flex justify-between w-full">
+              <span className="self-start text-xl text-texto font-bold">
+                Archivos del postulante en este llamado
+              </span>
+              <Button
+                action={() => setOpenModalAdd(!openModalAdd)}
+                icon={<AiOutlinePlus color="white" size={20} />}
+                variant="fill"
+                text="Agregar archivo"
+              />
+            </div>
             {/* TODO: Agregar archivo al postulante front y back */}
             <List>
               {archivos?.length === 0 && (
@@ -376,6 +397,7 @@ const PostulanteInLlamadoInfo = () => {
             </List>
           </div>
         </Content>
+        {openModalAdd && <AddFilePostulanteModal llamadoId={llamadoId} postulanteId={postulanteId} archivos={archivos || []} setOpen={setOpenModalAdd} />}
       </MainContainer>
     </Container>
   );

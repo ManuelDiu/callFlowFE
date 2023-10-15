@@ -87,3 +87,22 @@ export const listarMiembrosTribunal = gql`
     }
   }
 `;
+
+export const getUserInfoById = gql`
+  query getUserInfoById($usrId: Int!) {
+    getUserInfoById(usrId: $usrId) {
+      id
+      email
+      name
+      imageUrl
+      lastName
+      roles
+      itr
+      telefono
+      llamados
+      activo
+      documento
+      biografia
+    }
+  }
+`;

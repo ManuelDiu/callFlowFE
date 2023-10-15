@@ -121,6 +121,18 @@ input[type=number]::-webkit-outer-spin-button {
 
 }
 
+.fileNameColor {
+  color: #ce00ff!important;
+  margin-left: 4px;
+  margin-right: 4px;
+}
+
+.fileTypeColor {
+  color: #2495b9!important;
+  margin-left: 4px;
+  margin-right: 4px;
+}
+
 .estadoColor {
   color: #8EA501!important;
   margin-left: 4px;

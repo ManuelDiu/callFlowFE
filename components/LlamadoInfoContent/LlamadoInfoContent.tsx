@@ -23,6 +23,8 @@ import VerDisponibilidadModal from "../VerDisponibilidadModal/VerDisponibilidadM
 import { TipoMiembro } from "@/enums/TipoMiembro";
 import { Roles } from "@/enums/Roles";
 import RenunciarLlamadoModal from "../RenunciarLlamadoModal/RenunciarLlamadoModal";
+import Modal from "../Modal/Modal";
+import GrillaPDF from "../GrillaPDF/GrillaPDF";
 
 const Container = styled.div`
   ${tw`w-full h-auto flex flex-col items-start justify-start gap-4`}
@@ -89,6 +91,7 @@ const LlamadoInfoContent = ({ llamadoInfo }: Props) => {
   const [verDisponibilidad, setVerDisponibilidad] = useState(false);
   const [openRenunciarLlamadoModal, setOpenRenunciarLlamadoModal] =
     useState(false);
+  const [previewGrilla, setPreviewGrilla] = useState(false);
 
   const { userInfo } = useGlobal();
   const miembrosTribunal = llamadoInfo.miembrosTribunal || [];
@@ -100,14 +103,14 @@ const LlamadoInfoContent = ({ llamadoInfo }: Props) => {
         item?.tipoMiembro === TipoMiembro.titular
     ) !== "undefined";
 
-    const renuncio = miembrosTribunal?.find(
-      (item) =>
-        item?.usuario?.id === userInfo?.id
-    )?.motivoRenuncia !== "";
+  const renuncio =
+    miembrosTribunal?.find((item) => item?.usuario?.id === userInfo?.id)
+      ?.motivoRenuncia !== "";
 
   const { isAdmin, isSolicitante } = useGlobal();
 
   const handleGenerateGrilla = () => {
+    setPreviewGrilla(true);
     // generate grilla and download it
   };
 
@@ -267,6 +270,17 @@ const LlamadoInfoContent = ({ llamadoInfo }: Props) => {
         title="Miembros del tribunal"
         selectedUsers={formatTribunales(llamadoInfo?.miembrosTribunal)}
       />
+
+      {previewGrilla && (
+        <Modal
+          textok="Aceptar"
+          onSubmit={() => setPreviewGrilla(false)}
+          content={<GrillaPDF llamadoInfo={llamadoInfo} />}
+          title="Grilla del llamado"
+          setOpen={setPreviewGrilla}
+          description="Previsualiza la informacion antes de generar el archivo, si sobrescribes el archivo ya existente , se perderan todas las firmas que el archivo tenga hasta el momento , puedes ver esto en la seccion de archivos"
+        />
+      )}
 
       {verDisponibilidad && (
         <VerDisponibilidadModal

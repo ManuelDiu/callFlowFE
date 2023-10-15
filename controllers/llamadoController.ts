@@ -46,7 +46,7 @@ export const llamadoSubscriptionCreated = gql`
 `;
 
 export const disabledLlamados = gql`
-  mutation($llamados: [Int]) {
+  mutation ($llamados: [Int]) {
     deshabilitarLlamados(llamados: $llamados) {
       message
       ok
@@ -55,7 +55,7 @@ export const disabledLlamados = gql`
 `;
 
 export const getLlamadoInfoById = gql`
-  query($llamadoId: Int) {
+  query ($llamadoId: Int) {
     getLlamadoById(llamadoId: $llamadoId) {
       solicitante {
         telefono
@@ -111,6 +111,7 @@ export const getLlamadoInfoById = gql`
         subetapas {
           requisitos {
             puntajeSugerido
+            id
             nombre
             excluyente
           }
@@ -137,9 +138,9 @@ export const getLlamadoInfoById = gql`
       archivosFirma {
         nombre
         extension
-        tipoArchivo {
-          origen
-          nombre
+        firmas {
+          usuario
+          firmado
         }
         url
       }
@@ -209,14 +210,13 @@ export const avanzarEtapaPostulanteInLlamado = gql`
 `;
 
 export const addFileToLlamado = gql`
-  mutation($dataFile: AddFileLlamadoInput) {
+  mutation ($dataFile: AddFileLlamadoInput) {
     addFileToLlamado(info: $dataFile) {
       message
       ok
     }
   }
 `;
-
 
 export const cambiarEstadoLlamado = gql`
   mutation CambiarEstadoLlamado($info: CambiarEstadoLlamadoInput) {
@@ -228,7 +228,7 @@ export const cambiarEstadoLlamado = gql`
 `;
 
 export const cambiarCambioLlamado = gql`
-  mutation($info: LlamadoChangeCambioInput) {
+  mutation ($info: LlamadoChangeCambioInput) {
     cambiarCambioLlamado(info: $info) {
       message
     }
@@ -236,10 +236,22 @@ export const cambiarCambioLlamado = gql`
 `;
 
 export const renunciarLlamado = gql`
-  mutation($info: RenunciarLlamadoInput) {
+  mutation ($info: RenunciarLlamadoInput) {
     renunciarLlamado(info: $info) {
       message
       ok
+    }
+  }
+`;
+
+export const puntajesLlamado = gql`
+  query ($llamadoId: Int) {
+    listarPuntajesPostulantes(llamadoId: $llamadoId) {
+      postulanteId
+      requisitos {
+        puntaje
+        requisitoId
+      }
     }
   }
 `;

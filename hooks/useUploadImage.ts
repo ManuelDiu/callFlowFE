@@ -2,7 +2,9 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from "../firebase";
 import { useState } from "react";
 
-const useUploadImage = () => {
+const DEFAULT_IMAGES_FOLDER = "images";
+
+const useUploadImage = ({ folder = DEFAULT_IMAGES_FOLDER }: any) => {
   const [imageError, setImageError] = useState<string | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
 
@@ -13,7 +15,7 @@ const useUploadImage = () => {
           }
           const storageRef = ref(
             storage,
-            `/images/${Date.now() + file?.name}`
+            `/${folder}/${Date.now() + file?.name}`
           ); // modificar esta línea para usar un nombre distinto para el archivo
           const uploadTask = uploadBytesResumable(storageRef, file);
           await uploadTask;

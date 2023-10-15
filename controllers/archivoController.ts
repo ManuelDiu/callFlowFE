@@ -8,3 +8,12 @@ export const deleteArchivo = gql`
     }
   }
 `;
+
+export const addArchivoFirmaToLlamado = gql`
+  mutation ($dataFile: AddFileLlamadoInputFirma) {
+    addArchivoFirmaToLlamado(info: $dataFile) {
+      message
+      ok
+    }
+  }
+`;

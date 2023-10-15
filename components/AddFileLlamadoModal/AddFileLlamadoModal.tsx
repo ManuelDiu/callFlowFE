@@ -54,7 +54,7 @@ const AddFileLlamadoModal = ({ setOpen, archivos }: Props) => {
   const { data, loading: loadingTipoArchivo } = useQuery<{
     listTiposArchivo: TipoArchivoItem[];
   }>(listTiposArchivo);
-  const { handleUpload } = useUploadImage();
+  const { handleUpload } = useUploadImage({});
   const [handleAddFile] = useMutation(addFileToLlamado);
   const [existsWithSameType, setExistsWithSameType] = useState(false);
 

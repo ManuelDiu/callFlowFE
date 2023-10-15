@@ -122,20 +122,74 @@ const FileLlamado = ({ llamadoInfo }: Props) => {
     <Container>
       <Row>
         <Title>Archivos llamado</Title>
-        {isAdmin && <Button
-          action={() => setOpenModalAdd(!openModalAdd)}
-          icon={<AiOutlinePlus color="white" size={20} />}
-          variant="fill"
-          text="Agregar archivo"
-        />}
+        {isAdmin && (
+          <Button
+            action={() => setOpenModalAdd(!openModalAdd)}
+            icon={<AiOutlinePlus color="white" size={20} />}
+            variant="fill"
+            text="Agregar archivo"
+          />
+        )}
       </Row>
 
       <Subtitle>Archivos con firma</Subtitle>
-      {archivos?.length === 0 && <Text className="!text-base" text="Ooops!... No encontramos ninguna archivo con firma para este llamado" />}
+      <List>
+        {archivosFirma?.length === 0 && (
+          <Text
+            className="!text-base"
+            text="Ooops!... No encontramos ninguna archivo con firma para este llamado"
+          />
+        )}
+        {archivosFirma?.map((archivo) => {
+          return (
+            <ArchivoItem key={archivo?.id}>
+              <Row className="!justify-start !gap-2">
+                <div className="w-[80px] h-[90px]">
+                  <FileIcon
+                    extension={getFileType(archivo)}
+                    {...(defaultStyles as any)[getFileType(archivo)]}
+                  />
+                </div>
+
+                <InfoList>
+                  <ArchivoKey>Nombre:</ArchivoKey>
+                  <ArchivoText>{archivo?.nombre}</ArchivoText>
+                  <ArchivoKey>Firmas:</ArchivoKey>
+                  <ArchivoText>5</ArchivoText>
+                </InfoList>
+              </Row>
+              <ActionsContainer>
+                <a href={archivo.url} rel="noreferrer" target="_blank">
+                  <ActionWrapper
+                    className="!border-green"
+                    onClick={() => handleDownload(archivo)}
+                  >
+                    <GoDownload color="#37B63C" size={20} />
+                  </ActionWrapper>
+                </a>
+                <ActionWrapper
+                  className="!border-red-500"
+                  onClick={() => {
+                    setOpenConfirmationDelete(true);
+                    setSelectedArchivoToDelete(archivo);
+                  }}
+                >
+                  <BsTrash color="red" size={20} />
+                </ActionWrapper>
+              </ActionsContainer>
+            </ArchivoItem>
+          );
+        })}
+      </List>
 
       <Subtitle>Archivos</Subtitle>
       <List>
-        {archivos?.length === 0 && <Text className="!text-base" text="Ooops!... No encontramos ninguna archivo para este llamado" />}
+        {archivos?.length === 0 && (
+          <Text
+            className="!text-base"
+            text="Ooops!... No encontramos ninguna archivo para este llamado"
+          />
+        )}
         {archivos?.map((archivo) => {
           return (
             <ArchivoItem key={archivo?.id}>
@@ -190,7 +244,9 @@ const FileLlamado = ({ llamadoInfo }: Props) => {
           description="Si eliminas a este archivo, no tendras mas acceso al mismo dentro del sistema"
         />
       )}
-      {openModalAdd && <AddFileLlamadoModal archivos={archivos} setOpen={setOpenModalAdd} />}
+      {openModalAdd && (
+        <AddFileLlamadoModal archivos={archivos} setOpen={setOpenModalAdd} />
+      )}
     </Container>
   );
 };

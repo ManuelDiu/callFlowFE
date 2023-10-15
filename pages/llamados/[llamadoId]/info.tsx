@@ -1,6 +1,7 @@
 import { Topbar } from "@/components/CheckTokenWrapper/CheckTokenWrapper";
 import EtapasList from "@/components/EtapasList/EtapasList";
 import FileLlamado from "@/components/FileLlamado/FileLlamado";
+import GrillaPDF from "@/components/GrillaPDF/GrillaPDF";
 import HistorialLlamado from "@/components/HistorialLlamado/HistorialLlamado";
 import PostulantesListContent from "@/components/ListOfPostulantes/PostulantesListContent/PostulantesListContent";
 import ListOfUsers from "@/components/ListOfUsers/ListOfUsers";

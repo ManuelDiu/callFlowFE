@@ -106,6 +106,9 @@ const FileLlamado = ({ llamadoInfo }: Props) => {
               archivos: llamadoInfo?.archivos?.filter(
                 (file) => file?.id !== selectedArchivoToDelete?.id
               ),
+              archivosFirma: llamadoInfo?.archivosFirma?.filter(
+                (file) => file?.id !== selectedArchivoToDelete?.id
+              ),
             },
           },
         });

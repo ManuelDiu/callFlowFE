@@ -137,9 +137,15 @@ export const getLlamadoInfoById = gql`
       }
       archivosFirma {
         nombre
+        id
         extension
         firmas {
-          usuario
+          usuario {
+            name
+            lastName
+            imageUrl
+            id
+          }
           firmado
         }
         url

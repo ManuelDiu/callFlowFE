@@ -16,6 +16,7 @@ const appRoutes = {
     agregarTemplate: () => `/template/agregar-template`,
     selectTemplate: () => `/llamados/select-template`,
     templates: () => `/template`,
+    userProfilePage: (userId: any) => `/perfil/${userId}`,
     modificarInfoPerfil: () => `/perfil/modificar-informacion`,
     llamadoInfoPage: (llamadoId?: any) => `/llamados/${llamadoId ? llamadoId : `[llamadoId]`}/info`,
     completarGrillaPostulante: (llamadoId?: any, postulanteId?: any) => `/llamados/${llamadoId ? llamadoId : `[llamadoId]`}/completar-grilla-postulante/${postulanteId ? postulanteId : `[postulanteId]`}`,

@@ -44,6 +44,7 @@ import useUploadImage from "@/hooks/useUploadImage";
 import { toast } from "react-toastify";
 import ModalConfirmation from "@/components/Modal/components/ModalConfirmation";
 import { useUsersOrder } from "@/hooks/useUsersOrder";
+import appRoutes from "@/routes/appRoutes";
 
 const Container = styled.div`
   ${tw`w-full max-h-full pb-5 h-auto p-5 py-0 flex gap-4 flex-col items-center justify-start`}
@@ -60,7 +61,7 @@ const Usuarios = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [file, setFileSelected] = useState(false);
   const [normalErrors, setNormalErrors] = useState<string[]>([]);
-  const { handleUpload } = useUploadImage();
+  const { handleUpload } = useUploadImage({});
   const [createNewUser] = useMutation(createUser);
   const client = useApolloClient();
   const [openDeleteModal, setDeleteModalOpen] = useState(false);
@@ -173,6 +174,7 @@ const Usuarios = () => {
           ) : (
             <MdCancel size={20} color="red" />
           ),
+          href: appRoutes.userProfilePage(usr?.id),
           actions:
             userInfo?.email !== usr?.email ? (
               <ActionsList

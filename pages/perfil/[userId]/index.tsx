@@ -13,21 +13,30 @@ import {
   defaultValues,
 } from "@/forms/ModifyProfileInfoForm";
 import { yupResolver } from "@hookform/resolvers/yup";
-import ModifyProfileInfo from "@/components/ModifyProfileInfoForm/ModifyProfileInfoForm";
 import { UserList } from "types/usuario";
 import { useMutation, useQuery } from "@apollo/client";
 import { getUserInfoById, updateUserInfo } from "@/controllers/userController";
 import ModalConfirmation from "@/components/Modal/components/ModalConfirmation";
 import { toast } from "react-toastify";
-import Button from "@/components/Buttons/Button";
 import useUploadImage from "@/hooks/useUploadImage";
+import { useRouter } from "next/router";
+import Text from "@/components/Table/components/Text";
+import { MdOutlineWhatsapp } from "react-icons/md";
+import GmailIcon from "@/public/icons/GmailIcon.svg";
+import { PiPhoneDuotone } from "react-icons/pi";
+import Table from "@/components/Table/Table";
+import { Columns, formatLlamadosToTable } from "@/utils/llamadoUtils";
+import { LlamadoList } from "types/llamado";
+import { listarLlamados } from "@/controllers/llamadoController";
 import NotFoundPage from "@/components/NotFoundPage/NotFoundPage";
+import appRoutes from "@/routes/appRoutes";
+
 const Topbar = styled.div`
   ${tw`flex justify-between p-5 w-full h-max`}
 `;
 
 const MainContainer = styled.div`
-  ${tw`flex flex-col gap-3 px-5 mb-5 items-center justify-center w-full`}
+  ${tw`flex flex-col gap-3 mb-5 items-center justify-center w-full`}
 `;
 
 const Content = styled.div`
@@ -55,102 +64,49 @@ const ImageSelectorContainer = styled.div`
 `;
 
 const FormSection = styled.section`
-  ${tw`flex flex-col items-center justify-center w-full p-8 bg-white rounded-3xl shadow-md relative`}
+  ${tw`flex flex-col items-center justify-center w-full p-8 bg-white rounded-3xl shadow-md relative mb-5`}
 `;
 
-const ModificarInformacion: FC = () => {
+const UserProfile: FC = () => {
+  const router = useRouter();
+  const { query } = useRouter();
+  const userId = Number(query?.userId || 0);
+
   const [selectedFile, setSelectedFile] = useState(null);
-  const [normalErrors, setNormalErrors] = useState<string[]>([]);
-  const { handleSetLoading, userInfo: usrLogg } = useGlobal();
-  const [openConfirmationModal, setConfirmationModalOpen] = useState(false);
-  const [handleUpdateUser] = useMutation(updateUserInfo);
-  const { handleUpload } = useUploadImage({});
-  const createModifyProfileForm = useForm<ModifyProfileInfoForm>({
-    defaultValues: defaultValues,
-    resolver: yupResolver(createModifyProfileInfoValidationSchema()),
-  });
-  const { handleSubmit } = createModifyProfileForm;
+  const { handleSetLoading } = useGlobal();
 
   const { data, loading } = useQuery<{
     getUserInfoById?: UserList;
   }>(getUserInfoById, {
     variables: {
-      usrId: usrLogg?.id,
+      usrId: userId,
     },
   });
 
+  const { data: dataLlamados, loading: loadingLlamados } = useQuery<{
+    listarLlamados: LlamadoList[];
+  }>(listarLlamados, {
+    variables: {},
+  });
+
   const userInfo = data?.getUserInfoById;
+  const rows = formatLlamadosToTable(dataLlamados?.listarLlamados || []);
 
   useEffect(() => {
-    handleSetLoading(loading);
-  }, [loading]);
-
-  const userDoesntExist = !data?.getUserInfoById?.id;
+    handleSetLoading(loading || loadingLlamados);
+  }, [loading, loadingLlamados]);
 
   if (loading) {
     return null;
   }
+
+  const userDoesntExist = !data?.getUserInfoById?.id;
   if (userDoesntExist && !loading) {
     return <NotFoundPage />;
   }
 
-  const handleNext = async (data: ModifyProfileInfoForm) => {
-    let allErrs: any = [];
-    if (allErrs?.length > 0) {
-      setNormalErrors(allErrs);
-      return;
-    }
-    setNormalErrors([]);
-    handleSetLoading(true);
-
-    const imageUrl = await handleUpload(selectedFile);
-    const resp = await handleUpdateUser({
-      variables: {
-        updaetUserInfo: {
-          id: userInfo?.id,
-          name: data?.name,
-          itr: data?.itr,
-          roles: userInfo?.roles,
-          telefono: data?.telefono,
-          lastName: data?.lastName,
-          imageUrl: imageUrl,
-          email: data?.email,
-          biografia: data?.biografia,
-          documento: data?.documento,
-        },
-      },
-      refetchQueries: [
-        {
-          query: getUserInfoById,
-          variables: {
-            usrId: usrLogg?.id,
-          },
-        },
-      ],
-    });
-
-    if (resp?.data?.updateUser?.ok === true) {
-      toast.success("Usuario actualizado correctamente", {});
-    } else {
-      toast.error("Error al actualizar usuario");
-    }
-    handleSetLoading(false);
-    setConfirmationModalOpen(false);
-  };
   return (
     <>
-      {openConfirmationModal && (
-        <ModalConfirmation
-          variant="red"
-          textok="Si, actualizar usuario"
-          textcancel="Cancelar"
-          onSubmit={handleSubmit(handleNext)}
-          onCancel={() => setConfirmationModalOpen(false)}
-          setOpen={setConfirmationModalOpen}
-          title="¿Está seguro de que desea actualizar el usuario con los datos proporcionados?"
-          description=""
-        />
-      )}
       <Topbar>
         <Breadcrumb title="Modificar Información" />
         <ProfileBar />
@@ -187,26 +143,69 @@ const ModificarInformacion: FC = () => {
                 ITR {userInfo?.itr?.replace("_", " ")}
               </span>
             </UserImageAndName>
+            <div className="flex flex-col justify-center items-center w-full pb-5">
+              <div className="flex gap-10 w-full justify-center items-center pb-3">
+                <a
+                  target="_blank"
+                  rel="noreferrer"
+                  title="Enviar mensaje a whatsapp."
+                  href={`https://wa.me/598${userInfo?.telefono}`}
+                  className="p-1 rounded-full shadow-2xl active:shadow-inner"
+                >
+                  <MdOutlineWhatsapp className="fill-green" size={50} />
+                </a>
+                <a
+                  href={`mailTo:${userInfo?.email}`}
+                  title="Enviar correo."
+                  className="flex p-1 rounded-full shadow-2xl active:shadow-inner"
+                >
+                  <Image
+                    src={GmailIcon?.src}
+                    alt="gmail icon"
+                    width={50}
+                    height={50}
+                  />
+                </a>
+                <a
+                  href={`tel:+598${userInfo?.telefono}`}
+                  title="Iniciar llamada telefónica."
+                  className="p-1 rounded-full shadow-2xl active:shadow-inner"
+                >
+                  <PiPhoneDuotone className="fill-blue-600" size={50} />
+                </a>
+              </div>
+              {userInfo?.biografia && (
+                <>
+                  <Text text="Biografía" className="!text-lg" />
+                  <p className="w-5/6 text-center break-words font-medium text-textoGray">
+                    {userInfo?.biografia}
+                  </p>
+                </>
+              )}
+            </div>
           </TopSection>
-          <FormSection>
-            <FormProvider {...createModifyProfileForm}>
-              <ModifyProfileInfo
-                userInfo={userInfo}
-                normalErrors={normalErrors}
-              />
-            </FormProvider>
-          </FormSection>
-          <Button
-            text="Guardar información"
-            variant="fill"
-            action={() => setConfirmationModalOpen(true)}
-            className="!py-2 !text-base"
-            sizeVariant="fit"
-          />
+          {userInfo && (
+            <Table
+              multiDisabled={false}
+              title="Llamados en los que participa"
+              cols={Columns}
+              data={rows}
+              others={
+                <div className="flex justify-center w-full">
+                  <button
+                    onClick={() => router.push(appRoutes.llamados())}
+                    className="font-medium text-principal rounded-full px-4 py-1 bg-principal/5"
+                  >
+                    Ver más
+                  </button>
+                </div>
+              }
+            />
+          )}
         </Content>
       </MainContainer>
     </>
   );
 };
 
-export default ModificarInformacion;
+export default UserProfile;

@@ -4,21 +4,11 @@ import ProfileBar from "@/components/Topbar/ProfileBar";
 import { useGlobal } from "@/hooks/useGlobal";
 import Image from "next/image";
 import React, { FC, useEffect, useState } from "react";
-import { FormProvider, useForm } from "react-hook-form";
 import styled from "styled-components";
 import tw from "twin.macro";
-import {
-  ModifyProfileInfoForm,
-  createModifyProfileInfoValidationSchema,
-  defaultValues,
-} from "@/forms/ModifyProfileInfoForm";
-import { yupResolver } from "@hookform/resolvers/yup";
 import { UserList } from "types/usuario";
-import { useMutation, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { getUserInfoById, updateUserInfo } from "@/controllers/userController";
-import ModalConfirmation from "@/components/Modal/components/ModalConfirmation";
-import { toast } from "react-toastify";
-import useUploadImage from "@/hooks/useUploadImage";
 import { useRouter } from "next/router";
 import Text from "@/components/Table/components/Text";
 import { MdOutlineWhatsapp } from "react-icons/md";
@@ -27,9 +17,10 @@ import { PiPhoneDuotone } from "react-icons/pi";
 import Table from "@/components/Table/Table";
 import { Columns, formatLlamadosToTable } from "@/utils/llamadoUtils";
 import { LlamadoList } from "types/llamado";
-import { listarLlamados } from "@/controllers/llamadoController";
+import { listLlamadosByUser } from "@/controllers/llamadoController";
 import NotFoundPage from "@/components/NotFoundPage/NotFoundPage";
 import appRoutes from "@/routes/appRoutes";
+import { DEFAULT_USER_IMAGE } from "@/utils/userUtils";
 
 const Topbar = styled.div`
   ${tw`flex justify-between p-5 w-full h-max`}
@@ -60,11 +51,23 @@ const BlurredCircle = styled.div`
 `;
 
 const ImageSelectorContainer = styled.div`
-  ${tw`min-w-[180px] w-[180px] h-[180px]`}
+  ${tw`relative min-w-[180px] w-[100px] h-[180px]`}
 `;
 
-const FormSection = styled.section`
-  ${tw`flex flex-col items-center justify-center w-full p-8 bg-white rounded-3xl shadow-md relative mb-5`}
+const ContactAndBiography = styled.div`
+  ${tw`flex flex-col justify-center items-center w-full pb-5`}
+`;
+
+const ContactIcons = styled.div`
+  ${tw`flex gap-10 w-full justify-center items-center pb-3`}
+`;
+
+const ContactItem = styled.a`
+  ${tw`flex p-1 rounded-full shadow-2xl active:shadow-inner`}
+`;
+
+const ShowMore = styled.a`
+  ${tw`flex justify-center w-full`}
 `;
 
 const UserProfile: FC = () => {
@@ -72,7 +75,6 @@ const UserProfile: FC = () => {
   const { query } = useRouter();
   const userId = Number(query?.userId || 0);
 
-  const [selectedFile, setSelectedFile] = useState(null);
   const { handleSetLoading } = useGlobal();
 
   const { data, loading } = useQuery<{
@@ -84,13 +86,13 @@ const UserProfile: FC = () => {
   });
 
   const { data: dataLlamados, loading: loadingLlamados } = useQuery<{
-    listarLlamados: LlamadoList[];
-  }>(listarLlamados, {
-    variables: {},
+    listarLlamadosByUser: LlamadoList[];
+  }>(listLlamadosByUser, {
+    variables: { userId },
   });
 
   const userInfo = data?.getUserInfoById;
-  const rows = formatLlamadosToTable(dataLlamados?.listarLlamados || []);
+  const rows = formatLlamadosToTable(dataLlamados?.listarLlamadosByUser || []);
 
   useEffect(() => {
     handleSetLoading(loading || loadingLlamados);
@@ -108,7 +110,7 @@ const UserProfile: FC = () => {
   return (
     <>
       <Topbar>
-        <Breadcrumb title="Modificar Información" />
+        <Breadcrumb title="Perfil del Usuario" />
         <ProfileBar />
       </Topbar>
       <MainContainer>
@@ -126,9 +128,12 @@ const UserProfile: FC = () => {
             <UserImageAndName>
               <BlurredCircle>
                 <ImageSelectorContainer>
-                  <AvatarSelector
-                    defaultImage={userInfo?.imageUrl}
-                    setFile={setSelectedFile}
+                  <Image
+                    src={userInfo?.imageUrl || DEFAULT_USER_IMAGE}
+                    alt="Imagen del usuario"
+                    objectFit="fill"
+                    layout="fill"
+                    className="rounded-full"
                   />
                 </ImageSelectorContainer>
               </BlurredCircle>
@@ -143,21 +148,19 @@ const UserProfile: FC = () => {
                 ITR {userInfo?.itr?.replace("_", " ")}
               </span>
             </UserImageAndName>
-            <div className="flex flex-col justify-center items-center w-full pb-5">
-              <div className="flex gap-10 w-full justify-center items-center pb-3">
-                <a
+            <ContactAndBiography>
+              <ContactIcons>
+                <ContactItem
                   target="_blank"
                   rel="noreferrer"
                   title="Enviar mensaje a whatsapp."
                   href={`https://wa.me/598${userInfo?.telefono}`}
-                  className="p-1 rounded-full shadow-2xl active:shadow-inner"
                 >
                   <MdOutlineWhatsapp className="fill-green" size={50} />
-                </a>
-                <a
+                </ContactItem>
+                <ContactItem
                   href={`mailTo:${userInfo?.email}`}
                   title="Enviar correo."
-                  className="flex p-1 rounded-full shadow-2xl active:shadow-inner"
                 >
                   <Image
                     src={GmailIcon?.src}
@@ -165,15 +168,14 @@ const UserProfile: FC = () => {
                     width={50}
                     height={50}
                   />
-                </a>
-                <a
+                </ContactItem>
+                <ContactItem
                   href={`tel:+598${userInfo?.telefono}`}
                   title="Iniciar llamada telefónica."
-                  className="p-1 rounded-full shadow-2xl active:shadow-inner"
                 >
                   <PiPhoneDuotone className="fill-blue-600" size={50} />
-                </a>
-              </div>
+                </ContactItem>
+              </ContactIcons>
               {userInfo?.biografia && (
                 <>
                   <Text text="Biografía" className="!text-lg" />
@@ -182,7 +184,7 @@ const UserProfile: FC = () => {
                   </p>
                 </>
               )}
-            </div>
+            </ContactAndBiography>
           </TopSection>
           {userInfo && (
             <Table
@@ -191,14 +193,14 @@ const UserProfile: FC = () => {
               cols={Columns}
               data={rows}
               others={
-                <div className="flex justify-center w-full">
+                <ShowMore>
                   <button
                     onClick={() => router.push(appRoutes.llamados())}
                     className="font-medium text-principal rounded-full px-4 py-1 bg-principal/5"
                   >
                     Ver más
                   </button>
-                </div>
+                </ShowMore>
               }
             />
           )}

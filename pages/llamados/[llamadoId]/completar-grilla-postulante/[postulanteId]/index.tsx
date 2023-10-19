@@ -202,14 +202,6 @@ const PostulanteInLlamadoInfo = () => {
     }
 
     if (saveOperation === saveOptions.guardarYAvanzar) {
-      if(etapa){
-        if (etapa?.total < etapa?.puntajeMin){
-          toast.error("El postulante no avanzó de etapa porque no cumple con el puntaje mínimo de la misma.")
-          return;
-        }
-      }else{
-        return;
-      }
       const dataAvanzar: AvanzarEtapaPostulanteData = {
         llamadoId: llamadoId,
         postulanteId: postulanteId,

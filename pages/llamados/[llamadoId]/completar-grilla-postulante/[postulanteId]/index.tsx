@@ -205,7 +205,7 @@ const PostulanteInLlamadoInfo = () => {
       const dataAvanzar: AvanzarEtapaPostulanteData = {
         llamadoId: llamadoId,
         postulanteId: postulanteId,
-        currentEtapa: Number(etapa?.currentEtapa || 0)
+        currentEtapa: Number(etapa?.currentEtapa || 0),
       };
       const resp = await avanzarEtapaPostulante({
         variables: {

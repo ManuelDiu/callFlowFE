@@ -74,6 +74,7 @@ const SubEtapaListGrilla = ({
     }
   };
   return subetapas?.map((subEtapa, index) => {
+    sumOfRequisitos = 0;
     handleErrores(subEtapa);
 
     return (

@@ -21,6 +21,7 @@ import ModalConfirmation from "@/components/Modal/components/ModalConfirmation";
 import { toast } from "react-toastify";
 import Button from "@/components/Buttons/Button";
 import useUploadImage from "@/hooks/useUploadImage";
+import NotFoundPage from "@/components/NotFoundPage/NotFoundPage";
 const Topbar = styled.div`
   ${tw`flex justify-between p-5 w-full h-max`}
 `;
@@ -83,6 +84,15 @@ const ModificarInformacion: FC = () => {
   useEffect(() => {
     handleSetLoading(loading);
   }, [loading]);
+
+  const userDoesntExist = !data?.getUserInfoById?.id;
+
+  if (loading) {
+    return null;
+  }
+  if (userDoesntExist && !loading) {
+    return <NotFoundPage />;
+  }
 
   const handleNext = async (data: ModifyProfileInfoForm) => {
     let allErrs: any = [];
@@ -174,7 +184,7 @@ const ModificarInformacion: FC = () => {
                 )}
               </span>
               <span className="text-textogris text-md font-semibold">
-                ITR {userInfo?.itr}
+                ITR {userInfo?.itr?.replace("_", " ")}
               </span>
             </UserImageAndName>
           </TopSection>

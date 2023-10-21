@@ -45,6 +45,7 @@ import { toast } from "react-toastify";
 import ModalConfirmation from "@/components/Modal/components/ModalConfirmation";
 import { useUsersOrder } from "@/hooks/useUsersOrder";
 import { ITR } from "@/enums/ITR";
+import appRoutes from "@/routes/appRoutes";
 
 const Container = styled.div`
   ${tw`w-full max-h-full pb-5 h-auto p-5 py-0 flex gap-4 flex-col items-center justify-start`}
@@ -174,6 +175,7 @@ const Usuarios = () => {
           ) : (
             <MdCancel size={20} color="red" />
           ),
+          href: appRoutes.userProfilePage(usr?.id),
           actions:
             userInfo?.email !== usr?.email ? (
               <ActionsList

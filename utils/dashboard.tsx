@@ -25,22 +25,22 @@ export const cols: ColumnItem[] = [
   {
     title: "Nombre",
     icon: <AiOutlineInfoCircle color="#A3AED0" size={20} />,
-    key: "name",
+    key: "nombre",
   },
   {
     title: "Estado",
     icon: <TbStatusChange color="#A3AED0" size={20} />,
-    key: "status",
+    key: "estado",
   },
   {
     title: "Fecha Últ. Modificación",
     icon: <AiOutlineCalendar color="#A3AED0" size={20} />,
-    key: "updatedAt",
+    key: "ultimaModificacion",
   },
   {
     title: "Progreso",
     icon: <AiOutlinePercentage color="#A3AED0" size={20} />,
-    key: "progress",
+    key: "progreso",
   },
 ];
 

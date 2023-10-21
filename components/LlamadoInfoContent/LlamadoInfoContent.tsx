@@ -260,7 +260,15 @@ const LlamadoInfoContent = ({ llamadoInfo }: Props) => {
           </LlamadoInfoLine>
           <LlamadoInfoLine>
             <LlamadoInfoKey>Etapa</LlamadoInfoKey>
-            <LlamadoInfoValue>{handleGetEtapaBadge()}</LlamadoInfoValue>
+            <div className="w-full flex-grow h-auto flex flex-col gap-1">
+              <LlamadoInfoValue>{handleGetEtapaBadge()}</LlamadoInfoValue>
+              {llamadoInfo?.etapaActual && (
+                <span className="text-sm text-gray-900 font-medium">
+                  Plazo de dias de esta etapa:{" "}
+                  {llamadoInfo?.etapaActual?.plazoDias}
+                </span>
+              )}
+            </div>
           </LlamadoInfoLine>
           <LlamadoInfoLine>
             <LlamadoInfoKey>Horas</LlamadoInfoKey>

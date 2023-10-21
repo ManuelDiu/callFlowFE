@@ -101,3 +101,17 @@ export const DEFAULT_BADGES_WITH_DIAS_PLAZO = [
 
 //   if (DEFAULT_BADGES_WITH_DIAS_PLAZO.includes(llamado))
 // }
+
+export type CantidadCargo = {
+  nombre: string;
+  cantidad: number;
+}
+
+export type EstadisticasGet = {
+  llamadosEnProceso: number;
+  llamadosFinalizados: number;
+  nuevosPostulantes: number;
+  llamadosRecientes: LlamadoList[];
+  postulantesRecientes: PostulanteList[];
+  cantidadCargos: CantidadCargo[]
+}

@@ -67,7 +67,7 @@ export const llamadoSubscriptionCreated = gql`
 `;
 
 export const disabledLlamados = gql`
-  mutation($llamados: [Int]) {
+  mutation ($llamados: [Int]) {
     deshabilitarLlamados(llamados: $llamados) {
       message
       ok
@@ -76,7 +76,7 @@ export const disabledLlamados = gql`
 `;
 
 export const getLlamadoInfoById = gql`
-  query($llamadoId: Int) {
+  query ($llamadoId: Int) {
     getLlamadoById(llamadoId: $llamadoId) {
       solicitante {
         telefono
@@ -241,7 +241,7 @@ export const avanzarEtapaPostulanteInLlamado = gql`
 `;
 
 export const addFileToLlamado = gql`
-  mutation($dataFile: AddFileLlamadoInput) {
+  mutation ($dataFile: AddFileLlamadoInput) {
     addFileToLlamado(info: $dataFile) {
       message
       ok
@@ -259,7 +259,7 @@ export const cambiarEstadoLlamado = gql`
 `;
 
 export const cambiarCambioLlamado = gql`
-  mutation($info: LlamadoChangeCambioInput) {
+  mutation ($info: LlamadoChangeCambioInput) {
     cambiarCambioLlamado(info: $info) {
       message
     }
@@ -267,7 +267,7 @@ export const cambiarCambioLlamado = gql`
 `;
 
 export const renunciarLlamado = gql`
-  mutation($info: RenunciarLlamadoInput) {
+  mutation ($info: RenunciarLlamadoInput) {
     renunciarLlamado(info: $info) {
       message
       ok
@@ -276,7 +276,7 @@ export const renunciarLlamado = gql`
 `;
 
 export const puntajesLlamado = gql`
-  query($llamadoId: Int) {
+  query ($llamadoId: Int) {
     listarPuntajesPostulantes(llamadoId: $llamadoId) {
       postulanteId
       requisitos {
@@ -292,6 +292,41 @@ export const cambiarMiembroTribunal = gql`
     cambiarMiembroTribunal(data: $data) {
       message
       ok
+    }
+  }
+`;
+
+export const getEstadisticas = gql`
+  query ($itr: String, $meses: String) {
+    listarEstadisticas(itr: $itr, meses: $meses) {
+      llamadosEnProceso
+      llamadosFinalizados
+      llamadosRecientes {
+        ultimaModificacion
+        ref
+        progreso
+        postulantes
+        nombre
+        id
+        estado
+        cupos
+        cargo {
+          nombre
+          id
+        }
+      }
+      nuevosPostulantes
+      postulantesRecientes {
+        nombres
+        id
+        documento
+        apellidos
+        createdAt
+      }
+      cantidadCargos {
+        nombre
+        cantidad
+      }
     }
   }
 `;

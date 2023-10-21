@@ -26,6 +26,7 @@ const GrillaPDF = ({ llamadoInfo }: Props) => {
     variables: {
       llamadoId: llamadoInfo?.id,
     },
+    fetchPolicy: "no-cache",
   });
 
   useEffect(() => {
@@ -54,8 +55,6 @@ const GrillaPDF = ({ llamadoInfo }: Props) => {
       );
       if (pdfFile) {
         const urlFile = await handleUpload(pdfFile);
-        console.log("urlFile", urlFile);
-
         const dataToSend = {
           nombre: "Grilla",
           url: urlFile,
@@ -126,10 +125,14 @@ const GrillaPDF = ({ llamadoInfo }: Props) => {
 
         {llamadoInfo?.postulantes?.map((item, index) => {
           let sumTotal = 0;
-          const puntajesOfThisPostulante =
-            puntajes?.find(
-              (puntaje: any) => puntaje?.postulanteId == item?.postulante?.id
-            )?.requisitos || [];
+          const puntajeThiPost =
+          puntajes?.find(
+            (puntaje: any) => puntaje?.postulanteId == item?.postulante?.id
+          );
+          if (puntajeThiPost == null || typeof puntajeThiPost === "undefined" || !puntajeThiPost) {
+            return;
+          }
+          const puntajesOfThisPostulante = puntajeThiPost?.requisitos || [];
 
           return (
             <div

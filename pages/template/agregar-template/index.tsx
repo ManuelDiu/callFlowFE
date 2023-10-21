@@ -244,14 +244,14 @@ const AgregarTemplate = () => {
           },
         });
         if (respose?.data?.crearTemplate?.ok === true) {
-          toast.success("Template creado correctamente");
+          toast.success("Modelos creado correctamente");
         } else {
           toast.error(
-            `Error al crear template, ${respose?.data?.crearTemplate?.message}`
+            `Error al crear modelo, ${respose?.data?.crearTemplate?.message}`
           );
         }
       } catch (error: any) {
-        toast.error(error?.message || "Error al crear template");
+        toast.error(error?.message || "Error al crear modelo");
       }
     }
   };
@@ -259,14 +259,14 @@ const AgregarTemplate = () => {
   return (
     <Container>
       <Topbar>
-        <Breadcrumb title="Agregar nuevo template" />
+        <Breadcrumb title="Agregar nuevo modelo" />
         <ProfileBar />
       </Topbar>
 
       <div className="sticky !w-full z-[10] pt-4 !right-0 top-0 flex items-center justify-start">
         <div className="flex w-fit p-4 rounded-full items-center bg-[#EFF4FB] shadow-md justify-end">
           <Button
-            text="Guardar template"
+            text="Guardar modelo"
             variant="fill"
             action={handleSubmit(handleNext)}
             className="!py-2 !text-base"
@@ -275,7 +275,7 @@ const AgregarTemplate = () => {
         </div>
       </div>
 
-      <SectionTitle>Datos del template</SectionTitle>
+      <SectionTitle>Datos del modelo</SectionTitle>
       <ContentInfo>
         <Row>
           <Input
@@ -330,7 +330,7 @@ const AgregarTemplate = () => {
       {suggestions?.length > 0 && (
         <Modal
           textok={"Revisar"}
-          description="Oops..! parece que tienes items por revisar antes de crear el template"
+          description="Oops..! parece que tienes items por revisar antes de crear el modelo"
           onSubmit={() => setSuggestions([])}
           setOpen={() => setSuggestions([])}
           content={

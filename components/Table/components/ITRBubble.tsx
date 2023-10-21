@@ -29,6 +29,8 @@ const ITRBubble = ({ itr }: Props) => {
         return "#4ED738";
       case ITR.suroeste:
         return "#943232";
+      case ITR.ulo:
+        return "#859854";
     }
   };
 

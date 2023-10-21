@@ -9,7 +9,7 @@ export type CreateUserForm = {
   telefono: string;
   email: string;
   roles: Roles[];
-  itr: any;
+  itr?: any;
   biografia?: string;
 };
 
@@ -38,8 +38,6 @@ export const createUserValidationSchema = () =>
     roles: yup.array().required("Los roles son requeridos."),
     itr: yup
       .string()
-      .oneOf(["Suroeste", "Norte", "Este", "Centro_Sur"])
-      .trim()
-      .required("El ITR es requerido."),
+      .oneOf(["Suroeste", "Norte", "Este", "Centro_Sur", "ULO"]),
     biografia: yup.string().trim(),
   });

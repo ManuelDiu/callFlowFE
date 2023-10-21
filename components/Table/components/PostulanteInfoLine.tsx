@@ -11,6 +11,7 @@ import Button from "@/components/Buttons/Button";
 import { TbArrowsExchange } from "react-icons/tb";
 import { useRouter } from "next/router";
 import { EstadoData, EtapaPostulante } from "types/postulante";
+import { EstadoPostulanteEnum } from "@/enums/EstadoPostulanteEnum";
 
 interface Props {
   userName?: string;
@@ -18,6 +19,7 @@ interface Props {
   userImage: string | undefined;
   className?: string;
   withDot?: boolean;
+  label?: any;
   options?: OptionsItem[];
   showCurrEtapa?: boolean;
   llamadoId?: number;
@@ -69,6 +71,10 @@ const BubbleContainer = styled.div`
   ${tw`w-fit h-auto px-2 flex py-[2px] flex-row items-center gap-[4px] py-0 rounded-[6px] shadow-sm max-w-full overflow-hidden bg-red-400`}
 `;
 
+const LabelContainer = styled.div`
+  ${tw`w-fit h-auto px-2 flex py-[2px] flex-row items-center gap-[4px] py-0 rounded-[6px] shadow-sm max-w-full `}
+`;
+
 const Bubble = styled.div`
   ${tw`rounded-full bg-white w-[6px] h-[6px]`}
 `;
@@ -87,10 +93,22 @@ const PostulanteInfoLine = ({
   llamadoId,
   postulanteId,
   showCurrEtapa = false,
-  etapaActual
+  etapaActual,
+  label,
 }: Props) => {
   const [openOptions, setOpenOptions] = useState(false);
   const { push } = useRouter();
+
+  const getColor = () => {
+    switch (label) {
+      case EstadoPostulanteEnum.cumpleRequisito:
+        return "#48D656";
+      case EstadoPostulanteEnum.noCumpleRequisito:
+        return "#DC2626";
+      case EstadoPostulanteEnum.enDua:
+        return "#DCE01E";
+    }
+  };
 
   return (
     <Container className={className}>
@@ -122,8 +140,20 @@ const PostulanteInfoLine = ({
               variant="outline"
               text="Modificar Puntajes"
               className="!z-[20]"
-              action={() => push(appRoutes.completarGrillaPostulante(llamadoId, postulanteId))}
+              action={() =>
+                push(
+                  appRoutes.completarGrillaPostulante(llamadoId, postulanteId)
+                )
+              }
             />
+          </ActionsContainer>
+        )}
+        {label && (
+          <ActionsContainer>
+            <LabelContainer style={{ background: getColor() }}>
+              <Bubble></Bubble>
+              <Text>{label}</Text>
+            </LabelContainer>
           </ActionsContainer>
         )}
       </Content>

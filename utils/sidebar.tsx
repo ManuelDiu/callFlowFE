@@ -17,7 +17,7 @@ export const items = [
     validPath: [appRoutes.llamados(), appRoutes.agregarLlamado(), appRoutes.selectTemplate(), appRoutes.llamadoInfoPage()],
   },
   {
-    title: "Plantillas",
+    title: "Modelos",
     icon: <ImInsertTemplate size={24} />,
     href: appRoutes.templates(),
     validPath: [appRoutes.templates(), appRoutes.agregarTemplate()],

@@ -10,6 +10,7 @@ type CheckboxProps = {
   helperText?: string;
   value?: any;
   disabled?: boolean;
+  defaultChecked?: boolean;
 };
 
 const Checkbox = ({
@@ -18,12 +19,15 @@ const Checkbox = ({
   helperText,
   value,
   disabled = false,
+  defaultChecked = false,
 }: CheckboxProps) => {
   const id = generarId();
-  const [checked, setChecked] = useState(false);
+  const [checked, setChecked] = useState(defaultChecked);
 
   useEffect(() => {
-    setChecked(value === true);
+    if (value) {
+      setChecked(value === true);
+    }
   }, [value]);
 
   const toggleChecked = () => {

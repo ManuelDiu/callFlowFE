@@ -49,6 +49,7 @@ const AddUserForm = ({ setFile, normalErrors = [], selectedUser }: Props) => {
     resolver: yupResolver(createUserValidationSchema()),
   });
   const [selectedUserFile, setSelectedUserFile] = useState(null);
+  const [showITR, setShowITR] = useState(false);
 
   useEffect(() => {
     setFile(selectedUserFile);
@@ -58,6 +59,7 @@ const AddUserForm = ({ setFile, normalErrors = [], selectedUser }: Props) => {
     register,
     setValue,
     formState: { errors },
+    watch,
     getValues,
   } = useFormContext();
 
@@ -74,12 +76,24 @@ const AddUserForm = ({ setFile, normalErrors = [], selectedUser }: Props) => {
 
   const formatErrors = errors as any;
 
+  useEffect(() => {
+    const value = getValues(CreateUserFormFields.roles);
+    if (value && value?.includes(Roles.admin)) {
+      setShowITR(true);
+    } else {
+      setShowITR(false);
+    }
+  }, [watch(CreateUserFormFields.roles)]);
+
   return (
     <FormProvider {...createUserForm}>
       <Container>
         <Row>
           <ImageSelectorContainer>
-            <AvatarSelector defaultImage={selectedUser?.imageUrl} setFile={setSelectedUserFile} />
+            <AvatarSelector
+              defaultImage={selectedUser?.imageUrl}
+              setFile={setSelectedUserFile}
+            />
           </ImageSelectorContainer>
           <Col>
             <Input
@@ -130,25 +144,6 @@ const AddUserForm = ({ setFile, normalErrors = [], selectedUser }: Props) => {
           inputFormName={CreateUserFormFields.email}
           isInvalid={!!errors[CreateUserFormFields.email]?.message}
         />
-
-        <Dropdown
-          defaultValue={selectedUser?.itr ? [selectedUser?.itr] : []}
-          label="ITR"
-          isInvalid={!!errors[CreateUserFormFields.itr]?.message}
-          placeholder="Seleccione un ITR"
-          onChange={(val: any) =>
-            setValue(CreateUserFormFields.itr, val?.value)
-          }
-          required
-          items={[
-            { label: "Suroeste", value: ITR.suroeste },
-            { label: "Este", value: ITR.este },
-            { label: "Norte", value: ITR.norte },
-            { label: "Centro Sur", value: ITR.centrosur },
-          ]}
-          inputFormName={CreateUserFormFields.itr}
-        />
-
         <Dropdown
           defaultValue={selectedUser?.roles || []}
           label="Roles"
@@ -168,10 +163,31 @@ const AddUserForm = ({ setFile, normalErrors = [], selectedUser }: Props) => {
           items={[
             { label: "Admin", value: Roles.admin },
             { label: "Tribunal", value: Roles.tribunal },
-            { label: "Cordinador", value: Roles.cordinador },
+            { label: "Solicitante", value: Roles.cordinador },
           ]}
           inputFormName={CreateUserFormFields.roles}
         />
+
+        {showITR && (
+          <Dropdown
+            defaultValue={selectedUser?.itr ? [selectedUser?.itr] : []}
+            label="ITR"
+            isInvalid={!!errors[CreateUserFormFields.itr]?.message}
+            placeholder="Seleccione un ITR"
+            onChange={(val: any) =>
+              setValue(CreateUserFormFields.itr, val?.value)
+            }
+            required
+            items={[
+              { label: "Suroeste", value: ITR.suroeste },
+              { label: "Este", value: ITR.este },
+              { label: "Norte", value: ITR.norte },
+              { label: "Centro Sur", value: ITR.centrosur },
+              { label: "ULO", value: ITR.ulo },
+            ]}
+            inputFormName={CreateUserFormFields.itr}
+          />
+        )}
 
         <Input
           label="Biografia"

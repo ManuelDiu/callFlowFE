@@ -39,6 +39,7 @@ export type PostulanteLlamadoFull = {
   archivos: Archivo[];
   estadoActual: EstadoData;
   updatedAt: string;
+  descripcion: string;
 };
 
 export type EtapaPostulante = {
@@ -57,4 +58,5 @@ export type PostulanteLlamadoResumed = {
   estadoActual: EstadoData;
   etapa: EtapaPostulante;
   updatedAt: string;
+  label?: any;
 };

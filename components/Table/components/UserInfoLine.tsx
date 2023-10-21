@@ -58,7 +58,12 @@ const UserInfoLine = ({
   options,
 }: Props) => {
   const [openOptions, setOpenOptions] = useState(false);
-  console.log("label", label)
+
+  const handleClickItem = (itm: any) => {
+    itm?.onClick()
+    setOpenOptions(false);
+  }
+
   return (
     <Container className={className}>
       <ImageContainer>
@@ -80,7 +85,7 @@ const UserInfoLine = ({
                   <OptionLabel
                     className="transition-all bg-transparent hover:bg-slate-100"
                     key={`opt-${index}`}
-                    onClick={() => opt?.onClick && opt?.onClick()}
+                    onClick={() => opt?.onClick && handleClickItem(opt)}
                   >
                     {opt?.text}
                   </OptionLabel>

@@ -25,7 +25,6 @@ const useDownloadFile = () => {
           link.parentNode.removeChild(link);
         }
       }).catch((err: any) => {
-        console.log("err", err)
       })
   };
 

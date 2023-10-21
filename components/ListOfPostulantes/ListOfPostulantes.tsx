@@ -72,6 +72,7 @@ const ListOfPostulantes = ({
                 withDot={onRemove !== undefined && onRemove !== null}
                 options={optionsToItem}
                 showCurrEtapa={showCurrEtapa}
+                label={item?.label}
               />
             );
           })
@@ -96,6 +97,7 @@ const ListOfPostulantes = ({
                 withDot={onRemove !== undefined && onRemove !== null}
                 options={optionsToItem}
                 showCurrEtapa={showCurrEtapa}
+                label={item?.label}
               />
             );
           })}

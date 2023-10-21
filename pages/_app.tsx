@@ -24,7 +24,6 @@ import DisableNumberInputScroll from "@/utils/disableInputScroll";
 function MyApp({ Component, pageProps }: AppProps) {
   const { pathname } = useRouter();
 
-  console.log(pathname)
   return (
     <main className="min-h-screen flex flex-col font-primaria">
       <Head>

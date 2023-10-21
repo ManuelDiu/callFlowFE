@@ -62,7 +62,6 @@ const RequisitoListGrilla = ({
             className="flex-grow w-full"
             required
             onChange={(e: any) =>{
-              console.log(requisitos)
               handleChangeSubEtapaField(requisito, "puntaje", e?.target?.value)
             }}
             // disabled={isView}

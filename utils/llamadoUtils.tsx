@@ -137,13 +137,13 @@ export const formatEtapas = (etapas: EtapaList[]) => {
 
 export const formatPostulantes = (postulantes: LlamadoPostulante[]) => {
   return postulantes?.map((postulante, index) => {
-    console.log("postulante", postulante)
     return {
       id: postulante.postulante.id,
       index: index,
       imageUrl: DEFAULT_USER_IMAGE,
       name: `${postulante.postulante.nombres} ${postulante.postulante.apellidos}`,
       lastName: postulante.postulante.documento,
+      label: postulante?.estadoActual?.nombre || "Sin estado"
     };
   });
 };
@@ -152,6 +152,10 @@ export const formatTribunales = (tribunales: TribunalLlamado[]) => {
   return tribunales?.map((tribunal, index) => {
     return {
       index: index,
+      id: tribunal?.id,
+      motivoRenuncia: tribunal.motivoRenuncia,
+      orden: tribunal.orden,
+      tipoMiembro: tribunal.tipoMiembro,
       imageUrl: tribunal?.usuario?.imageUrl || DEFAULT_USER_IMAGE,
       name: `${tribunal?.usuario?.name} ${tribunal?.usuario?.lastName}`,
       lastName: `Tribunal - ${tribunal.orden} ${tribunal.tipoMiembro}`,

@@ -32,7 +32,6 @@ const PostulantesListContent = ({ title, postulantes, llamadoId }: Props) => {
     return null;
   }
 
-  console.log("data is", postulantesFound);
   return (
     <>
       <ListOfPostulantes

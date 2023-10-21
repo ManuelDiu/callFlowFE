@@ -66,6 +66,7 @@ export const infoPostulanteEnLlamado = gql`
       postulanteId: $postulanteId
     ) {
       id
+      descripcion
       postulante {
         id
         nombres

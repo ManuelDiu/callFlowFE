@@ -137,6 +137,7 @@ const ModifyProfileInfoForm = ({
             { label: "Este", value: ITR.este },
             { label: "Norte", value: ITR.norte },
             { label: "Centro Sur", value: ITR.centrosur },
+            { label: "ULO", value: ITR.ulo },
           ]}
           inputFormName={ModifyProfileInfoFormFields.itr}
         />

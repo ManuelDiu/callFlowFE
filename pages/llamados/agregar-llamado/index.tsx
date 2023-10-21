@@ -72,7 +72,7 @@ const AgregarTemplate = () => {
   }>(listarCargosList);
   const agregarLlamadoForm = useForm<crearLlamadoForm>({
     defaultValues: {
-      enviarEmailTodos: false,
+      enviarEmailTodos: true,
     },
     resolver: yupResolver(crearLlamadoValidationSchema()),
   });
@@ -167,7 +167,9 @@ const AgregarTemplate = () => {
       label: templateInfo?.cargo?.nombre,
       value: templateInfo?.cargo?.id,
     });
-    setValue(crearLlamadoFormFields.cargo, templateInfo?.cargo?.id);
+    if (templateInfo?.cargo?.id) {
+      setValue(crearLlamadoFormFields.cargo, templateInfo?.cargo?.id);
+    }
   };
 
   useEffect(() => {
@@ -465,6 +467,7 @@ const AgregarTemplate = () => {
             { label: "Este", value: ITR.este },
             { label: "Norte", value: ITR.norte },
             { label: "Centro Sur", value: ITR.centrosur },
+            { label: "ULO", value: ITR.ulo },
           ]}
           inputFormName={crearLlamadoFormFields.itr}
         />
@@ -517,6 +520,7 @@ const AgregarTemplate = () => {
           setValue={(val: any) =>
             setValue(crearLlamadoFormFields.enviarEmailTodos, val)
           }
+          defaultChecked={true}
           helperText="*De lo contrario, se notificará solamente a las personas relacionadas al llamado (ITR)*"
         />
       </ContentInfo>

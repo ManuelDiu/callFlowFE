@@ -10,6 +10,7 @@ interface Props {
   selectedUsers: any[];
   onAddClick?: any;
   onRemove?: any,
+  onEdit?: any,
 }
 
 const Container = styled.div`
@@ -33,6 +34,7 @@ const ListOfUsers = ({
   selectedUsers,
   onAddClick,
   onRemove,
+  onEdit,
 }: Props) => {
   return (
     <Container>
@@ -44,9 +46,15 @@ const ListOfUsers = ({
       </Row>
       {selectedUsers?.map((item, index) => {
         const optionsToItem: OptionsItem[] = [
-          {
+          onRemove && {
             text: "Eliminar",
             onClick: () => onRemove(item),
+          },
+          onEdit && {
+            text: "Editar",
+            onClick: () => {
+              onEdit(item)
+            }
           },
         ];
 
@@ -57,7 +65,7 @@ const ListOfUsers = ({
             userImage={item?.imageUrl}
             userName={item?.name}
             userlastName={item?.lastName}
-            withDot={onRemove !== undefined && onRemove !== null}
+            withDot={onRemove !== undefined && onRemove !== null || onEdit !== undefined && onEdit !== null}
             options={optionsToItem}
             label={item?.label}
           />

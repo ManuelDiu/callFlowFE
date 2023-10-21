@@ -63,7 +63,7 @@ const ModificarInformacion: FC = () => {
   const { handleSetLoading, userInfo: usrLogg } = useGlobal();
   const [openConfirmationModal, setConfirmationModalOpen] = useState(false);
   const [handleUpdateUser] = useMutation(updateUserInfo);
-  const { handleUpload } = useUploadImage();
+  const { handleUpload } = useUploadImage({});
   const createModifyProfileForm = useForm<ModifyProfileInfoForm>({
     defaultValues: defaultValues,
     resolver: yupResolver(createModifyProfileInfoValidationSchema()),

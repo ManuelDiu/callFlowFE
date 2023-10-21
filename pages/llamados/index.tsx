@@ -156,7 +156,6 @@ const Llamados: NextPage = () => {
           <LlamadoFiltro
             refetch={() =>
               {
-                console.log("filters", filtersToBackend)
                 refetch({
                   filters: filtersToBackend,
                 })

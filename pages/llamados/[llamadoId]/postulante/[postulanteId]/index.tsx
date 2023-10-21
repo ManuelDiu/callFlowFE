@@ -40,6 +40,8 @@ import { DEFAULT_USER_IMAGE } from "@/utils/userUtils";
 import { AiOutlinePlus } from "react-icons/ai";
 import AddFileLlamadoModal from "@/components/AddFileToPostulanteModal/AddFileToPostulanteModal";
 import AddFilePostulanteModal from "@/components/AddFileToPostulanteModal/AddFileToPostulanteModal";
+import { getLlamadoInfoById } from "@/controllers/llamadoController";
+import Input from "@/components/Inputs/Input";
 
 const colorVariants: any = {
   [EstadoPostulanteEnum.cumpleRequisito]: tw`bg-green`,
@@ -121,6 +123,7 @@ const PostulanteInLlamadoInfo = () => {
   const [showInfoModal, setShowInfoModal] = useState(false);
   const [showChangeStateModal, setShowChangeStateModal] = useState(false);
   const [openModalAdd, setOpenModalAdd] = useState<boolean>();
+  const [description, setDescription] = useState<string>("");
   const { query } = useRouter();
   const llamadoId = Number(query?.llamadoId || 0);
   const postulanteId = Number(query?.postulanteId || 0);
@@ -182,6 +185,7 @@ const PostulanteInLlamadoInfo = () => {
             postulanteId: postulanteId,
             solicitanteId: userInfo?.id,
             nuevoEstado: data?.nuevoEstado,
+            descripcion: description,
           },
         },
         refetchQueries: [
@@ -190,6 +194,12 @@ const PostulanteInLlamadoInfo = () => {
             variables: {
               llamadoId: Number(llamadoId),
               postulanteId: Number(postulanteId),
+            },
+          },
+          {
+            query: getLlamadoInfoById,
+            variables: {
+              llamadoId: Number(llamadoId),
             },
           },
         ],
@@ -215,8 +225,17 @@ const PostulanteInLlamadoInfo = () => {
             postulanteId: postulanteId,
             solicitanteId: userInfo?.id,
             nuevoEstado: data?.nuevoEstado,
+            descripcion: description,
           },
         },
+        refetchQueries: [
+          {
+            query: getLlamadoInfoById,
+            variables: {
+              llamadoId: Number(llamadoId),
+            },
+          },
+        ],
       });
 
       if (resp?.data?.cambiarEstadoPostulanteLlamadoTribunal?.ok === true) {
@@ -257,6 +276,16 @@ const PostulanteInLlamadoInfo = () => {
                 <ModificarEstadoPostulanteForm
                   estadoActual={estadoActual as EstadoPostulanteEnum}
                   normalErrors={normalErrors}
+                />
+                <Input
+                  label="Descrpcion del cambio de estado (Opcional)"
+                  placeholder="Ingrese una descrpcion del cambio del estado"
+                  variante="textarea"
+                  required
+                  value={description}
+                  onChange={(val: any) => setDescription(val?.target?.value)}
+                  isInvalid={false}
+                  inputFormName={""}
                 />
               </FormProvider>
             }
@@ -323,6 +352,13 @@ const PostulanteInLlamadoInfo = () => {
                 <TagEstado estado={estadoActual as EstadoPostulanteEnum}>
                   {estadoActual}
                 </TagEstado>
+
+                <span className="text-lg font-medium mt-5">
+                  Descripcion del por que esta en este estado:
+                </span>
+                <span className="md:w-1/2 mt-4 w-full text-center text-sm font-medium">
+                  {data?.infoPostulanteEnLlamado?.descripcion || "No tiene"}
+                </span>
                 <Button
                   text="Transicionar Estado"
                   variant="outline"
@@ -397,7 +433,14 @@ const PostulanteInLlamadoInfo = () => {
             </List>
           </div>
         </Content>
-        {openModalAdd && <AddFilePostulanteModal llamadoId={llamadoId} postulanteId={postulanteId} archivos={archivos || []} setOpen={setOpenModalAdd} />}
+        {openModalAdd && (
+          <AddFilePostulanteModal
+            llamadoId={llamadoId}
+            postulanteId={postulanteId}
+            archivos={archivos || []}
+            setOpen={setOpenModalAdd}
+          />
+        )}
       </MainContainer>
     </Container>
   );

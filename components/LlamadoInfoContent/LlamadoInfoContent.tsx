@@ -25,6 +25,8 @@ import { Roles } from "@/enums/Roles";
 import RenunciarLlamadoModal from "../RenunciarLlamadoModal/RenunciarLlamadoModal";
 import Modal from "../Modal/Modal";
 import GrillaPDF from "../GrillaPDF/GrillaPDF";
+import AddTribunalModal from "../AddTribunalModal/AddTribunalModal";
+import EditTribunalModal from "../AddTribunalModal/EditTribunalModal";
 
 const Container = styled.div`
   ${tw`w-full h-auto flex flex-col items-start justify-start gap-4`}
@@ -78,8 +80,16 @@ const LlamadoInfoKey = styled.div`
   ${tw`min-w-[150px] font-semibold max-w-full truncate overflow-hidden flex text-left text-sm font-medium`}
 `;
 
+const CategoriaContainer = styled.div`
+  ${tw`flex-grow w-full h-auto flex flex-row items-center justify-start gap-2 flex-wrap`}
+`;
+
 const LlamadoInfoValue = styled.div`
   ${tw`w-full flex-grow h-auto max-w-full truncate overflow-hidden`}
+`;
+
+const CategoriaBadge = styled.div`
+  ${tw`w-auto h-auto flex items-center justify-center px-2 py-1 rounded-full shadow-sm font-medium bg-gray-200`}
 `;
 
 interface Props {
@@ -92,6 +102,8 @@ const LlamadoInfoContent = ({ llamadoInfo }: Props) => {
   const [openRenunciarLlamadoModal, setOpenRenunciarLlamadoModal] =
     useState(false);
   const [previewGrilla, setPreviewGrilla] = useState(false);
+  const [selectedTribunalToEdit, setSelectedTribunalToEdit] =
+    useState<any>(null);
 
   const { userInfo } = useGlobal();
   const miembrosTribunal = llamadoInfo.miembrosTribunal || [];
@@ -120,8 +132,17 @@ const LlamadoInfoContent = ({ llamadoInfo }: Props) => {
     );
   };
 
+  const handleGetCategorias = () => {
+    return (
+      <CategoriaContainer>
+        {llamadoInfo?.categorias?.map((cat) => {
+          return <CategoriaBadge key={cat?.id}>{cat?.nombre}</CategoriaBadge>;
+        })}
+      </CategoriaContainer>
+    );
+  };
+
   const handleGetEtapaBadge = () => {
-    console.log("llamadoInfo", llamadoInfo);
     const currentEtapa: EtapaList = llamadoInfo?.etapaActual;
     if (!currentEtapa) {
       return "Este llamado aun no paso a la siguiente etapa";
@@ -138,11 +159,13 @@ const LlamadoInfoContent = ({ llamadoInfo }: Props) => {
     } else {
       color = "#0FBB00";
     }
-    console.log("color", color);
-
     return (
       <LlamadoEstadoBubble customColor={color} estado={etapaText as any} />
     );
+  };
+
+  const handleOpenEditModal = (item: any) => {
+    setSelectedTribunalToEdit(item);
   };
 
   return (
@@ -176,8 +199,9 @@ const LlamadoInfoContent = ({ llamadoInfo }: Props) => {
             action={handleGenerateGrilla}
           />
         )}
-        {isAdmin ||
-          (isMiembro && (
+        {/* {Check} */}
+        {isMiembro ||
+          (isAdmin && (
             <Button
               icon={<TbArrowsExchange color="#4318FF" size={18} />}
               variant="outline"
@@ -243,6 +267,10 @@ const LlamadoInfoContent = ({ llamadoInfo }: Props) => {
             <LlamadoInfoValue>{llamadoInfo?.cantidadHoras}</LlamadoInfoValue>
           </LlamadoInfoLine>
           <LlamadoInfoLine>
+            <LlamadoInfoKey>Categorias</LlamadoInfoKey>
+            <LlamadoInfoValue>{handleGetCategorias()}</LlamadoInfoValue>
+          </LlamadoInfoLine>
+          <LlamadoInfoLine>
             <LlamadoInfoKey>Postulantes</LlamadoInfoKey>
             <LlamadoInfoValue>
               {llamadoInfo?.postulantes?.length || 0}
@@ -267,6 +295,7 @@ const LlamadoInfoContent = ({ llamadoInfo }: Props) => {
         selectedUsers={formatPostulantes(llamadoInfo?.postulantes)}
       />
       <ListOfUsers
+        onEdit={handleOpenEditModal}
         title="Miembros del tribunal"
         selectedUsers={formatTribunales(llamadoInfo?.miembrosTribunal)}
       />
@@ -279,6 +308,14 @@ const LlamadoInfoContent = ({ llamadoInfo }: Props) => {
           title="Grilla del llamado"
           setOpen={setPreviewGrilla}
           description="Previsualiza la informacion antes de generar el archivo, si sobrescribes el archivo ya existente , se perderan todas las firmas que el archivo tenga hasta el momento , puedes ver esto en la seccion de archivos"
+        />
+      )}
+
+      {selectedTribunalToEdit !== null && (
+        <EditTribunalModal
+          llamadoId={llamadoInfo?.id}
+          selectedUser={selectedTribunalToEdit}
+          setOpen={() => setSelectedTribunalToEdit(null)}
         />
       )}
 

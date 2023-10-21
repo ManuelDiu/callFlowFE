@@ -92,7 +92,6 @@ const Home: NextPage = () => {
           .then((response) => response.json())
           .then((data) => {
             // Hacer algo con la respuesta de la API
-            console.log(data)
           })
           .catch((error) => {
             // Manejar errores

@@ -53,8 +53,14 @@ export type TribunalLlamado = {
   tipoMiembro: TipoMiembro;
 };
 
+export type PostulanteEstado = {
+  id: number;
+  nombre: string;
+}
+
 export type LlamadoPostulante = {
   postulante: PostulanteList
+  estadoActual: PostulanteEstado
 }
 
 export type FullLlamadoInfo = {

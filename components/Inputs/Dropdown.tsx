@@ -21,6 +21,8 @@ type InputProps = {
   items: DropDownItem[];
   onChange: any;
   defaultValue?: any;
+  disabled?: any;
+  listenDefaultValue?: boolean;
   isInvalid?: boolean;
 };
 
@@ -75,9 +77,11 @@ const Dropdown = ({
   variante,
   multiSelect,
   isInvalid,
+  disabled,
   onChange,
   items,
   defaultValue,
+  listenDefaultValue = false,
   ...otros
 }: InputProps) => {
   const id = generarId();
@@ -87,13 +91,17 @@ const Dropdown = ({
     defaultValue && defaultValue?.length > 0
       ? defaultValue?.map((item: any, index: number) => {
           const val = items?.find((itm) => itm?.value === item);
-          return {...val, id: index};
+          return { ...val, id: index };
         })
       : [];
-    
-  const [selectedValues, setSelectedValues] = useState<any[]>(
-    defaultValuesFormatted
-  );
+
+  const [selectedValues, setSelectedValues] = useState<any[]>(defaultValuesFormatted);
+
+  useEffect(() => {
+    if (listenDefaultValue) {
+      setSelectedValues(defaultValuesFormatted);
+    }
+  }, [defaultValue, listenDefaultValue]);
 
   const [query, setQuery] = useState("");
 
@@ -145,7 +153,9 @@ const Dropdown = ({
   };
 
   return (
-    <div className="flex flex-col gap-1 w-full">
+    <div
+      className={clsx("flex flex-col gap-1 w-full", disabled && "opacity-50")}
+    >
       <div className="flex flex-col w-full relative">
         {label && (
           <label
@@ -196,14 +206,14 @@ const Dropdown = ({
 
           <button
             className="px-4 cursor-pointer border-0 outline-none"
-            onClick={() => setExpanded(!expanded)}
+            onClick={() => !disabled && setExpanded(!expanded)}
           >
             <FiChevronDown
               className={clsx(
                 "transition-all transform",
                 expanded ? "rotate-180" : "rotate-0"
               )}
-              onClick={() => setExpanded(!expanded)}
+              onClick={() => !disabled && setExpanded(!expanded)}
             />
           </button>
         </InputContainer>
@@ -214,15 +224,16 @@ const Dropdown = ({
                 return (
                   <DropdownItem
                     onClick={() => !itm?.disabled && handleToggleItem(itm)}
-                    className={clsx("",
-                      itm?.disabled ? "opacity-40  !cursor-default" : "hover:bg-gray-100"
+                    className={clsx(
+                      "",
+                      itm?.disabled
+                        ? "opacity-40  !cursor-default"
+                        : "hover:bg-gray-100"
                     )}
                     key={itm?.value}
                   >
                     {itm?.label}
-                    {
-                      itm?.customBadge && itm?.customBadge
-                    }
+                    {itm?.customBadge && itm?.customBadge}
                   </DropdownItem>
                 );
               })

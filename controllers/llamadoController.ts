@@ -71,6 +71,10 @@ export const getLlamadoInfoById = gql`
           documento
           apellidos
         }
+        estadoActual {
+          id
+          nombre
+        }
       }
       nombre
       etapaUpdated
@@ -258,6 +262,15 @@ export const puntajesLlamado = gql`
         puntaje
         requisitoId
       }
+    }
+  }
+`;
+
+export const cambiarMiembroTribunal = gql`
+  mutation ($data: CambiarTribunalInput) {
+    cambiarMiembroTribunal(data: $data) {
+      message
+      ok
     }
   }
 `;

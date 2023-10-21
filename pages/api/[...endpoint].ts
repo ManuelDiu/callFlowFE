@@ -9,5 +9,4 @@ export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-    console.log("aca 1");
 }

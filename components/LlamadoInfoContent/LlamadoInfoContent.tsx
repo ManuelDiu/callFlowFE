@@ -15,7 +15,7 @@ import {
   formatTribunales,
 } from "@/utils/llamadoUtils";
 import ListOfUsers from "../ListOfUsers/ListOfUsers";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ChnageStatusModal from "../ChangeStatusModal/ChangeStatusModal";
 import { useGlobal } from "@/hooks/useGlobal";
 import ListOfPostulantes from "../ListOfPostulantes/ListOfPostulantes";
@@ -97,6 +97,8 @@ interface Props {
   llamadoInfo: FullLlamadoInfo;
 }
 
+const DEFAULT_VER_DISPONIBILIDAD_TITLE = "Ver disponibilidad del tribunal"
+
 const LlamadoInfoContent = ({ llamadoInfo }: Props) => {
   const [openCambiarEstadoModal, setOpenCambarEstadoModal] = useState(false);
   const [verDisponibilidad, setVerDisponibilidad] = useState(false);
@@ -105,6 +107,7 @@ const LlamadoInfoContent = ({ llamadoInfo }: Props) => {
   const [previewGrilla, setPreviewGrilla] = useState(false);
   const [selectedTribunalToEdit, setSelectedTribunalToEdit] =
     useState<any>(null);
+  const [disponibilidadTitle, setDisponibilidadTitle] = useState(DEFAULT_VER_DISPONIBILIDAD_TITLE)
 
   const { userInfo } = useGlobal();
   const miembrosTribunal = llamadoInfo.miembrosTribunal || [];
@@ -126,6 +129,12 @@ const LlamadoInfoContent = ({ llamadoInfo }: Props) => {
     setPreviewGrilla(true);
     // generate grilla and download it
   };
+
+  useEffect(() => {
+    if (!verDisponibilidad) {
+      setDisponibilidadTitle(DEFAULT_VER_DISPONIBILIDAD_TITLE)
+    }
+  }, [verDisponibilidad])
 
   const handleGetStatusBadge = () => {
     return (
@@ -165,14 +174,22 @@ const LlamadoInfoContent = ({ llamadoInfo }: Props) => {
     );
   };
 
+  console.log("isMiembro", isMiembro);
+
   const handleOpenEditModal = (item: any) => {
     setSelectedTribunalToEdit(item);
   };
+
+  const onOpenDisponibilidad = (text: string) => {
+    setVerDisponibilidad(true);
+    setDisponibilidadTitle(text)
+  }
 
   return (
     <Container>
       {openCambiarEstadoModal && (
         <ChnageStatusModal
+        onOpenDisponibilidad={onOpenDisponibilidad}
           llamadoInfo={llamadoInfo}
           setOpen={setOpenCambarEstadoModal}
         />
@@ -201,15 +218,14 @@ const LlamadoInfoContent = ({ llamadoInfo }: Props) => {
           />
         )}
         {/* {Check} */}
-        {isMiembro ||
-          (isAdmin && (
-            <Button
-              icon={<TbArrowsExchange color="#4318FF" size={18} />}
-              variant="outline"
-              text="Cambiar estado"
-              action={() => setOpenCambarEstadoModal(!openCambiarEstadoModal)}
-            />
-          ))}
+        {(isMiembro || isAdmin) && (
+          <Button
+            icon={<TbArrowsExchange color="#4318FF" size={18} />}
+            variant="outline"
+            text="Cambiar estado"
+            action={() => setOpenCambarEstadoModal(!openCambiarEstadoModal)}
+          />
+        )}
 
         {isMiembro && !renuncio && (
           <Button
@@ -243,7 +259,9 @@ const LlamadoInfoContent = ({ llamadoInfo }: Props) => {
           </LlamadoInfoLine>
           <LlamadoInfoLine>
             <LlamadoInfoKey>ITR</LlamadoInfoKey>
-            <LlamadoInfoValue><ITRBubble itr={llamadoInfo?.itr} /></LlamadoInfoValue>
+            <LlamadoInfoValue>
+              <ITRBubble itr={llamadoInfo?.itr} />
+            </LlamadoInfoValue>
           </LlamadoInfoLine>
           <LlamadoInfoLine>
             <LlamadoInfoKey>Referencia</LlamadoInfoKey>
@@ -335,6 +353,7 @@ const LlamadoInfoContent = ({ llamadoInfo }: Props) => {
       {verDisponibilidad && (
         <VerDisponibilidadModal
           isMiembro={isMiembro}
+          title={disponibilidadTitle}
           llamadoId={llamadoInfo?.id}
           setOpen={setVerDisponibilidad}
         />

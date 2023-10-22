@@ -23,7 +23,7 @@ const Container = styled.div`
 `;
 
 const ModalContainer = styled.div`
-  ${tw`lg:w-[900px] overflow-visible md:w-[700px] mt-[5%] w-full flex flex-col items-center justify-start gap-[20px] h-fit bg-white shadow-md rounded-2xl z-[2]`}
+  ${tw`lg:w-[900px] relative overflow-visible md:w-[700px] mt-[5%] w-full flex flex-col items-center justify-start gap-[20px] h-fit bg-white shadow-md rounded-2xl z-[2]`}
 `;
 
 const Content = styled.div`
@@ -68,7 +68,7 @@ const Modal = ({
             <Title>{title}</Title>
             <GrClose
               onClick={() => setOpen(false)}
-              className="cursor-pointer"
+              className="cursor-pointer absolute right-5 top-5"
               color="#A3AED0"
               size={20}
             />

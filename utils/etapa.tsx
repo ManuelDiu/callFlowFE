@@ -48,6 +48,8 @@ export const formatEtapasForDropdown = (
 const TRIBUNAL_ESTADOS_CHANGE: EstadoLlamadoEnum[] = [
   EstadoLlamadoEnum.enEstudioMerito,
   EstadoLlamadoEnum.listoParaEntrevistas,
+  EstadoLlamadoEnum.enProcesoDeFrimaGrilla,
+  EstadoLlamadoEnum.enProcesoDeFrimaActaFinal,
 ];
 
 export const formatEstadosToLlamado = (

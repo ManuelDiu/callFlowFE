@@ -21,13 +21,14 @@ interface Props {
   setOpen: any;
   isMiembro: boolean;
   llamadoId?: number;
+  title: string;
 }
 
 const ContainerModal = styled.div`
   ${tw`w-full h-auto flex flex-col items-end justify-center gap-4`}
 `;
 
-const VerDisponibilidadModal = ({ setOpen, isMiembro, llamadoId }: Props) => {
+const VerDisponibilidadModal = ({ setOpen, isMiembro, llamadoId , title}: Props) => {
   const [addOpen, setAddOpen] = useState(false);
   const { data, loading: loadingDisponibilidad } = useQuery<{
     listarDisponibilidad: DisponibilidadList[];
@@ -113,7 +114,7 @@ const VerDisponibilidadModal = ({ setOpen, isMiembro, llamadoId }: Props) => {
         onSubmit={() => setOpen(false)}
         setOpen={setOpen}
         content={handleRenderContent()}
-        title="Ver disponibilidad tribunal"
+        title={title || "Ver disponibilidad tribunal"}
         className=""
       />
       {addOpen && (

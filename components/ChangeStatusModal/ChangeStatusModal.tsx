@@ -25,9 +25,10 @@ const Container = styled.div`
 interface Props {
   setOpen: any;
   llamadoInfo: FullLlamadoInfo;
+  onOpenDisponibilidad: any;
 }
 
-const ChnageStatusModal = ({ setOpen, llamadoInfo }: Props) => {
+const ChnageStatusModal = ({ setOpen, llamadoInfo, onOpenDisponibilidad }: Props) => {
   const etapas = llamadoInfo?.etapas;
   const etapaActual = llamadoInfo?.etapaActual;
   const estadoActual = llamadoInfo?.estadoActual;
@@ -42,7 +43,7 @@ const ChnageStatusModal = ({ setOpen, llamadoInfo }: Props) => {
   );
   const [handleChangeStatus] = useMutation(cambiarEstadoLlamado);
   const { handleSetLoading, userInfo } = useGlobal();
-  const isAdmin = userInfo?.roles?.includes(Roles.admin);
+  const isAdmin = userInfo?.roles?.includes(Roles.admin) || false;
 
   const handleSubmit = async () => {
     const dataToSend = {
@@ -68,6 +69,9 @@ const ChnageStatusModal = ({ setOpen, llamadoInfo }: Props) => {
       toast.success("Se cambio el estado correctamente");
       handleSetLoading(false);
       setOpen(false);
+      if (dataToSend.estado === EstadoLlamadoEnum.listoParaEntrevistas) {
+        onOpenDisponibilidad("Antes de irte....No olvides agregar una disponibilidad para las entrevistas")
+      }
     } else {
       toast.error(
         resp?.data?.cambiarEstadoLlamado?.message ||

@@ -8,11 +8,11 @@ const Container = styled.div`
 `;
 
 const ListItems = styled.div`
-  ${tw`w-full h-auto flex flex-row items-center justify-start gap-0`}
+  ${tw`w-full h-auto flex md:flex-row flex-col items-center justify-start md:gap-0 gap-4`}
 `;
 
 const Item = styled.span<{ isActive?: boolean }>`
-  ${tw`px-[10px] text-texto font-bold text-base py-2 text-center border-b-2 cursor-pointer border-transparent transition-all`}
+  ${tw`px-[10px] md:w-auto w-full text-texto font-bold text-base py-2 text-center border-b-2 cursor-pointer border-transparent transition-all`}
   ${({ isActive }) =>
     isActive ? tw`border-principal` : tw`border-transparent`}
 `;

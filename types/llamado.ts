@@ -16,6 +16,7 @@ export type LlamadoList = {
   ref: string;
   cupos: number;
   cargo: Cargo;
+  itr: String;
   postulantes: number;
   progreso: number;
 };

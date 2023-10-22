@@ -19,6 +19,9 @@ import { EtapaList } from "types/template";
 import { PostulanteList } from "types/postulante";
 import { DEFAULT_USER_IMAGE } from "./userUtils";
 import { TipoArchivoItem } from "types/tipoArchivo";
+import { BsFillPinAngleFill } from "react-icons/bs";
+import ITRBubble from "@/components/Table/components/ITRBubble";
+import { ITR } from "@/enums/ITR";
 
 export const ORDER_LLAMADO_STATUS = [
   EstadoLlamadoEnum.creado,
@@ -69,9 +72,9 @@ export const Columns: ColumnItem[] = [
     key: "cargo",
   },
   {
-    title: "Postulantes",
-    icon: <PiUsersThreeBold color="#A3AED0" size={20} />,
-    key: "postulantes",
+    title: "ITR",
+    icon: <BsFillPinAngleFill color="#A3AED0" size={20} />,
+    key: "itr",
   },
   {
     title: "Progreso",
@@ -99,7 +102,7 @@ export const formatLlamadosToTable = (llamados: LlamadoList[] = []) => {
       ref: <Text text={llamado?.ref} />,
       cupos: <Text text={llamado?.cupos?.toString() || "0"} />,
       cargo: <Text text={llamado?.cargo?.nombre} />,
-      postulantes: <Text text={llamado?.postulantes?.toString() || "0"} />,
+      itr: <ITRBubble itr={llamado?.itr as ITR} />,
       progreso: <LlamadoProgress progress={llamado?.progreso || 0} />,
       href: appRoutes.llamadoInfoPage(llamado?.id)
     };

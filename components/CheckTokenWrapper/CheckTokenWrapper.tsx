@@ -16,21 +16,23 @@ import Breadcrumb from "@/components/Topbar/Breadcrumb";
 import ProfileBar from "@/components/Topbar/ProfileBar";
 import { Roles } from "@/enums/Roles";
 import NotFoundPage from "../NotFoundPage/NotFoundPage";
+import { useWindowDimensions } from "@/hooks/useWindowDimensions";
 
 interface Props {
   children: any;
 }
 
 const MainContent = styled.div`
-  ${tw`w-screen h-screen min-w-full min-h-full flex flex-row items-start justify-start`}
+  ${tw`w-screen h-auto min-w-full min-h-full flex flex-row items-start justify-start`}
 `;
 
-const ContentPage = styled.div`
-  ${tw`w-full h-full max-h-full overflow-auto flex-grow`}
+const ContentPage = styled.div<{withPadding: boolean}>`
+  ${tw`w-full h-auto flex-grow`}
+  ${({ withPadding }) => withPadding && tw`mt-[80px]`}
 `;
 
 export const Topbar = styled.div`
-  ${tw`flex justify-between py-5 w-full h-max`}
+  ${tw`flex md:flex-row flex-col gap-2 justify-between py-5 w-full h-max`}
 `;
 
 let isChecking = false;
@@ -46,6 +48,7 @@ const CheckTokenWrapper = ({ children }: Props) => {
   const isAdmin = userInfo?.roles?.includes(Roles.admin);
   const isTribunal = userInfo?.roles?.includes(Roles.tribunal);
   const isCordinador = userInfo?.roles?.includes(Roles.cordinador);
+  const { isMobile } = useWindowDimensions();
 
   const handleCheckToken = async () => {
     setChecking(true);
@@ -119,13 +122,7 @@ const CheckTokenWrapper = ({ children }: Props) => {
       />
       {/* Same as */}
       <ToastContainer />
-      <ContentPage>
-        {/* {!isPublicPath && (
-          <Topbar>
-            <Breadcrumb title="asdasd" />
-            <ProfileBar />
-          </Topbar>
-        )} */}
+      <ContentPage withPadding={!isPublicPath && isMobile}>
         {invalidPath ? <NotFoundPage /> : children}
       </ContentPage>
     </MainContent>

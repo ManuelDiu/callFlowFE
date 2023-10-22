@@ -54,11 +54,11 @@ const Container = styled.div`
 `;
 
 const MainContainer = styled.div`
-  ${tw`flex flex-col gap-3 px-5 mb-5 items-center justify-center w-full`}
+  ${tw`flex w-full flex-col gap-3 px-5 mb-5 items-center justify-center w-full`}
 `;
 
 const Content = styled.div`
-  ${tw`flex flex-col items-center justify-start gap-5 w-5/6 rounded-3xl overflow-hidden`}
+  ${tw`flex flex-col items-center justify-start gap-5 md:w-5/6 w-full rounded-3xl overflow-hidden`}
 `;
 
 const TopSection = styled.section`

@@ -28,11 +28,11 @@ import LlamadoFiltro from "@/components/LlamadoFiltro/LlamadoFiltro";
 import useLlamadoFilters from "@/hooks/useLlamadoFilters";
 
 const Container = styled.div`
-  ${tw`w-full overflow-hidden max-h-full pb-5 h-auto p-5 py-0 flex gap-4 flex-col items-center justify-start`}
+  ${tw`w-full h-auto p-5 py-0 flex gap-4 flex-col items-center justify-start`}
 `;
 
 const ActionRow = styled.div`
-  ${tw`w-full h-auto flex flex-row items-center justify-end gap-4`}
+  ${tw`w-full h-auto flex md:flex-row flex-col md:items-center items-start justify-end gap-4`}
 `;
 
 const Llamados: NextPage = () => {

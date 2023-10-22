@@ -2,8 +2,6 @@ import styled from "styled-components";
 import tw from "twin.macro";
 import { IoMdTime } from "react-icons/io";
 import { HistorialLlamado } from "types/llamado";
-import htmlParser from "html-react-parser";
-import moment from "moment";
 import Button from "../Buttons/Button";
 import { useMutation } from "@apollo/client";
 import {
@@ -13,6 +11,11 @@ import {
 import { useGlobal } from "@/hooks/useGlobal";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
+const moment = require('moment');
+require('moment/locale/es');
+const HtmlToReactParser = require('html-to-react').Parser;
+const htmlParser = new HtmlToReactParser();
+
 moment.locale("es");
 
 const Container = styled.div`
@@ -32,7 +35,7 @@ const ItemLine = styled.div`
 `;
 
 const Text = styled.span`
-  ${tw`w-full h-auto flex flex-grow text-left flex-grow min-w-fit items-center`}
+  ${tw`w-full h-auto flex flex-grow text-left flex-grow min-w-fit items-center flex-wrap justify-start`}
 `;
 
 const ContentDia = styled.div`
@@ -62,6 +65,7 @@ interface Props {
 }
 
 const HistorialLlamadoComp = ({ historiales, llamadoId }: Props) => {
+
   const [cambiarCambioHistorialItem, { loading }] =
     useMutation(cambiarCambioLlamado);
   const { handleSetLoading } = useGlobal();
@@ -149,7 +153,7 @@ const HistorialLlamadoComp = ({ historiales, llamadoId }: Props) => {
                     <span>{item?.fecha}</span>
                     <ItemLine />
                   </TimeText>
-                  <Text>{htmlParser(item?.descripcion)}</Text>
+                  <Text>{htmlParser.parse(item?.descripcion)}</Text>
                   {item?.cambio && (item?.cambio?.cambio === null || item?.cambio?.cambio === undefined) && (
                     <ActionsContainer>
                       <Button

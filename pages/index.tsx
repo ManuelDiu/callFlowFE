@@ -36,13 +36,13 @@ import { DEFAULT_USER_IMAGE } from "@/utils/userUtils";
 import moment from "moment";
 
 const Topbar = styled.div`
-  ${tw`flex justify-between p-5 w-full h-max`}
+  ${tw`flex md:flex-row flex-col gap-2  justify-between p-5 w-full h-max`}
 `;
 const MainContainer = styled.div`
   ${tw`flex flex-col gap-3 px-5 items-center justify-start w-full h-auto `}
 `;
 const FilterContainer = styled.div`
-  ${tw`flex items-center justify-between w-full h-auto `}
+  ${tw`flex flex-wrap gap-4 items-center justify-between w-full h-auto `}
 `;
 const Statistics = styled.div`
   ${tw`flex justify-between gap-x-7 gap-y-2 w-full flex-wrap lg:flex-nowrap h-auto `}
@@ -64,8 +64,9 @@ const Home: NextPage = () => {
   const router = useRouter();
   const [selectedITR, setSelectedITR] = useState<string>();
   const [selectedMeses, setSelectedMeses] = useState<string>("3");
-  const { handleSetLoading } = useGlobal();
+  const { handleSetLoading, isAdmin } = useGlobal();
   const [data, setData] = useState<EstadisticasGet | undefined>(undefined);
+  const { push } = useRouter();
 
   // El siguiente codigo es a modo de prueba del proceso de firma, luego eliminar.
   const [showFirmarModal, setShowFirmarModal] = useState<boolean>(false);
@@ -150,6 +151,14 @@ const Home: NextPage = () => {
   const formatCantidadCargos = (data?.cantidadCargos || [])?.map((item) => {
     return [item?.nombre, item?.cantidad]
   })
+
+  if (!isAdmin) {
+    push(appRoutes.llamados());
+  }
+
+  if (!isAdmin) {
+    return null;
+  }
 
   return (
     <>
@@ -277,7 +286,7 @@ const Home: NextPage = () => {
               <Button
                 variant="fill"
                 icon={<BiPlus size={24} fontWeight={700} color="white" />}
-                action={() => null}
+                action={() => push(appRoutes.postulantes())}
                 className=""
               />
             </div>

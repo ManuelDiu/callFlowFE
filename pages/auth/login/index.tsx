@@ -19,6 +19,8 @@ import tw from "twin.macro";
 import Image from "next/image";
 import { loginValidationSchema } from "@/forms/LoginForm";
 import Spinner from "@/components/Spinner/Spinner";
+import clsx from "clsx";
+import { useWindowDimensions } from "@/hooks/useWindowDimensions";
 
 type LoginFormFields = {
   email: string;
@@ -34,8 +36,8 @@ interface ContainerProps {
 }
 
 const HalfScreenContainerVariants = {
-  firstHalf: tw` items-center`,
-  secondHalf: tw``,
+  firstHalf: tw` items-center md:w-1/2 !w-full`,
+  secondHalf: tw`md:flex !hidden`,
 };
 
 const MainContainer = styled.div(() => [
@@ -48,18 +50,15 @@ const HalfScreenContainer = styled.div<ContainerProps>(() => [
 ]);
 
 const FirstHalfContainer = styled.div(() => [
-  tw`flex flex-col w-[400px] p-0 gap-7`,
+  tw`flex flex-col md:w-[400px] w-[90%] md:p-0 px-5 md:py-0 py-5 rounded-lg bg-white/100 gap-7`,
 ]);
 
 const FormContainer = styled.div(() => [tw`flex flex-col py-6 gap-5`]);
 
 const ImagesContainer = styled.div(() => [
-  tw`flex relative w-full justify-center items-center rounded-bl-[200px] overflow-hidden`,
+  tw`flex w-full h-full relative w-full justify-center items-center md:rounded-bl-[200px] overflow-hidden`,
 ]);
 
-const ErrorContainer = styled.div(() => [
-  tw`flex gap-2 items-center text-red-600`,
-]);
 
 const Login: NextPage = () => {
   const {
@@ -71,6 +70,7 @@ const Login: NextPage = () => {
     mode: "onSubmit",
   });
   const [message, setMessage] = useState<string | null>(null);
+  const { isMobile } = useWindowDimensions();
 
   const { handleSetToken, handleSetLoading } = useGlobal();
 
@@ -103,7 +103,7 @@ const Login: NextPage = () => {
 
   return (
       <MainContainer>
-        <HalfScreenContainer>
+        <HalfScreenContainer className="z-[20]">
           <FirstHalfContainer>
             <section>
               <h1 className="font-extrabold text-texto">Iniciar Sesión</h1>
@@ -152,7 +152,9 @@ const Login: NextPage = () => {
             </form>
           </FirstHalfContainer>
          </HalfScreenContainer>
-      <HalfScreenContainer variant="secondHalf">
+      <HalfScreenContainer className={clsx(
+        isMobile && "fixed inset-0 z-[10] h-full w-full"
+      )}>
         <ImagesContainer>
           <Image
             src="/img/loginBG.svg"

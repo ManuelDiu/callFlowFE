@@ -15,7 +15,7 @@ import { PiBell, PiMoon } from "react-icons/pi";
 import { useGlobal } from "@/hooks/useGlobal";
 
 const MainBarContainer = styled.div(() => [
-  tw`flex justify-between items-center w-96 h-16 px-4 py-1 rounded-[30px] bg-white`,
+  tw`flex justify-between items-center md:w-96 w-full h-16 px-4 py-1 rounded-[30px] bg-white`,
 ]);
 
 const ButtonsContainer = styled.div(() => [tw`flex items-center gap-2`]);
@@ -109,7 +109,7 @@ const ProfileBar: NextPage = () => {
           >
             <Image
               alt="Imágen del usuario logueado."
-              src={userInfo?.imageUrl}
+              src={userInfo?.imageUrl || ""}
               layout="fill"
               className="rounded-full h-auto border-none"
             />

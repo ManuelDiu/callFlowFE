@@ -43,7 +43,6 @@ export const items = [
 ];
 
 export const itemsTribunalOrCordinador = [
-  { title: "Inicio", icon: <AiFillHome size={24} />, href: appRoutes.home(), validPath: [appRoutes.home()] },
   {
     title: "Llamados",
     icon: <PiClipboardTextDuotone size={24} />,

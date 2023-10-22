@@ -27,13 +27,14 @@ import Modal from "../Modal/Modal";
 import GrillaPDF from "../GrillaPDF/GrillaPDF";
 import AddTribunalModal from "../AddTribunalModal/AddTribunalModal";
 import EditTribunalModal from "../AddTribunalModal/EditTribunalModal";
+import ITRBubble from "../Table/components/ITRBubble";
 
 const Container = styled.div`
   ${tw`w-full h-auto flex flex-col items-start justify-start gap-4`}
 `;
 
 const IndicatorsContainer = styled.div`
-  ${tw`w-auto h-auto flex flex-row items-center justify-start gap-4`}
+  ${tw`w-auto h-auto flex md:flex-row flex-col md:items-center items-start md:my-0 my-4 justify-start gap-4`}
 `;
 
 const IndicatorItem = styled.div`
@@ -239,6 +240,10 @@ const LlamadoInfoContent = ({ llamadoInfo }: Props) => {
           <LlamadoInfoLine>
             <LlamadoInfoKey>Nombre</LlamadoInfoKey>
             <LlamadoInfoValue>{llamadoInfo?.nombre}</LlamadoInfoValue>
+          </LlamadoInfoLine>
+          <LlamadoInfoLine>
+            <LlamadoInfoKey>ITR</LlamadoInfoKey>
+            <LlamadoInfoValue><ITRBubble itr={llamadoInfo?.itr} /></LlamadoInfoValue>
           </LlamadoInfoLine>
           <LlamadoInfoLine>
             <LlamadoInfoKey>Referencia</LlamadoInfoKey>

@@ -28,7 +28,7 @@ const Container = styled.div`
   ${tw`w-full h-auto flex flex-col gap-4 items-center justify-start`}
 `;
 const Row = styled.div`
-  ${tw`w-full flex flex-row items-center justify-center gap-4`}
+  ${tw`w-full flex md:flex-row flex-col items-center justify-center gap-4`}
 `;
 
 const Col = styled.div`

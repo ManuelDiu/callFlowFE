@@ -17,7 +17,7 @@ const ButtonVariants = {
 };
 
 const Container = styled.div`
-  ${tw`w-full h-auto flex flex-row items-center justify-center gap-2`}
+  ${tw`w-full h-auto flex flex-row items-center md:justify-center justify-end gap-2`}
 `;
 
 const ItemContainer = styled.button<{ variant: ActionType }>`

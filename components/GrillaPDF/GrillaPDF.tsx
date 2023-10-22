@@ -97,7 +97,7 @@ const GrillaPDF = ({ llamadoInfo }: Props) => {
       <Button action={() => handleGenerateGrilla()} text="Descargar" />
       <div
         ref={targetRef}
-        className="flex p-10 flex-col items-start justify-start gap-4"
+        className="flex md:px-10 px-0 md:py-10 py-4 flex-col items-start justify-start gap-4"
       >
         <span className="text-black font-semibold text-3xl">
           Grilla del llamado

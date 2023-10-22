@@ -37,7 +37,7 @@ h4 {
 }
 
 * {
-  transition: all 150ms ease;
+  transition: all 150ms ease!important;
 }
 
 div {
@@ -137,4 +137,9 @@ input[type=number]::-webkit-outer-spin-button {
   color: #8EA501!important;
   margin-left: 4px;
   margin-right: 4px;
+}
+
+body {
+  max-width: 100vh!important;
+  overflow-x: hidden;
 }

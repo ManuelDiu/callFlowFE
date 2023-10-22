@@ -8,6 +8,7 @@ export const listarLlamados = gql`
       ref
       postulantes
       progreso
+      itr
       nombre
       cupos
       estado

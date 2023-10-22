@@ -14,12 +14,14 @@ const useLlamadoFilters = () => {
   const selectedPostulantes = filters?.selectedPostulantes;
   const selectedUsuarios = filters?.selectedUsuarios;
   const selectedEstados = filters?.selectedEstados;
+  const selectedITRs = filters?.selectedITRs;
 
   const formatedSelectedCategorias = filters?.selectedCategorias
   const formatedSelectedCargos = filters?.selectedCargos
   const formatedSelectedPostulantes = filters?.selectedPostulantes
   const formatedSelectedUsuarios = filters?.selectedUsuarios
   const formatedSelectedEstados = filters?.selectedEstados
+  const formatedSelectedITRs = filters?.selectedITRs
 
   const filtersToBackend = {
     selectedCategorias: formatedSelectedCategorias,
@@ -27,6 +29,7 @@ const useLlamadoFilters = () => {
     selectedPostulantes: formatedSelectedPostulantes,
     selectedUsuarios: formatedSelectedUsuarios,
     selectedEstados: formatedSelectedEstados,
+    selectedITRs: formatedSelectedITRs,
   };
 
   const getFiltrosLength = () => {
@@ -56,6 +59,7 @@ const useLlamadoFilters = () => {
     selectedUsuarios,
     selectedEstados,
     handleChangeFilter,
+    selectedITRs,
     filters,
     getFiltrosLength,
     filtersToBackend,

@@ -20,9 +20,10 @@ import { listUsers } from "@/controllers/userController";
 import { useGlobal } from "@/hooks/useGlobal";
 import { LlamadoList } from "types/llamado";
 import { listarLlamados } from "@/controllers/llamadoController";
+import { ITR } from "@/enums/ITR";
 
 const Container = styled.div`
-  ${tw`md:w-[400px] px-5 py-16 gap-4 overflow-auto max-h-screen w-full bg-white h-auto flex flex-col items-start justify-start absolute top-0 right-0 bg-white shadow-md border-l h-screen border-gray-300`}
+  ${tw`md:w-[400px] px-5 py-16 gap-4 overflow-auto max-h-screen w-full bg-white h-auto z-[50] flex flex-col items-start justify-start absolute top-0 right-0 bg-white shadow-md border-l h-screen border-gray-300`}
 `;
 
 const Title = styled.span`
@@ -49,6 +50,7 @@ const LlamadoFiltro = ({ setOpen, refetch }: Props) => {
     selectedPostulantes,
     selectedUsuarios,
     selectedEstados,
+    selectedITRs,
     handleChangeFilter,
   } = useLlamadoFilters();
   const { handleSetLoading } = useGlobal();
@@ -228,6 +230,46 @@ const LlamadoFiltro = ({ setOpen, refetch }: Props) => {
           })}
           //   inputFormName={crearLlamadoFormFields.solicitante}
         />
+
+<Dropdown
+          defaultValue={selectedITRs}
+          label="ITRs"
+          //   isInvalid={}
+          placeholder="Seleccione ITRs para filtrar"
+          onChange={(val: any) => handleChangeFilter("selectedITRs", val?.map((item: any) => item?.value))}
+          required
+          multiSelect
+          items={
+            [
+              {
+                label: "Todos",
+                value: "Todos",
+              },
+              {
+                label: "Sur oeste",
+                value: ITR.suroeste,
+              },
+              {
+                label: "Este",
+                value: ITR.este,
+              },
+              {
+                label: "Norte",
+                value: ITR.norte,
+              },
+              {
+                label: "Ulo",
+                value: ITR.ulo,
+              },
+              {
+                label: "Centro sur",
+                value: ITR.centrosur,
+              }
+            ]
+          }
+          //   inputFormName={crearLlamadoFormFields.solicitante}
+        />
+
       </Column>
     </Container>
   );

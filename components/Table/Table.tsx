@@ -6,6 +6,8 @@ import NotFoundImage from "@/public/images/NotFound.svg";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import Checkbox from "../Inputs/Checkbox";
+import MobileTable from "./components/MobileTable";
+import { useWindowDimensions } from "@/hooks/useWindowDimensions";
 interface PropsTable {
   cols: ColumnItem[];
   title: string;
@@ -50,7 +52,10 @@ const Cell = styled.div`
 
 const CellSelect = styled.div<{ isExpanded: boolean }>`
   ${tw`transition-all overflow-hidden`}
-  ${({ isExpanded }) => (isExpanded ? tw`min-w-[50px] w-[50px] opacity-[100]` : tw`w-[0px] opacity-0`)}
+  ${({ isExpanded }) =>
+    isExpanded
+      ? tw`min-w-[50px] w-[50px] opacity-[100]`
+      : tw`w-[0px] opacity-0`}
 `;
 
 const Table = ({
@@ -63,6 +68,7 @@ const Table = ({
   selectedItems,
 }: PropsTable) => {
   const { push } = useRouter();
+  const { isMobile } = useWindowDimensions();
 
   const handleAddItem = (val: any, selectedItem: any) => {
     if (val) {
@@ -74,6 +80,20 @@ const Table = ({
       setSelectedItems(newItems);
     }
   };
+
+  if (isMobile) {
+    return (
+      <MobileTable
+        cols={cols}
+        title={title}
+        data={data}
+        others={others}
+        multiDisabled={multiDisabled}
+        setSelectedItems={setSelectedItems}
+        selectedItems={selectedItems}
+      />
+    );
+  }
 
   return (
     <Container>
@@ -111,12 +131,16 @@ const Table = ({
                 }
                 key={`row-${index}`}
               >
-                  <CellSelect isExpanded={multiDisabled || false}>
-                    <Checkbox
-                      value={selectedItems?.find((itm: any) => itm?.id === item?.id) !== undefined}
-                      setValue={(val: any) => handleAddItem(val, item)}
-                    />
-                  </CellSelect>
+                <CellSelect isExpanded={multiDisabled || false}>
+                  <Checkbox
+                    value={
+                      selectedItems?.find(
+                        (itm: any) => itm?.id === item?.id
+                      ) !== undefined
+                    }
+                    setValue={(val: any) => handleAddItem(val, item)}
+                  />
+                </CellSelect>
 
                 {cols?.map((col, indexCol) => {
                   return (

@@ -8,6 +8,7 @@ const initialState: {
     selectedPostulantes: any[];
     selectedUsuarios: any[];
     selectedEstados: any[];
+    selectedITRs: any[];
   };
 } = {
   filters: {
@@ -16,6 +17,8 @@ const initialState: {
     selectedPostulantes: [],
     selectedUsuarios: [],
     selectedEstados: [],
+    selectedITRs: [],
+
   },
 };
 

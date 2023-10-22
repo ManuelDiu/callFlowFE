@@ -23,7 +23,7 @@ import appRoutes from "@/routes/appRoutes";
 import { DEFAULT_USER_IMAGE } from "@/utils/userUtils";
 
 const Topbar = styled.div`
-  ${tw`flex justify-between p-5 w-full h-max`}
+  ${tw`flex md:flex-row flex-col gap-2  justify-between p-5 w-full h-max`}
 `;
 
 const MainContainer = styled.div`

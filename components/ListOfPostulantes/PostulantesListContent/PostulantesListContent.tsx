@@ -5,6 +5,7 @@ import { PostulanteLlamadoResumed } from "types/postulante";
 import { useGlobal } from "@/hooks/useGlobal";
 import { useEffect } from "react";
 import NotFoundPage from "@/components/NotFoundPage/NotFoundPage";
+import { EstadoPostulanteEnum } from "@/enums/EstadoPostulanteEnum";
 interface Props {
   title: string;
   postulantes?: any;
@@ -23,6 +24,10 @@ const PostulantesListContent = ({ title, postulantes, llamadoId }: Props) => {
 
   const isLoading = loading;
   const postulantesFound = data?.getPostulantesByLlamadoId;
+  const postulantesCumpliendoRequisitos = postulantesFound?.filter(
+    (postul) =>
+      postul.estadoActual.nombre === EstadoPostulanteEnum.cumpleRequisito
+  );
 
   useEffect(() => {
     handleSetLoading(loading);
@@ -37,7 +42,7 @@ const PostulantesListContent = ({ title, postulantes, llamadoId }: Props) => {
       <ListOfPostulantes
         title={title}
         selectedUsers={postulantes}
-        postulantesLlamadoFound={postulantesFound}
+        postulantesLlamadoFound={postulantesCumpliendoRequisitos}
         llamadoId={llamadoId}
         showCurrEtapa
       />

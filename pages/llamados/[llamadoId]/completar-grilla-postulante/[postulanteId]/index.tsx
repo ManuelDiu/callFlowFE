@@ -98,6 +98,7 @@ const PostulanteInLlamadoInfo = () => {
       llamadoId: llamadoId,
       postulanteId: postulanteId,
     },
+    fetchPolicy: "no-cache",
   });
 
   const { data: etapaData, loading: etapaDataLoading } = useQuery<{

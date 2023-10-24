@@ -62,6 +62,7 @@ const PostulantesResumen = ({ llamadoInfo }: Props) => {
     variables: {
       llamadoId: llamadoInfo?.id,
     },
+    fetchPolicy: "no-cache",
   });
 
   if (loading) {

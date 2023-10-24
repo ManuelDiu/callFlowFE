@@ -208,24 +208,48 @@ export const getEtapaActualPostInLlamado = gql`
       llamadoId: $llamadoId
       postulanteId: $postulanteId
     ) {
-      id
-      nombre
-      plazoDias
-      total
-      currentEtapa
-      cantEtapas
-      puntajeMin
-      subetapas {
+      currentEtapa {
         id
         nombre
-        subtotal
-        puntajeMaximo
-        requisitos {
+        plazoDias
+        total
+        puntajeMin
+        currentEtapa
+        cantEtapas
+        subetapas {
           id
           nombre
-          puntajeSugerido
-          puntaje
-          excluyente
+          subtotal
+          puntajeMaximo
+          requisitos {
+            id
+            nombre
+            puntajeSugerido
+            puntaje
+            excluyente
+          }
+        }
+      }
+      allEtapas {
+        id
+        nombre
+        plazoDias
+        total
+        puntajeMin
+        currentEtapa
+        cantEtapas
+        subetapas {
+          id
+          nombre
+          subtotal
+          puntajeMaximo
+          requisitos {
+            id
+            nombre
+            puntajeSugerido
+            puntaje
+            excluyente
+          }
         }
       }
     }

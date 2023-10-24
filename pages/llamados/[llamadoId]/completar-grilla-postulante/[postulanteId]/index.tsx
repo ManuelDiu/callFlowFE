@@ -27,6 +27,7 @@ import { DEFAULT_USER_IMAGE } from "@/utils/userUtils";
 import SubEtapaListGrilla from "@/components/EtapasList/SubEtapaList/SubEtapaListGrilla";
 import {
   AvanzarEtapaPostulanteData,
+  CurrentEtapaData,
   DataGrilla,
   EtapaGrilla,
   RequisitoGrillaInput,
@@ -80,7 +81,7 @@ enum saveOptions {
   guardarYAvanzar = "GUARDAR Y AVANZAR",
 }
 
-const PostulanteInLlamadoInfo = () => {
+const CompletarPuntajesPostulante = () => {
   const { userInfo, handleSetLoading } = useGlobal();
   const [guardarPuntajes] = useMutation(guardarPuntajesPostulanteEnLlamado);
   const [avanzarEtapaPostulante] = useMutation(avanzarEtapaPostulanteInLlamado);
@@ -102,7 +103,7 @@ const PostulanteInLlamadoInfo = () => {
   });
 
   const { data: etapaData, loading: etapaDataLoading } = useQuery<{
-    getEtapaActualPostInLlamado?: EtapaGrilla;
+    getEtapaActualPostInLlamado?: CurrentEtapaData;
   }>(getEtapaActualPostInLlamado, {
     variables: {
       llamadoId: llamadoId,
@@ -113,15 +114,23 @@ const PostulanteInLlamadoInfo = () => {
   const [subetapas, setSubetapas] = useState<SubEtapaGrilla[] | []>([]);
 
   const postulanteInLlamadoInfo = data?.infoPostulanteEnLlamado;
-  const etapa = etapaData?.getEtapaActualPostInLlamado;
+  const etapaLoad = etapaData?.getEtapaActualPostInLlamado;
+  const [etapa, setEtapa] = useState<EtapaGrilla>();
+
+  // Guardo la etapa actual real del postulante en el llamado.
+  const etapaActualReal: number = etapaLoad?.currentEtapa.currentEtapa || 1;
+
+  // Guardo la etapa en la que se está posicionado en la vista, pero no tiene por qué ser la actual "real".
+  let currentEtapa: number = etapa?.currentEtapa || 1;
 
   const notExistsPostulanteInLlamado = !postulanteInLlamadoInfo?.id;
 
   useEffect(() => {
-    if (etapa) {
-      setSubetapas(etapa.subetapas);
+    if (etapaLoad) {
+      setEtapa(etapaLoad.currentEtapa);
+      setSubetapas(etapaLoad.currentEtapa.subetapas);
     }
-  }, [etapa]);
+  }, [etapaLoad]);
 
   useEffect(() => {
     handleSetLoading(loading || etapaDataLoading);
@@ -139,6 +148,7 @@ const PostulanteInLlamadoInfo = () => {
     if (errores) {
       return;
     }
+
     const dataToSend: DataGrilla = {
       llamadoId: llamadoId,
       postulanteId: postulanteId,
@@ -243,6 +253,40 @@ const PostulanteInLlamadoInfo = () => {
       }
     }
   };
+
+  const handleRetrocederEtapa = async () => {
+    if (etapa) {
+      if (currentEtapa - 1 > etapa.cantEtapas - etapa.cantEtapas) {
+        if (etapaLoad) {
+          const newEtapa = etapaLoad.allEtapas.find(
+            (etapa) => etapa.currentEtapa === currentEtapa - 1
+          );
+          if (newEtapa?.subetapas) {
+            setEtapa(newEtapa);
+            setSubetapas(newEtapa.subetapas);
+            currentEtapa -= 1;
+          }
+        }
+      } else {
+        toast.error("Error, no hay más etapas que retroceder.");
+      }
+    }
+  };
+
+  const handleReturnToCurrentEtapa = async () => {
+    if (etapa) {
+      if (currentEtapa !== etapaActualReal) {
+        if (etapaLoad) {
+          setEtapa(etapaLoad.currentEtapa);
+          setSubetapas(etapaLoad.currentEtapa.subetapas);
+          currentEtapa = etapaActualReal;
+        }
+      } else {
+        toast.error("Error, ya estás posicionado en la etapa actual.");
+      }
+    }
+  };
+
   return (
     <Container>
       {showConfirmGuardarModal && (
@@ -302,6 +346,24 @@ const PostulanteInLlamadoInfo = () => {
             <span className="font-medium text-lg text-textogris">
               {`Etapa ${etapa?.currentEtapa} / ${etapa?.cantEtapas}`}
             </span>
+            <Button
+              // icon={<TbArrowsExchange color="#4318FF" size={15} />}
+              variant="outline"
+              sizeVariant="fit"
+              text="Modificar una etapa anterior"
+              className="!z-[20]"
+              action={handleRetrocederEtapa}
+            />
+            {currentEtapa !== etapaActualReal && (
+              <Button
+                // icon={<TbArrowsExchange color="#4318FF" size={15} />}
+                variant="outline"
+                sizeVariant="fit"
+                text="Volver a la etapa actual"
+                className="!z-[20] mt-1"
+                action={handleReturnToCurrentEtapa}
+              />
+            )}
           </div>
           <div className="flex flex-col self-end">
             <span className="text-end font-semibold text-xl text-texto">
@@ -309,7 +371,7 @@ const PostulanteInLlamadoInfo = () => {
               <span className="text-red-600"> {etapa?.puntajeMin}</span>
             </span>
             <span className="text-end font-semibold text-xl text-texto">
-              Puntaje actual del postulante en la etapa:
+              Puntaje actual del postulante en esta etapa:
               <span className="text-green"> {etapa?.total}</span>
             </span>
           </div>
@@ -319,7 +381,7 @@ const PostulanteInLlamadoInfo = () => {
         <EtapaContainer className="modalOpen group">
           <SectionTitle>Subetapa</SectionTitle>
           <SubEtapaListGrilla
-            setSubEtapas={(values: any) => setSubetapas(values)}
+            setSubEtapas={setSubetapas}
             subetapas={subetapas}
             setErrores={setErrores}
           />
@@ -338,13 +400,25 @@ const PostulanteInLlamadoInfo = () => {
           variant="fill"
           text="Guardar puntajes y avanzar etapa"
           action={() => setShowConfirmAvanzarModal(true)}
-          disabled={errores}
-          className={errores ? "cursor-not-allowed opacity-40" : ""}
-          title={errores ? "Corrige los errores antes de continuar." : ""}
+          disabled={errores || currentEtapa !== etapaActualReal}
+          className={
+            errores
+              ? "cursor-not-allowed opacity-40"
+              : currentEtapa !== etapaActualReal
+              ? "cursor-not-allowed opacity-40"
+              : ""
+          }
+          title={
+            errores
+              ? "Corrige los errores antes de continuar."
+              : currentEtapa !== etapaActualReal
+              ? "No puedes avanzar de etapa ya que estás modificando una anterior... Vuelve a la actual para continuar."
+              : ""
+          }
         />
       </SaveButtons>
     </Container>
   );
 };
 
-export default PostulanteInLlamadoInfo;
+export default CompletarPuntajesPostulante;

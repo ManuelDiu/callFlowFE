@@ -7,27 +7,12 @@ import {
   SubEtapa,
   SubEtapaGrilla,
 } from "types/etapa";
-import Input from "@/components/Inputs/Input";
-import Button from "@/components/Buttons/Button";
-import { IoMdAdd } from "react-icons/io";
-import Text from "@/components/Table/components/Text";
-import { emptyRequisito, emptySubEtapa } from "@/utils/etapa";
-import RequisitoList from "../RequisitoList/RequisitoList";
-import { BsTrash3 } from "react-icons/bs";
-import { useEffect, useState } from "react";
 import OneLineError from "@/components/OneLineError/OneLineError";
 import RequisitoListGrilla from "../RequisitoList/RequisitoListGrilla";
+import { useEffect } from "react";
 
 const Container = styled.div`
   ${tw`w-full p-6 pt-8 relative h-auto flex flex-col items-center justify-start gap-y-4 bg-subEtapaItem rounded-2xl shadow-md`}
-`;
-
-const Row = styled.div`
-  ${tw`w-full h-auto gap-4 flex flex-row items-center justify-start`}
-`;
-
-const Cell = styled.div`
-  ${tw`w-full h-full flex flex-grow items-center`}
 `;
 
 const SectionTitle = styled.h2`
@@ -63,19 +48,27 @@ const SubEtapaListGrilla = ({
     setSubEtapas(newSubEtapas);
   };
   let sumOfRequisitos = 0;
-  const handleErrores = (subEtapa: SubEtapaGrilla) => {
-    subEtapa?.requisitos?.forEach((req: any) => {
-      sumOfRequisitos += Number(req?.puntaje);
+
+  useEffect(() => {
+    handleErrores();
+  }, [subetapas]);
+
+  const handleErrores = () => {
+    subetapas?.map((subEtapa) => {
+      subEtapa?.requisitos?.forEach((req: any) => {
+        sumOfRequisitos += Number(req.puntaje);
+      });
+      if (Number(sumOfRequisitos) > Number(subEtapa?.puntajeMaximo)) {
+        setErrores(true);
+        return;
+      } else {
+        setErrores(false);
+      }
     });
-    if (Number(sumOfRequisitos) > Number(subEtapa?.puntajeMaximo)) {
-      setErrores(true);
-    } else {
-      setErrores(false);
-    }
   };
   return subetapas?.map((subEtapa, index) => {
     sumOfRequisitos = 0;
-    handleErrores(subEtapa);
+    handleErrores();
 
     return (
       <Container className="modalOpen group" key={`etapa-${index}`}>

@@ -64,3 +64,8 @@ export type AvanzarEtapaPostulanteData = {
   llamadoId: number;
   currentEtapa: number
 };
+
+export type CurrentEtapaData = {
+  currentEtapa: EtapaGrilla;
+  allEtapas: EtapaGrilla[];
+};

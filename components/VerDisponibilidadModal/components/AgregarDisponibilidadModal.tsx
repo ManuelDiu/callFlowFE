@@ -18,6 +18,10 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import styled from "styled-components";
 import tw from "twin.macro";
+import DatePicker from "react-date-picker";
+import moment from "moment";
+import { useState } from "react";
+import TimePicker from "react-time-picker";
 
 interface Props {
   setOpen: any;
@@ -33,11 +37,16 @@ const AgregarDisponibilidadModal = ({ setOpen, llamadoId }: Props) => {
     register,
     formState: { errors },
     handleSubmit,
+    setValue,
+    getValues,
   } = useForm<CrearDisponibilidadForm>({
     resolver: yupResolver(CrearDisponibilidadValidation()),
   });
   const [handleCrearDisponibilidad] = useMutation(crearDisponibilidad);
   const { handleSetLoading } = useGlobal();
+  const [selectedDate, setSelectedDate] = useState<any>(null);
+  const [selectedTimeMin, setSelectedTimeMin] = useState<any>(null);
+  const [selectedTimeMax, setSelectedTimeMax] = useState<any>(null);
 
   const handleNext = async (data: CrearDisponibilidadForm) => {
     handleSetLoading(true);
@@ -73,14 +82,21 @@ const AgregarDisponibilidadModal = ({ setOpen, llamadoId }: Props) => {
   const handleRenderContent = () => {
     return (
       <Container>
-        <Input
-          label="Fecha"
-          placeholder="Ingrese una fecha (dd:mm:yyyy)"
-          type="string"
-          required
-          register={register}
-          isInvalid={!!errors[CrearDisponibilidadFormFields.fecha]?.message}
-          inputFormName={CrearDisponibilidadFormFields.fecha}
+        <label className="text-md font-medium text-texto select-none">
+          Fecha
+          <span className="text-principal">*</span>
+        </label>
+        <DatePicker
+          minDate={new Date()}
+          onChange={(val) => {
+            setSelectedDate(val);
+            const fecha = new Date(val?.toString() || "");
+            const formattedFecha = moment(fecha)
+              .format("DD/MM/YYYY")
+              .toString();
+            setValue(CrearDisponibilidadFormFields.fecha, formattedFecha);
+          }}
+          value={selectedDate}
         />
         {!!errors[CrearDisponibilidadFormFields.fecha]?.message && (
           <OneLineError
@@ -88,30 +104,44 @@ const AgregarDisponibilidadModal = ({ setOpen, llamadoId }: Props) => {
           />
         )}
 
-        <Input
-          label="Hora minima"
-          placeholder="Ingrese una hora minima (hh:mm)"
-          type="string"
-          required
-          register={register}
-          isInvalid={!!errors[CrearDisponibilidadFormFields.horaMin]?.message}
-          inputFormName={CrearDisponibilidadFormFields.horaMin}
+        <label className="text-md font-medium text-texto select-none">
+          Hora minima
+          <span className="text-principal">*</span>
+        </label>
+
+        <TimePicker
+          onChange={(val) => {
+            setSelectedTimeMin(val);
+            setValue(
+              CrearDisponibilidadFormFields.horaMin,
+              val?.toString() || ""
+            );
+          }}
+          value={selectedTimeMin}
         />
+
         {!!errors[CrearDisponibilidadFormFields.horaMin]?.message && (
           <OneLineError
             message={errors[CrearDisponibilidadFormFields.horaMin]?.message}
           />
         )}
 
-        <Input
-          label="Hora maxima"
-          placeholder="Ingrese una hora maxima (hh:mm)"
-          type="string"
-          required
-          register={register}
-          isInvalid={!!errors[CrearDisponibilidadFormFields.horaMax]?.message}
-          inputFormName={CrearDisponibilidadFormFields.horaMax}
+        <label className="text-md font-medium text-texto select-none">
+          Hora maxima
+          <span className="text-principal">*</span>
+        </label>
+
+        <TimePicker
+          onChange={(val) => {
+            setSelectedTimeMax(val);
+            setValue(
+              CrearDisponibilidadFormFields.horaMax,
+              val?.toString() || ""
+            );
+          }}
+          value={selectedTimeMax}
         />
+
         {!!errors[CrearDisponibilidadFormFields.horaMax]?.message && (
           <OneLineError
             message={errors[CrearDisponibilidadFormFields.horaMax]?.message}

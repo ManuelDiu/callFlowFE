@@ -204,6 +204,7 @@ const Home: NextPage = () => {
           </div>
           <div className="w-fit flex flex-row gap-4">
             <Dropdown
+              writable={false}
               placeholder="Filtrar por ITR"
               defaultValue={['Todos']}
               onChange={(val: any) => setSelectedITR(val?.value)}
@@ -216,6 +217,7 @@ const Home: NextPage = () => {
               ]}
             />
            <Dropdown
+              writable={false}
               placeholder="Cantidad de meses"
               defaultValue={['3']}
               onChange={(val: any) => setSelectedMeses(val?.value)}

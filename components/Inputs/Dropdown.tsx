@@ -21,6 +21,7 @@ type InputProps = {
   items: DropDownItem[];
   onChange: any;
   defaultValue?: any;
+  writable?: boolean;
   disabled?: any;
   listenDefaultValue?: boolean;
   isInvalid?: boolean;
@@ -61,7 +62,7 @@ const SelectedItems = styled.div`
 `;
 
 const LabelSelect = styled.div`
-  ${tw`flex flex-grow w-full font-semibold text-[14px]`}
+  ${tw`flex min-w-fit flex-grow w-full font-semibold text-[14px]`}
 `;
 
 const SelectedItemTag = styled.div`
@@ -79,6 +80,7 @@ const Dropdown = ({
   isInvalid,
   disabled,
   onChange,
+  writable = true,
   items,
   defaultValue,
   listenDefaultValue = false,
@@ -179,7 +181,7 @@ const Dropdown = ({
                 setQuery(val);
               }}
             />
-          ) : typeof selectedValues[0]?.label === "string" ? (
+          ) : typeof selectedValues[0]?.label === "string" && writable ? (
             <StyledInput
               name={inputFormName}
               id={id}

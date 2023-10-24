@@ -1,15 +1,6 @@
 import Head from "next/head";
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
-
-import { AiFillHome } from "react-icons/ai";
-import { PiClipboardTextDuotone } from "react-icons/pi";
-import { MdOutlineCategory } from "react-icons/md";
-import { ImInsertTemplate } from "react-icons/im";
-import { PiUserDuotone } from "react-icons/pi";
-import { PiUsersThreeDuotone } from "react-icons/pi";
-import { PiFilePlusLight } from "react-icons/pi";
-import { MdOutlineWorkOutline } from "react-icons/md";
 import "react-toastify/dist/ReactToastify.css";
 
 import { ApolloProvider, useQuery } from "@apollo/client";
@@ -20,6 +11,10 @@ import CheckTokenWrapper from "@/components/CheckTokenWrapper/CheckTokenWrapper"
 import SubscriptionGlobalWrapper from "@/components/SubscriptionGlobalWrapper/SubscriptionGlobalWrapper";
 import { useRouter } from "next/router";
 import DisableNumberInputScroll from "@/utils/disableInputScroll";
+import 'react-date-picker/dist/DatePicker.css';
+import 'react-calendar/dist/Calendar.css';
+import 'react-time-picker/dist/TimePicker.css';
+import 'react-clock/dist/Clock.css';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const { pathname } = useRouter();

@@ -25,7 +25,7 @@ interface Props {
 }
 
 const HeaderRow = styled.div`
-  ${tw`w-full transition-all px-4 border-b-2 border-borders2 w-fit min-w-full h-auto py-2 flex flex-row items-center justify-center gap-x-2 bg-white`}
+  ${tw`hidden w-full transition-all px-4 border-b-2 border-borders2 w-fit min-w-full h-auto py-2 md:flex flex-row items-center justify-center gap-x-2 bg-white`}
 `;
 
 const ColItem = styled.div`
@@ -41,12 +41,12 @@ const Content = styled.div`
 `;
 
 const Row = styled.div<{ cumple: boolean | undefined }>`
-  ${tw`w-full py-4 transition-all px-2 rounded-md flex flex-row max-w-full items-center py-4 border`}
+  ${tw`divide-y md:divide-none divide-slate-200 w-full py-4 transition-all px-2 rounded-md flex flex-col md:flex-row max-w-full items-center md:items-start py-4 border`}
   ${({ cumple = false }) => (cumple ? tw`border-green` : tw`border-red-500`)}
 `;
 
 const Cell = styled.div`
-  ${tw`w-full h-full transition-all flex flex-col max-w-full overflow-clip bg-transparent pl-2 justify-center`}
+  ${tw`w-full h-full gap-y-1 transition-all flex flex-col max-w-full overflow-clip bg-transparent ml-2 justify-center`}
 `;
 
 const UnderlinedText = styled.span<{ cumpleminimo: boolean | undefined }>`
@@ -171,20 +171,21 @@ const PostulantesResumen = ({ llamadoInfo }: Props) => {
               cumple={cumpleMinimo || undefined}
               key={`itemPostulante-${index}`}
             >
-              <Cell className="h-full text-gray-800 font-semibold text-xl">
-                <span className="break-words">{`${item?.postulante.nombres} ${item?.postulante.apellidos} ${item?.postulante?.documento}`}</span>
+              <Cell className="justify-center text-gray-800 font-semibold ">
+                <span className="text-center md:text-start text-xl">{`${item?.postulante.nombres} ${item?.postulante.apellidos} - ${item?.postulante?.documento}`}</span>
               </Cell>
 
               {item?.etapas?.map((etapa) => {
                 const cumpleMinimoEtapa = etapa.total >= etapa.minimo;
                 return (
-                  <Cell key={`etapaId-${etapa?.id}`}>
-                    <div className="w-full h-full flex flex-col items-start justify-start gap-y-1">
+                  <Cell key={`etapaId-${etapa?.id}`} className="pt-2">
+                    <span className="text-sm">Subetapas de {etapa.nombre}:</span>
+                    <div className="w-max h-full flex flex-col items-start justify-start gap-y-1 border-l-2 rounded-md border-principal/30 pl-2">
                       {etapa?.subetapas?.map((subetapa) => {
                         return (
                           <div
                             key={`subetapa-${subetapa?.nombre}`}
-                            className="flex flex-col items-start gap-4 justify-start overflow-clip"
+                            className="w-full flex flex-col items-start gap-4 justify-start"
                           >
                             <div className="flex flex-col">
                               <span className="font-semibold text-textoGray break-words">
@@ -195,9 +196,9 @@ const PostulantesResumen = ({ llamadoInfo }: Props) => {
                         );
                       })}
                     </div>
-                    <div className="flex flex-row items-center justify-between">
+                    <div className="my-2 flex flex-row items-center justify-between">
                       <span className="font-semibold text-lg text-gray-800">
-                        Total:
+                        Total en etapa:
                         <UnderlinedText
                           cumpleminimo={cumpleMinimoEtapa}
                           title={
@@ -213,8 +214,8 @@ const PostulantesResumen = ({ llamadoInfo }: Props) => {
                   </Cell>
                 );
               })}
-              <Cell className="font-semibold text-lg text-gray-700">
-                <span className="break-words">{item.total}</span>
+              <Cell className="pt-5 md:text-center self-center md:py-0 font-semibold text-lg text-gray-700">
+                <span className="break-words">Total en el llamado {item.total}</span>
               </Cell>
             </Row>
           );

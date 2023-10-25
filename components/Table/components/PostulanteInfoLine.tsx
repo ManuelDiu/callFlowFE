@@ -28,7 +28,7 @@ interface Props {
 }
 
 const Container = styled.div`
-  ${tw`w-full h-auto max-w-full overflow-visible flex flex-row items-center justify-start gap-1`}
+  ${tw`w-full h-auto max-w-full overflow-visible flex flex-col sm:flex-row items-center justify-start gap-1`}
 `;
 
 const ImageContainer = styled.div`
@@ -36,15 +36,15 @@ const ImageContainer = styled.div`
 `;
 
 const Content = styled.p`
-  ${tw`flex w-full justify-between h-auto`}
+  ${tw`flex flex-col sm:flex-row w-full items-center justify-between h-auto`}
 `;
 
 const TextContainer = styled.a`
-  ${tw`flex-grow h-auto flex flex-col items-start mt-[2px] overflow-hidden justify-center cursor-pointer`}
+  ${tw`flex-grow h-auto flex flex-col items-center sm:items-start mt-[2px] overflow-hidden justify-center cursor-pointer`}
 `;
 
 const ActionsContainer = styled.div`
-  ${tw`h-auto flex flex-row  items-center justify-between gap-8 flex-wrap`}
+  ${tw`h-auto flex flex-col sm:flex-row items-center sm:justify-between gap-x-8 gap-y-3 flex-wrap`}
 `;
 
 const Name = styled.span`

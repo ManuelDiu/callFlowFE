@@ -5,6 +5,8 @@ import { OptionsItem } from "@/utils/utils";
 import PostulanteInfoLine from "../Table/components/PostulanteInfoLine";
 import { PostulanteLlamadoResumed } from "types/postulante";
 import { DEFAULT_USER_IMAGE } from "@/utils/userUtils";
+import Input from "../Inputs/Input";
+import { ChangeEvent, useEffect, useState } from "react";
 
 interface Props {
   title: string;
@@ -21,7 +23,7 @@ const Container = styled.div`
 `;
 
 const Row = styled.div`
-  ${tw`w-full flex flex-row items-center justify-between`}
+  ${tw`w-full flex flex-col sm:flex-row items-center justify-between`}
 `;
 
 const PlusContainer = styled.button`
@@ -41,10 +43,50 @@ const ListOfPostulantes = ({
   showCurrEtapa = false,
   postulantesLlamadoFound,
 }: Props) => {
+  const [query, setQuery] = useState<string>("");
+  const queryNotEmpty = query !== "" && query;
+
+  const filteredPostulantes =
+    queryNotEmpty && postulantesLlamadoFound
+      ? [
+          ...postulantesLlamadoFound.filter(
+            (postulante) =>
+              postulante.postulante?.nombres
+                ?.toLowerCase()
+                .includes(query.toLowerCase()) ||
+              postulante.postulante?.apellidos
+                ?.toLowerCase()
+                .includes(query.toLowerCase()) ||
+              postulante.postulante?.documento?.includes(query)
+          ),
+        ]
+      : postulantesLlamadoFound;
+
+  const filteredUsers = queryNotEmpty
+    ? [
+        ...selectedUsers?.filter(
+          (user) =>
+            user?.name?.toLowerCase().includes(query?.toLowerCase()) ||
+            user.lastName?.toLowerCase().includes(query.toLowerCase()) ||
+            user?.documento?.includes(query)
+        ),
+      ]
+    : selectedUsers;
   return (
     <Container>
       <Row>
         <Title>{title}</Title>
+        <div className="w-max">
+          <Input
+            placeholder="Nombre o documento"
+            type="string"
+            required
+            className="max-w-xs"
+            onChange={(e: any) => {
+              setQuery(e?.target?.value);
+            }}
+          />
+        </div>
         {onAddClick && (
           <PlusContainer onClick={() => onAddClick()}>
             <BsPlusCircleFill size={26} color="#4318FF" />
@@ -52,7 +94,7 @@ const ListOfPostulantes = ({
         )}
       </Row>
       {!postulantesLlamadoFound
-        ? selectedUsers?.map((item, index) => {
+        ? filteredUsers?.map((item, index) => {
             const optionsToItem: OptionsItem[] = [
               {
                 text: "Eliminar",
@@ -76,7 +118,7 @@ const ListOfPostulantes = ({
               />
             );
           })
-        : postulantesLlamadoFound?.map((item, index) => {
+        : filteredPostulantes?.map((item, index) => {
             const optionsToItem: OptionsItem[] = [
               {
                 text: "Eliminar",
@@ -89,8 +131,8 @@ const ListOfPostulantes = ({
                 className="shadow-md w-full rounded-2xl p-4"
                 key={`userInfoLine-${index}`}
                 userImage={DEFAULT_USER_IMAGE}
-                userName={item?.postulante?.nombres}
-                userlastName={item?.postulante?.apellidos}
+                userName={`${item?.postulante?.nombres} ${item?.postulante?.apellidos}`}
+                userlastName={item?.postulante?.documento}
                 llamadoId={llamadoId}
                 postulanteId={item?.postulante?.id}
                 etapaActual={item?.etapa}

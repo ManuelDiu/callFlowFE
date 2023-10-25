@@ -119,6 +119,9 @@ export const getLlamadoInfoById = gql`
           imageUrl
           id
         }
+        llamado {
+          id
+        }
         cambio {
           cambio
           nombre
@@ -351,6 +354,32 @@ export const getEstadisticas = gql`
       cantidadCargos {
         nombre
         cantidad
+      }
+    }
+  }
+`;
+
+export const listarAllHistoriales = gql`
+  query {
+    listarAllHistoriales {
+      cambio {
+        cambio
+        id
+      }
+      createdAt
+      descripcion
+      id
+      llamado {
+        id
+        nombre
+      }
+      usuario {
+        imageUrl
+        lastName
+        name
+        email
+        documento
+        id
       }
     }
   }

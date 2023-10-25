@@ -32,6 +32,7 @@ export type HistorialLlamado = {
   descripcion: string;
   usuario: UserList;
   createdAt?: string;
+  llamado: LlamadoList
   cambio?: Cambio;
 };
 

@@ -71,27 +71,28 @@ const Home: NextPage = () => {
   // El siguiente codigo es a modo de prueba del proceso de firma, luego eliminar.
   const [showFirmarModal, setShowFirmarModal] = useState<boolean>(false);
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
-  const [_, { loading: loadingEstadisticas, refetch }] =
-    useLazyQuery(getEstadisticas, {
-      fetchPolicy: 'no-cache',
+  const [_, { loading: loadingEstadisticas, refetch }] = useLazyQuery(
+    getEstadisticas,
+    {
+      fetchPolicy: "no-cache",
       variables: {
         itr: selectedITR === "Todos" || !selectedITR ? "" : selectedITR,
         meses: selectedMeses,
-      }
-    });
-
+      },
+    }
+  );
 
   const handleLoadEstadisticas = async () => {
     const resp = await refetch({
       variables: {
         itr: selectedITR === "Todos" || !selectedITR ? "" : selectedITR,
-      }
+      },
     });
     const info = resp?.data?.listarEstadisticas as EstadisticasGet;
     if (info) {
-      setData(info)
+      setData(info);
     }
-  }
+  };
 
   useEffect(() => {
     handleLoadEstadisticas();
@@ -146,11 +147,13 @@ const Home: NextPage = () => {
     handleSetLoading(loadingEstadisticas);
   }, [loadingEstadisticas]);
 
-  const formatLlamadosTableInfo = formatLlamadosToTable(data?.llamadosRecientes || []);
+  const formatLlamadosTableInfo = formatLlamadosToTable(
+    data?.llamadosRecientes || []
+  );
 
   const formatCantidadCargos = (data?.cantidadCargos || [])?.map((item) => {
-    return [item?.nombre, item?.cantidad]
-  })
+    return [item?.nombre, item?.cantidad];
+  });
 
   if (!isAdmin) {
     push(appRoutes.llamados());
@@ -196,17 +199,18 @@ const Home: NextPage = () => {
         /> */}
         <FilterContainer>
           <div className="max-w-full truncate flex flex-col">
-          <h3 className="text-texto font-semibold">Estadísticas</h3>
-          <span className="text-sm text-textogris">
-            Esta informacion es de los ultimos 3 meses, puedes cambiarlo <br />
-            en el siguiente filtro
-          </span>
+            <h3 className="text-texto font-semibold">Estadísticas</h3>
+            <span className="text-sm text-textogris">
+              Esta informacion es de los ultimos 3 meses, puedes cambiarlo{" "}
+              <br />
+              en el siguiente filtro
+            </span>
           </div>
           <div className="w-fit flex flex-row gap-4">
             <Dropdown
               writable={false}
               placeholder="Filtrar por ITR"
-              defaultValue={['Todos']}
+              defaultValue={["Todos"]}
               onChange={(val: any) => setSelectedITR(val?.value)}
               items={[
                 { label: "(Todos)", value: "Todos" },
@@ -216,10 +220,10 @@ const Home: NextPage = () => {
                 { label: "Centro Sur", value: ITR.centrosur },
               ]}
             />
-           <Dropdown
+            <Dropdown
               writable={false}
               placeholder="Cantidad de meses"
-              defaultValue={['3']}
+              defaultValue={["3"]}
               onChange={(val: any) => setSelectedMeses(val?.value)}
               items={[
                 { label: "1 mes", value: "1" },
@@ -229,7 +233,6 @@ const Home: NextPage = () => {
               ]}
             />
           </div>
-          
         </FilterContainer>
         <Statistics>
           <StatCard
@@ -267,14 +270,14 @@ const Home: NextPage = () => {
         </TableContainer>
         <BottomSection>
           <ChartWrapper>
-           <h3 className="text-texto font-semibold">Cargos</h3>
+            <h3 className="text-texto font-semibold">Cargos</h3>
             <Chart
               chartType="PieChart"
               width="100%"
               height="300px"
               data={[
                 ["Cargo", "Cantidad de Llamados"],
-                ...formatCantidadCargos
+                ...formatCantidadCargos,
               ]}
               options={chartOptions}
             />
@@ -292,26 +295,32 @@ const Home: NextPage = () => {
                 className=""
               />
             </div>
-            {data?.postulantesRecientes?.map((postulante: any, index: number) => {
-              return (
-                <div
-                className="flex flex-row items-center justify-start gap-2
+            {data?.postulantesRecientes?.map(
+              (postulante: any, index: number) => {
+                return (
+                  <div
+                    className="flex flex-row items-center justify-start gap-2
                 w-full px-5 py-2 rounded-xl bg-white shadow hover:shadow-md transition-all
                 "
-                key={`postulante-${index}`}
-                >
-                  <div className="w-10 h-10 relative max-h-[40px] max-w-[40px] min-w-[40px]">
-                    <Image src={DEFAULT_USER_IMAGE} layout="fill" objectFit="cover" />
+                    key={`postulante-${index}`}
+                  >
+                    <div className="w-10 h-10 relative max-h-[40px] max-w-[40px] min-w-[40px]">
+                      <Image
+                        src={DEFAULT_USER_IMAGE}
+                        layout="fill"
+                        objectFit="cover"
+                      />
+                    </div>
+                    <div className="">
+                      <span className="font-bold">{postulante?.nombres}</span>
+                      <p className="text-sm font-semibold text-textoGray">
+                        {moment(postulante?.createdAt).format("DD/MM/yyyy")}
+                      </p>
+                    </div>
                   </div>
-                  <div
-                  className=""
-                >
-                  <span className="font-bold">{postulante?.nombres}</span>
-                  <p className="text-sm font-semibold text-textoGray">{moment(postulante?.createdAt).format("DD/MM/yyyy")}</p>
-                </div>
-                </div>
-              );
-            })}
+                );
+              }
+            )}
           </PostulantesContainer>
         </BottomSection>
       </MainContainer>

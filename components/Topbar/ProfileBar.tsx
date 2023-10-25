@@ -13,8 +13,8 @@ import { PiBell, PiMoon } from "react-icons/pi";
 
 // Hooks
 import { useGlobal } from "@/hooks/useGlobal";
-import { listarLlamados } from "@/controllers/llamadoController";
-import { LlamadoList } from "types/llamado";
+import { listarAllHistoriales, listarLlamados } from "@/controllers/llamadoController";
+import { HistorialLlamado, LlamadoList } from "types/llamado";
 import { useQuery } from "@apollo/client";
 import { UserList } from "types/usuario";
 import { listUsers } from "@/controllers/userController";
@@ -53,6 +53,7 @@ const ProfileBar: NextPage = () => {
   }>(listarLlamados, {
     variables: {},
   });
+
   const { data: listUsuarios } = useQuery<{ listUsuarios: UserList[] }>(
     listUsers
   );
@@ -73,8 +74,6 @@ const ProfileBar: NextPage = () => {
         ),
       ]
     : [];
-
-  console.log("results", results);
 
   const [focus, setFocus] = useState(false);
   const closeOpenedMenus = () => {
@@ -138,7 +137,6 @@ const ProfileBar: NextPage = () => {
                     </Link>
                   );
                 } else {
-                  console.log('ref is', appRoutes.userProfilePage(userInfo?.id))
                   return (
                     <Link href={appRoutes.userProfilePage(res?.id)} key={`userInfoLine-${index}`}>
                      <div>

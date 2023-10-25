@@ -90,9 +90,10 @@ const CompletarPuntajesPostulante = () => {
   const [errores, setErrores] = useState<boolean>(false);
   const { query } = useRouter();
   const llamadoId = Number(query?.llamadoId || 0);
+  console.log("aloha")
   const postulanteId = Number(query?.postulanteId || 0);
 
-  const { data, loading } = useQuery<{
+  const { data, loading, error } = useQuery<{
     infoPostulanteEnLlamado?: PostulanteLlamadoFull;
   }>(infoPostulanteEnLlamado, {
     variables: {
@@ -102,13 +103,14 @@ const CompletarPuntajesPostulante = () => {
     fetchPolicy: "no-cache",
   });
 
-  const { data: etapaData, loading: etapaDataLoading } = useQuery<{
+  const { data: etapaData, loading: etapaDataLoading, error: errorGetEtapaActual } = useQuery<{
     getEtapaActualPostInLlamado?: CurrentEtapaData;
   }>(getEtapaActualPostInLlamado, {
     variables: {
       llamadoId: llamadoId,
       postulanteId: postulanteId,
     },
+    fetchPolicy: "no-cache",
   });
 
   const [subetapas, setSubetapas] = useState<SubEtapaGrilla[] | []>([]);
@@ -131,6 +133,13 @@ const CompletarPuntajesPostulante = () => {
       setSubetapas(etapaLoad.currentEtapa.subetapas);
     }
   }, [etapaLoad]);
+
+  useEffect(() => {
+    if (error) {
+      handleSetLoading(false);
+      toast.error("Permisos insuficientes")
+    }
+  }, [error])
 
   useEffect(() => {
     handleSetLoading(loading || etapaDataLoading);

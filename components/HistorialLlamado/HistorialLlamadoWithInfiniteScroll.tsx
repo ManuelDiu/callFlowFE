@@ -7,14 +7,16 @@ import { useMutation } from "@apollo/client";
 import {
   cambiarCambioLlamado,
   getLlamadoInfoById,
+  listarAllHistoriales,
 } from "@/controllers/llamadoController";
 import { useGlobal } from "@/hooks/useGlobal";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-const moment = require('moment');
-require('moment/locale/es');
-const HtmlToReactParser = require('html-to-react').Parser;
+const moment = require("moment");
+require("moment/locale/es");
+const HtmlToReactParser = require("html-to-react").Parser;
 const htmlParser = new HtmlToReactParser();
+import InfiniteScroll from "react-infinite-scroller";
 
 moment.locale("es");
 
@@ -54,9 +56,12 @@ const ActionsContainer = styled.div`
   ${tw`w-full flex-grow h-auto flex flex-col items-end justify-center gap-4`}
 `;
 
-const BadgeText = styled.div<{isSuccess: boolean}>`
+const BadgeText = styled.div<{ isSuccess: boolean }>`
   ${tw`text-sm font-medium px-4 py-1 rounded-lg transition-all absolute right-4 top-4`}
-  ${({ isSuccess }) => isSuccess ? tw`!bg-modalButtons-green text-white` : tw`bg-[#ffa5a3] text-[##fa0500]`}
+  ${({ isSuccess }) =>
+    isSuccess
+      ? tw`!bg-modalButtons-green text-white`
+      : tw`bg-[#ffa5a3] text-[##fa0500]`}
 `;
 
 interface Props {
@@ -64,18 +69,34 @@ interface Props {
   llamadoId?: Number;
 }
 
-const HistorialLlamadoComp = ({ historiales }: Props) => {
+const default_offset = 10;
+let timeout: any = 0;
 
+const HistorialLlamadoWithInfiniteScroll = ({ historiales = [] }: Props) => {
   const [cambiarCambioHistorialItem, { loading }] =
     useMutation(cambiarCambioLlamado);
   const { handleSetLoading } = useGlobal();
+  const [dataToShow, setDataToShow] = useState<any[]>([]);
+  const [currentIndex, setCurrentIndex] = useState<number>(1);
+  const offsetSize = Math.round(historiales?.length / default_offset);
+  const hasMore = currentIndex < offsetSize;
 
-  const formatHistoriales = historiales?.map((item) => {
+  const formatHistoriales = dataToShow?.map((item) => {
     return {
       ...item,
       fecha: moment(Number(item?.createdAt)).fromNow(),
     };
   });
+
+  useEffect(() => {
+    // reset index
+    setCurrentIndex(1);
+  }, [historiales]);
+
+  useEffect(() => {
+    const newItems = historiales?.slice(0, currentIndex * default_offset);
+    setDataToShow(newItems);
+  }, [currentIndex, historiales]);
 
   useEffect(() => {
     handleSetLoading(loading);
@@ -104,6 +125,15 @@ const HistorialLlamadoComp = ({ historiales }: Props) => {
     }
   );
 
+  const loadFunc = () => {
+    clearTimeout(timeout);
+    if (hasMore) {
+      timeout = setTimeout(() => {
+        setCurrentIndex(currentIndex + 1);
+      }, 3000);
+    }
+  };
+
   const handleToggleItem = async (item: HistorialLlamado, accept: boolean) => {
     // enviar al back
     try {
@@ -118,10 +148,7 @@ const HistorialLlamadoComp = ({ historiales }: Props) => {
         },
         refetchQueries: [
           {
-            query: getLlamadoInfoById,
-            variables: {
-              llamadoId: Number(item?.llamado?.id),
-            },
+            query: listarAllHistoriales,
           },
         ],
       });
@@ -136,7 +163,17 @@ const HistorialLlamadoComp = ({ historiales }: Props) => {
   };
 
   return (
-    <Container>
+    <InfiniteScroll
+      pageStart={currentIndex}
+      loadMore={loadFunc}
+      hasMore={hasMore}
+      loader={
+        <div className="loader" key={0}>
+          Cargando ...
+        </div>
+      }
+      useWindow={false}
+    >
       {orderDatosPorDia?.map((dia) => {
         return (
           <ContentDia key={dia}>
@@ -153,40 +190,43 @@ const HistorialLlamadoComp = ({ historiales }: Props) => {
                     <span>{item?.fecha}</span>
                     <ItemLine />
                   </TimeText>
+                  <span className="font-semibold text-base text-gray-700">{item?.llamado?.nombre}</span>
                   <Text>{htmlParser.parse(item?.descripcion)}</Text>
-                  {item?.cambio && (item?.cambio?.cambio === null || item?.cambio?.cambio === undefined) && (
-                    <ActionsContainer>
-                      <Button
-                        action={() => handleToggleItem(item, true)}
-                        className="!w-[140px]"
-                        text=" Aceptar"
-                        variant="green"
-                        rounded="large"
-                      />
-                      <Button
-                        action={() => handleToggleItem(item, false)}
-                        className="!w-[140px]"
-                        text="Cancelar"
-                        variant="red"
-                        rounded="large"
-                      />
-                    </ActionsContainer>
-                  )}
-                  {
-                    item?.cambio && (item?.cambio?.cambio !== null && item?.cambio?.cambio !== undefined) && <BadgeText isSuccess={item?.cambio?.cambio === true}>
-                      {
-                        item?.cambio?.cambio ? "Aceptado" : "Rechazado"
-                      }
-                    </BadgeText>
-                  }
+                  {item?.cambio &&
+                    (item?.cambio?.cambio === null ||
+                      item?.cambio?.cambio === undefined) && (
+                      <ActionsContainer>
+                        <Button
+                          action={() => handleToggleItem(item, true)}
+                          className="!w-[140px]"
+                          text=" Aceptar"
+                          variant="green"
+                          rounded="large"
+                        />
+                        <Button
+                          action={() => handleToggleItem(item, false)}
+                          className="!w-[140px]"
+                          text="Cancelar"
+                          variant="red"
+                          rounded="large"
+                        />
+                      </ActionsContainer>
+                    )}
+                  {item?.cambio &&
+                    item?.cambio?.cambio !== null &&
+                    item?.cambio?.cambio !== undefined && (
+                      <BadgeText isSuccess={item?.cambio?.cambio === true}>
+                        {item?.cambio?.cambio ? "Aceptado" : "Rechazado"}
+                      </BadgeText>
+                    )}
                 </ItemHistorial>
               );
             })}
           </ContentDia>
         );
       })}
-    </Container>
+    </InfiniteScroll>
   );
 };
 
-export default HistorialLlamadoComp;
+export default HistorialLlamadoWithInfiniteScroll;

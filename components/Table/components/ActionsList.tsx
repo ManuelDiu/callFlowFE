@@ -39,7 +39,8 @@ const ActionsList = ({ actions, onDelete, onUpdate }: Props) => {
     <Container>
       {actions?.map((itm) => {
         return (
-          <ItemContainer onClick={() => {
+          <ItemContainer onClick={(e) => {
+            e?.stopPropagation();
             if (itm === "delete" && onDelete) {
                 onDelete();
             }

@@ -16,6 +16,9 @@ import tw from "twin.macro";
 import Table from "../Table/Table";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import { ColumnItem } from "types/table";
+import { EstadoPostulanteEnum } from "@/enums/EstadoPostulanteEnum";
+import NotFoundImage from "@/public/images/NotFound.svg";
+import Text from "../Table/components/Text";
 
 // TODO: DE USO TEMPORAL, traer mínimo o settear uno global para eliminarla.
 const MINIMO_LLAMADO_GLOBAL: number = 60;
@@ -92,7 +95,12 @@ const PostulantesResumen = ({ llamadoInfo }: Props) => {
     },
   ];
 
-  const data = llamadoInfo?.postulantes
+  const postulantesFiltered = llamadoInfo?.postulantes?.filter(
+    (postul) =>
+      postul.estadoActual.nombre === EstadoPostulanteEnum.cumpleRequisito
+  );
+
+  const posutlantes = postulantesFiltered
     ?.map((item, index) => {
       let sumTotal = 0;
       const puntajesOfThisPostulante =
@@ -164,62 +172,81 @@ const PostulantesResumen = ({ llamadoInfo }: Props) => {
           })}
         </HeaderRow>
 
-        {data.map((item, index) => {
-          const cumpleMinimo = item?.total >= MINIMO_LLAMADO_GLOBAL;
-          return (
-            <Row
-              cumple={cumpleMinimo || undefined}
-              key={`itemPostulante-${index}`}
-            >
-              <Cell className="justify-center text-gray-800 font-semibold ">
-                <span className="text-center md:text-start text-xl">{`${item?.postulante.nombres} ${item?.postulante.apellidos} - ${item?.postulante?.documento}`}</span>
-              </Cell>
+        {posutlantes?.length > 0 ? (
+          posutlantes.map((item, index) => {
+            const cumpleMinimo = item?.total >= MINIMO_LLAMADO_GLOBAL;
+            return (
+              <Row
+                cumple={cumpleMinimo || undefined}
+                key={`itemPostulante-${index}`}
+              >
+                <Cell className="justify-center text-gray-800 font-semibold ">
+                  <span className="text-center md:text-start text-xl">{`${item?.postulante.nombres} ${item?.postulante.apellidos} - ${item?.postulante?.documento}`}</span>
+                </Cell>
 
-              {item?.etapas?.map((etapa) => {
-                const cumpleMinimoEtapa = etapa.total >= etapa.minimo;
-                return (
-                  <Cell key={`etapaId-${etapa?.id}`} className="pt-2">
-                    <span className="text-sm">Subetapas de {etapa.nombre}:</span>
-                    <div className="w-max h-full flex flex-col items-start justify-start gap-y-1 border-l-2 rounded-md border-principal/30 pl-2">
-                      {etapa?.subetapas?.map((subetapa) => {
-                        return (
-                          <div
-                            key={`subetapa-${subetapa?.nombre}`}
-                            className="w-full flex flex-col items-start gap-4 justify-start"
-                          >
-                            <div className="flex flex-col">
-                              <span className="font-semibold text-textoGray break-words">
-                                {`${subetapa?.nombre}: ${subetapa.total}`}
-                              </span>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                    <div className="my-2 flex flex-row items-center justify-between">
-                      <span className="font-semibold text-lg text-gray-800">
-                        Total en etapa:
-                        <UnderlinedText
-                          cumpleminimo={cumpleMinimoEtapa}
-                          title={
-                            cumpleMinimoEtapa
-                              ? "Cumple con el mínimo de la etapa."
-                              : "No cumple con el mínimo de la etapa."
-                          }
-                        >
-                          {etapa.total}
-                        </UnderlinedText>
+                {item?.etapas?.map((etapa) => {
+                  const cumpleMinimoEtapa = etapa.total >= etapa.minimo;
+                  return (
+                    <Cell key={`etapaId-${etapa?.id}`} className="pt-2">
+                      <span className="text-sm">
+                        Subetapas de {etapa.nombre}:
                       </span>
-                    </div>
-                  </Cell>
-                );
-              })}
-              <Cell className="pt-5 md:text-center self-center md:py-0 font-semibold text-lg text-gray-700">
-                <span className="break-words">Total en el llamado {item.total}</span>
-              </Cell>
-            </Row>
-          );
-        })}
+                      <div className="w-max h-full flex flex-col items-start justify-start gap-y-1 border-l-2 rounded-md border-principal/30 pl-2">
+                        {etapa?.subetapas?.map((subetapa) => {
+                          return (
+                            <div
+                              key={`subetapa-${subetapa?.nombre}`}
+                              className="w-full flex flex-col items-start gap-4 justify-start"
+                            >
+                              <div className="flex flex-col">
+                                <span className="font-semibold text-textoGray break-words">
+                                  {`${subetapa?.nombre}: ${subetapa.total}`}
+                                </span>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                      <div className="my-2 flex flex-row items-center justify-between">
+                        <span className="font-semibold text-lg text-gray-800">
+                          Total en etapa:
+                          <UnderlinedText
+                            cumpleminimo={cumpleMinimoEtapa}
+                            title={
+                              cumpleMinimoEtapa
+                                ? "Cumple con el mínimo de la etapa."
+                                : "No cumple con el mínimo de la etapa."
+                            }
+                          >
+                            {etapa.total}
+                          </UnderlinedText>
+                        </span>
+                      </div>
+                    </Cell>
+                  );
+                })}
+                <Cell className="pt-5 md:text-center self-center md:py-0 font-semibold text-lg text-gray-700">
+                  <span className="break-words">
+                    Total en el llamado {item.total}
+                  </span>
+                </Cell>
+              </Row>
+            );
+          })
+        ) : (
+          <div className="w-full  h-auto flex flex-col items-center py-10 justify-center gap-4">
+            <img
+              src={NotFoundImage?.src}
+              className="object-cover h-[300px] w-auto"
+            />
+            <Text
+              className="!text-[20px] !leading-[24px] h-full!"
+              text={
+                "No se encontraron postulantes que cumplan con los requisitos."
+              }
+            />
+          </div>
+        )}
       </div>
     </div>
   );

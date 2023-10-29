@@ -80,14 +80,14 @@ const GrillaPDF = ({ llamadoInfo }: Props) => {
             "Grilla generada correctamente, se envio un email a todos los miembros del tribunal para que firmen la misma"
           );
         } else {
-          throw new Error("Error generando archivo");
+          throw new Error(resp?.data?.addArchivoFirmaToLlamado?.message || "Error generando archivo");
         }
       } else {
         toast.error("Error generando grilla");
       }
       handleSetLoading(false);
-    } catch (error) {
-      toast.error("Error al generar grilla");
+    } catch (error: any) {
+      toast.error(error?.message);
       handleSetLoading(false);
     }
   };
@@ -228,6 +228,7 @@ const GrillaPDF = ({ llamadoInfo }: Props) => {
             </div>
           );
         })}
+        {llamadoInfo?.postulantes?.length === 0 && <span>{"El llamado no tiene ningun postulantes, o estos no estan en estado 'Cumple Requisitos'"}</span>}
       </div>
     </div>
   );

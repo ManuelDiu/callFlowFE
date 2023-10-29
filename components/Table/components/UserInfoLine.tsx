@@ -5,6 +5,7 @@ import { SlOptionsVertical } from "react-icons/sl";
 import { useState } from "react";
 import { OptionsItem } from "@/utils/utils";
 import { DEFAULT_USER_IMAGE } from "@/utils/userUtils";
+import clsx from "clsx";
 
 interface Props {
   userName?: string;
@@ -12,6 +13,7 @@ interface Props {
   userImage: string | undefined;
   className?: string;
   label?: any;
+  labelClass?: string;
   withDot?: boolean;
   options?: OptionsItem[];
 }
@@ -50,6 +52,7 @@ const OptionLabel = styled.p`
 
 const UserInfoLine = ({
   label,
+  labelClass,
   userImage,
   userName,
   userlastName,
@@ -100,7 +103,7 @@ const UserInfoLine = ({
           />
         </DotContainer>
       )}
-      {label && <div className="absolute right-4 top-4">
+      {label && <div className={clsx("absolute right-4 top-4", labelClass)}>
         {label}
         </div>}
     </Container>

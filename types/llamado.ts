@@ -22,17 +22,17 @@ export type LlamadoList = {
 };
 
 export type Cambio = {
-  cambio: boolean,
-  nombre: EstadoLlamadoEnum,
-  id: number,
-}
+  cambio: boolean;
+  nombre: EstadoLlamadoEnum;
+  id: number;
+};
 
 export type HistorialLlamado = {
   id: number;
   descripcion: string;
   usuario: UserList;
   createdAt?: string;
-  llamado: LlamadoList
+  llamado: LlamadoList;
   cambio?: Cambio;
 };
 
@@ -47,6 +47,21 @@ export type Archivo = {
   };
 };
 
+export type Firmas = {
+  usuario: UserList;
+  firmado: boolean;
+};
+
+export type ArchivoFirma = {
+  nombre: string;
+  id: number;
+  extension: string;
+  urlOriginal: string;
+  url: string;
+  tipoArchivoFirma: String;
+  firmas: Firmas[];
+};
+
 export type TribunalLlamado = {
   usuario: UserList;
   id: number;
@@ -58,12 +73,12 @@ export type TribunalLlamado = {
 export type PostulanteEstado = {
   id: number;
   nombre: string;
-}
+};
 
 export type LlamadoPostulante = {
-  postulante: PostulanteList
-  estadoActual: PostulanteEstado
-}
+  postulante: PostulanteList;
+  estadoActual: PostulanteEstado;
+};
 
 export type FullLlamadoInfo = {
   id: number;
@@ -85,7 +100,7 @@ export type FullLlamadoInfo = {
   categorias: CategoriaItem[];
   historiales: HistorialLlamado[];
   archivos: Archivo[];
-  archivosFirma: Archivo[];
+  archivosFirma: ArchivoFirma[];
   etapas: EtapaList[];
   etapaActual: EtapaList;
 };
@@ -107,7 +122,7 @@ export const DEFAULT_BADGES_WITH_DIAS_PLAZO = [
 export type CantidadCargo = {
   nombre: string;
   cantidad: number;
-}
+};
 
 export type EstadisticasGet = {
   llamadosEnProceso: number;
@@ -115,5 +130,5 @@ export type EstadisticasGet = {
   nuevosPostulantes: number;
   llamadosRecientes: LlamadoList[];
   postulantesRecientes: PostulanteList[];
-  cantidadCargos: CantidadCargo[]
-}
+  cantidadCargos: CantidadCargo[];
+};

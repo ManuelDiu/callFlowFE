@@ -75,6 +75,12 @@ const HistorialLlamadoComp = ({ historiales }: Props) => {
       ...item,
       fecha: moment(Number(item?.createdAt)).fromNow(),
     };
+  })?.sort((itemA, itemB) => {
+    if (moment(itemA?.createdAt).isAfter(moment(itemB?.createdAt))) {
+      return 1;
+    } else {
+      return -1;
+    }
   });
 
   useEffect(() => {

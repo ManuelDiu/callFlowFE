@@ -1,4 +1,4 @@
-import { Archivo } from "types/llamado";
+import { Archivo, ArchivoFirma } from "types/llamado";
 
 export type DropDownItem = {
   label: any;
@@ -27,7 +27,7 @@ export type TabItem = {
   content: any,
 }
 
-export const getFileType = (archivo: Archivo): any => {
+export const getFileType = (archivo: Archivo | ArchivoFirma): any => {
   const fileTipo = archivo.extension.split('/')[1] || "txt";
   return fileTipo;
 }

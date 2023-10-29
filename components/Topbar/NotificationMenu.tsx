@@ -59,7 +59,9 @@ const Divider = styled.div(() => [
 const NotificationMenu = ({ showNotificationMenu }: NotificationMenuProps) => {
   const { data, loading: loadingHistoriales } = useQuery<{
     listarAllHistoriales: HistorialLlamadoType[];
-  }>(listarAllHistoriales);
+  }>(listarAllHistoriales, {
+    fetchPolicy: "no-cache"
+  });
   const { handleSetLoading } = useGlobal();
   const historiales = data?.listarAllHistoriales || [];
 

@@ -168,6 +168,8 @@ export const getLlamadoInfoById = gql`
         nombre
         id
         extension
+        urlOriginal
+        tipoArchivoFirma
         firmas {
           usuario {
             name

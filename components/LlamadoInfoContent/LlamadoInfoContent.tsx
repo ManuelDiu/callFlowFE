@@ -338,7 +338,7 @@ const LlamadoInfoContent = ({ llamadoInfo }: Props) => {
           content={<GrillaPDF llamadoInfo={llamadoInfo} />}
           title="Grilla del llamado"
           setOpen={setPreviewGrilla}
-          description="Previsualiza la informacion antes de generar el archivo, si sobrescribes el archivo ya existente , se perderan todas las firmas que el archivo tenga hasta el momento , puedes ver esto en la seccion de archivos"
+          description="Previsualiza la informacion antes de generar el archivo, si sobrescribes el archivo ya existente , se perderan todas las firmas que el archivo tenga hasta el momento , puedes ver esto en la seccion de archivos, al realizar esta accion , se generara un archivo en la seccion Archivos - Archivos con firma listo para firmar por los miembros del tribunal"
         />
       )}
 

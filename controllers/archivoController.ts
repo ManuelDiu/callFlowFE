@@ -17,3 +17,13 @@ export const addArchivoFirmaToLlamado = gql`
     }
   }
 `;
+
+
+export const firmarArchivo = gql`
+  mutation FirmarArchivo($info: FirmarArchivoInput) {
+  firmarArchivo(info: $info) {
+    ok
+    message
+  }
+}
+`;

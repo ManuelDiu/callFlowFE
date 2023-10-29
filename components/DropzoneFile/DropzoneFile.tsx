@@ -4,9 +4,10 @@ import { useEffect, useState } from "react";
 interface Props {
   setFile: any;
   isInvalid?: boolean;
+  accept?: string;
 }
 
-const DropzoneFile = ({ setFile, isInvalid }: Props) => {
+const DropzoneFile = ({ setFile, isInvalid, accept }: Props) => {
   const [selectedFile, setSelectedFile] = useState<any>();
 
   useEffect(() => {
@@ -48,10 +49,10 @@ const DropzoneFile = ({ setFile, isInvalid }: Props) => {
 
           <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
             <span className="font-semibold">Click para subir un archivo</span>{" "}
-            or arrastralo
+            o arrastralo
           </p>
           <p className="text-xs text-gray-500 dark:text-gray-400">
-            SVG, PNG, JPG, PDF, EXCEL (MAX. 50MB)
+            {accept !== "" ? accept : "SVG, PNG, JPG, PDF, EXCEL "}(MAX. 50MB)
           </p>
 
           </div> : <p className="text-2xl text-center px-4 text-gray-500 dark:text-gray-400">
@@ -63,6 +64,7 @@ const DropzoneFile = ({ setFile, isInvalid }: Props) => {
           onChange={handleChangeFile}
           id="dropzone-file"
           type="file"
+          accept={accept}
           className="hidden"
         />
       </label>

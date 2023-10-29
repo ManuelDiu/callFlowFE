@@ -2,7 +2,7 @@ import styled from "styled-components";
 import tw from "twin.macro";
 import Button from "../Buttons/Button";
 import { AiOutlinePlus } from "react-icons/ai";
-import { Archivo, FullLlamadoInfo } from "types/llamado";
+import { Archivo, ArchivoFirma, FullLlamadoInfo } from "types/llamado";
 import { useState } from "react";
 import AddFileLlamadoModal from "../AddFileLlamadoModal/AddFileLlamadoModal";
 import { FileIcon, defaultStyles } from "react-file-icon";
@@ -17,6 +17,10 @@ import { deleteArchivo } from "@/controllers/archivoController";
 import { toast } from "react-toastify";
 import { getLlamadoInfoById } from "@/controllers/llamadoController";
 import Text from "../Table/components/Text";
+import FirmarArchivoModal from "./components/FirmarArchivoModal";
+import VerFirmasArchivoModal from "./components/VerFirmasPersonas";
+import AddActaFinalLlamado from "./components/AddActaFinalLlamado";
+import { TipoArchivoFirma } from "@/enums/TipoArchivoFirma";
 
 const Container = styled.div`
   ${tw`w-full h-auto flex flex-col items-start justify-start gap-10`}
@@ -35,7 +39,7 @@ const Row = styled.div`
 `;
 
 const ActionsContainer = styled.div`
-  ${tw`w-full h-auto flex gap-2 flex-row items-center justify-end`}
+  ${tw`w-full h-auto mt-2 flex gap-2 flex-row items-center justify-end`}
 `;
 
 const List = styled.div`
@@ -68,22 +72,32 @@ interface Props {
 
 const FileLlamado = ({ llamadoInfo }: Props) => {
   const [openModalAdd, setOpenModalAdd] = useState<boolean>();
+  const [openAddActa, setOpenAddActa] = useState<boolean>();
   const archivos = llamadoInfo?.archivos;
   const archivosFirma = llamadoInfo?.archivosFirma;
   const { downloadFile } = useDownloadFile();
   const client = useApolloClient();
+  const [selectedFileToFirmar, setSelectedFileToFirmar] =
+    useState<ArchivoFirma>();
   const { handleSetLoading, isAdmin } = useGlobal();
   const [openConfirmationDelete, setOpenConfirmationDelete] =
     useState<boolean>();
-  const [selectedArchivoToDelete, setSelectedArchivoToDelete] =
-    useState<Archivo>();
+  const [selectedArchivoToDelete, setSelectedArchivoToDelete] = useState<
+    Archivo | ArchivoFirma
+  >();
+  const [selectedFileToView, setSelectedFileToView] = useState<ArchivoFirma>();
   const [handleDeleteArchivo] = useMutation(deleteArchivo);
 
-  const handleDownload = async (item: Archivo) => {
+  const handleDownload = async (item: Archivo | ArchivoFirma) => {
     handleSetLoading(true);
-    await downloadFile(item.url, item.extension, item.nombre);
+    await downloadFile(item.url, item.extension, item?.nombre);
     handleSetLoading(false);
   };
+
+  const openFirmarArchivoModal =
+    selectedFileToFirmar !== undefined && selectedFileToFirmar !== null;
+  const hasArchivoToSee =
+    selectedFileToView !== undefined && selectedFileToView !== null;
 
   const deleteFile = async () => {
     try {
@@ -125,17 +139,62 @@ const FileLlamado = ({ llamadoInfo }: Props) => {
     <Container>
       <Row>
         <Title>Archivos llamado</Title>
-        {isAdmin && (
-          <Button
-            action={() => setOpenModalAdd(!openModalAdd)}
-            icon={<AiOutlinePlus color="white" size={20} />}
-            variant="fill"
-            text="Agregar archivo"
-          />
-        )}
+        <div className="flex gap-2 md:flex-row flex-col md:my-0 my-4 flex-grow items-center justify-end">
+          {isAdmin && (
+            <Button
+              action={() => setOpenModalAdd(!openModalAdd)}
+              icon={<AiOutlinePlus color="white" size={20} />}
+              variant="fill"
+              text="Agregar archivo"
+            />
+          )}
+          {isAdmin && (
+            <Button
+              action={() => {
+                const existsActaFinal = llamadoInfo?.archivosFirma?.find(
+                  (archivo) => archivo?.nombre === TipoArchivoFirma.actaFinal
+                );
+                if (existsActaFinal) {
+                  toast.error(
+                    "Ya existe un acta final para este llamado, elimínala y génerala nuevamente."
+                  );
+                } else {
+                  const grillaLlamado = llamadoInfo?.archivosFirma?.find(
+                    (archivo) => archivo?.nombre === TipoArchivoFirma.grilla
+                  );
+
+                  if (
+                    !grillaLlamado ||
+                    grillaLlamado?.firmas?.length !==
+                      llamadoInfo?.miembrosTribunal?.length
+                  ) {
+                    toast.error(
+                      "Asegúrate de que la grilla tenga todas las firmas para proceder a la creación del acta final."
+                    );
+                  } else {
+                    setOpenAddActa(!openAddActa);
+                  }
+                }
+              }}
+              icon={<AiOutlinePlus color="#4318FF" size={20} />}
+              variant="outline"
+              text="Agregar Acta Final"
+            />
+          )}
+        </div>
       </Row>
 
-      <Subtitle>Archivos con firma</Subtitle>
+      <Subtitle>
+        Archivos con firma
+        <div className="w-full h-auto text-sm flex flex-col my-2 text-left text-textogris">
+          <span>¿Como firmar un archivo de tipo firma?</span>
+          <span>- Descarga la ultima version en el icono de descargar</span>
+          <span>
+            - Presiona el boton <span className="text-principal">Firmar</span>
+          </span>
+          <span>- Sube la nueva version de tu archivo firmado</span>
+        </div>
+      </Subtitle>
       <List>
         {archivosFirma?.length === 0 && (
           <Text
@@ -157,11 +216,30 @@ const FileLlamado = ({ llamadoInfo }: Props) => {
                 <InfoList>
                   <ArchivoKey>Nombre:</ArchivoKey>
                   <ArchivoText>{archivo?.nombre}</ArchivoText>
-                  <ArchivoKey>Firmas:</ArchivoKey>
-                  <ArchivoText>5</ArchivoText>
+                  <ArchivoKey>Firmas actuales:</ArchivoKey>
+                  <ArchivoText>
+                    {archivo?.firmas?.length || 0} /{" "}
+                    {llamadoInfo?.miembrosTribunal?.length}
+                  </ArchivoText>
                 </InfoList>
               </Row>
               <ActionsContainer>
+                <div className="w-full flex-grow h-auto items-center justify-start">
+                  <span
+                    onClick={() => setSelectedFileToView(archivo)}
+                    className="text-principal underline text-sm cursor-pointer font-medium"
+                  >
+                    Ver firmas
+                  </span>
+                </div>
+
+                <Button
+                  action={() => setSelectedFileToFirmar(archivo)}
+                  icon={<AiOutlinePlus color="white" size={20} />}
+                  variant="fill"
+                  sizeVariant="fit"
+                  text="Firmar"
+                />
                 <a href={archivo.url} rel="noreferrer" target="_blank">
                   <ActionWrapper
                     className="!border-green"
@@ -247,8 +325,30 @@ const FileLlamado = ({ llamadoInfo }: Props) => {
           description="Si eliminas a este archivo, no tendras mas acceso al mismo dentro del sistema"
         />
       )}
+      {openFirmarArchivoModal && (
+        <FirmarArchivoModal
+          archivo={selectedFileToFirmar}
+          onClose={() => setSelectedFileToFirmar(undefined)}
+          llamadoInfo={llamadoInfo}
+        />
+      )}
+
+      {hasArchivoToSee && (
+        <VerFirmasArchivoModal
+          archivo={selectedFileToView}
+          onClose={() => setSelectedFileToView(undefined)}
+          llamadoInfo={llamadoInfo}
+        />
+      )}
       {openModalAdd && (
         <AddFileLlamadoModal archivos={archivos} setOpen={setOpenModalAdd} />
+      )}
+
+      {openAddActa && (
+        <AddActaFinalLlamado
+          onClose={() => setOpenAddActa(false)}
+          llamadoInfo={llamadoInfo}
+        />
       )}
     </Container>
   );

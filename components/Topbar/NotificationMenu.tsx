@@ -74,7 +74,7 @@ const NotificationMenu = ({ showNotificationMenu }: NotificationMenuProps) => {
       <div
         className={
           (showNotificationMenu ? "block " : "hidden ") +
-          "flex flex-col p-4 overflow-y-scroll rounded-xl transition-all bg-[#FAFAFF] absolute top-[90px] right-[20px] text-base z-10 float-right list-none text-left shadow-lg min-w-[650px] max-w-[650px] max-h-[595px]"
+          "flex flex-col p-4 overflow-y-scroll rounded-xl transition-all bg-[#FAFAFF] absolute top-[40px] -right-[150%] md:right-[20px] text-base z-50 list-none text-left shadow-lg md:min-w-[650px] min-w-[320px] w-[calc(100vh - 10px)] md:max-w-[650px] max-w-[calc(100vh - 10px)] max-h-[595px]"
         }
       >
         {historiales?.length === 0 && !loadingHistoriales && (

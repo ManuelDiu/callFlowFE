@@ -20,14 +20,13 @@ function MyApp({ Component, pageProps }: AppProps) {
   const { pathname } = useRouter();
 
   return (
-    <main className="min-h-screen flex flex-col font-primaria">
+    <main className="font-primaria">
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
 
       <DisableNumberInputScroll />
-      <div className="flex h-full min-h-screen">
-        <div className="bg-gray-100 flex-grow">
+        <div className="bg-gray-100 w-full">
           <ApolloProvider client={client}>
             <Provider store={store}>
               <CheckTokenWrapper>
@@ -38,7 +37,6 @@ function MyApp({ Component, pageProps }: AppProps) {
             </Provider>
           </ApolloProvider>
         </div>
-      </div>
     </main>
   );
 }

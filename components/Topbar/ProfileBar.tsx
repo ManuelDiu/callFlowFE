@@ -13,7 +13,10 @@ import { PiBell, PiMoon } from "react-icons/pi";
 
 // Hooks
 import { useGlobal } from "@/hooks/useGlobal";
-import { listarAllHistoriales, listarLlamados } from "@/controllers/llamadoController";
+import {
+  listarAllHistoriales,
+  listarLlamados,
+} from "@/controllers/llamadoController";
 import { HistorialLlamado, LlamadoList } from "types/llamado";
 import { useQuery } from "@apollo/client";
 import { UserList } from "types/usuario";
@@ -38,7 +41,7 @@ const ResultsContainer = styled.div`
 `;
 
 const ProfileButtonContainer = styled.div(() => [
-  tw`items-center relative w-[35px] h-[35px] rounded-full `,
+  tw`items-center relative w-[35px] min-w-[35px] h-[35px] rounded-full `,
 ]);
 
 const ProfileBar: NextPage = () => {
@@ -46,8 +49,9 @@ const ProfileBar: NextPage = () => {
   const [searchbarContent, setSearchbarContent] = useState("");
   const [showUserMenu, setShowUserMenu] = useState<boolean>(false);
   const [hasNotifications, setHasNotifications] = useState<boolean>(true);
-  const [showNotificationMenu, setShowNotificationMenu] =
-    useState<boolean>(false);
+  const [showNotificationMenu, setShowNotificationMenu] = useState<boolean>(
+    false
+  );
   const { data } = useQuery<{
     listarLlamados: LlamadoList[];
   }>(listarLlamados, {
@@ -66,11 +70,17 @@ const ProfileBar: NextPage = () => {
 
   const results = hasSearchbarContent
     ? [
-        ...llamados?.filter((item) => item?.nombre?.toLowerCase().includes(searchbarContent?.toLowerCase())),
+        ...llamados?.filter((item) =>
+          item?.nombre?.toLowerCase().includes(searchbarContent?.toLowerCase())
+        ),
         ...usuarios?.filter(
           (user) =>
-            user?.name?.toLowerCase()?.includes(searchbarContent?.toLowerCase()) ||
-            user?.lastName?.toLowerCase()?.includes(searchbarContent?.toLowerCase())
+            user?.name
+              ?.toLowerCase()
+              ?.includes(searchbarContent?.toLowerCase()) ||
+            user?.lastName
+              ?.toLowerCase()
+              ?.includes(searchbarContent?.toLowerCase())
         ),
       ]
     : [];
@@ -138,17 +148,19 @@ const ProfileBar: NextPage = () => {
                   );
                 } else {
                   return (
-                    <Link href={appRoutes.userProfilePage(res?.id)} key={`userInfoLine-${index}`}>
-                     <div>
-                     <UserInfoLine
-                      className="shadow-md w-full rounded-2xl p-4 cursor-pointer"
+                    <Link
+                      href={appRoutes.userProfilePage(res?.id)}
                       key={`userInfoLine-${index}`}
-                      userImage={res?.imageUrl}
-                      userName={res?.name}
-                      userlastName={res?.lastName}
-                    />
-                     </div>
-
+                    >
+                      <div>
+                        <UserInfoLine
+                          className="shadow-md w-full rounded-2xl p-4 cursor-pointer"
+                          key={`userInfoLine-${index}`}
+                          userImage={res?.imageUrl}
+                          userName={res?.name}
+                          userlastName={res?.lastName}
+                        />
+                      </div>
                     </Link>
                   );
                 }
@@ -157,31 +169,34 @@ const ProfileBar: NextPage = () => {
         )}
       </InputContainer>
       <ButtonsContainer>
-        <button
-          className={`relative flex justify-end p-2 rounded-full transition-all ${
-            showNotificationMenu && " bg-principal"
-          }`}
-          onClick={(e) => {
-            e.preventDefault();
-            showNotificationMenu
-              ? closeNotificationMenu()
-              : openNotificationMenu();
-          }}
-        >
-          {hasNotifications && (
-            <div
-              className={`absolute bg-principal w-[8px] h-[8px] rounded-full transition-all ${
-                showNotificationMenu && " bg-white"
+        <div className="relative w-full">
+          <button
+            className={`flex justify-end p-2 rounded-full transition-all ${
+              showNotificationMenu && " bg-principal"
+            }`}
+            onClick={(e) => {
+              e.preventDefault();
+              showNotificationMenu
+                ? closeNotificationMenu()
+                : openNotificationMenu();
+            }}
+          >
+            {hasNotifications && (
+              <div
+                className={`absolute bg-principal w-[8px] h-[8px] rounded-full transition-all ${
+                  showNotificationMenu && " bg-white"
+                }`}
+              />
+            )}
+            <PiBell
+              size={22}
+              className={`"w-max text-textogris transition-all ${
+                showNotificationMenu && " text-white"
               }`}
             />
-          )}
-          <PiBell
-            size={22}
-            className={`"w-max text-textogris transition-all ${
-              showNotificationMenu && " text-white"
-            }`}
-          />
-        </button>
+          </button>
+          <NotificationMenu showNotificationMenu={showNotificationMenu} />
+        </div>
         <button
           className={"p-2 rounded-full"}
           onClick={(e) => {
@@ -208,7 +223,6 @@ const ProfileBar: NextPage = () => {
             />
           </button>
         </ProfileButtonContainer>
-        <NotificationMenu showNotificationMenu={showNotificationMenu} />
         <UserMenu showUserMenu={showUserMenu} />
       </ButtonsContainer>
     </MainBarContainer>

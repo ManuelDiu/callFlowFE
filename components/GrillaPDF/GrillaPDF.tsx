@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import useUploadImage from "@/hooks/useUploadImage";
 import { useGlobal } from "@/hooks/useGlobal";
 import { addArchivoFirmaToLlamado } from "@/controllers/archivoController";
+import clsx from "clsx";
 
 interface Props {
   llamadoInfo: FullLlamadoInfo;
@@ -80,7 +81,10 @@ const GrillaPDF = ({ llamadoInfo }: Props) => {
             "Grilla generada correctamente, se envio un email a todos los miembros del tribunal para que firmen la misma"
           );
         } else {
-          throw new Error(resp?.data?.addArchivoFirmaToLlamado?.message || "Error generando archivo");
+          throw new Error(
+            resp?.data?.addArchivoFirmaToLlamado?.message ||
+              "Error generando archivo"
+          );
         }
       } else {
         toast.error("Error generando grilla");
@@ -92,11 +96,36 @@ const GrillaPDF = ({ llamadoInfo }: Props) => {
     }
   };
 
+  const postulantesSort = llamadoInfo?.postulantes?.sort((postA, postB) => {
+    const puntajeThiPostA = puntajes?.find(
+      (puntaje: any) => puntaje?.postulanteId == postA?.postulante?.id
+    );
+    let sumRequisitosA = 0;
+    puntajeThiPostA?.requisitos?.map((req: any) => {
+      sumRequisitosA += req?.puntaje || 0;
+    });
+
+    const puntajeThiPostB = puntajes?.find(
+      (puntaje: any) => puntaje?.postulanteId == postB?.postulante?.id
+    );
+    let sumRequisitosB = 0;
+    puntajeThiPostB?.requisitos?.map((req: any) => {
+      sumRequisitosB += req?.puntaje || 0;
+    });
+
+    if (sumRequisitosA > sumRequisitosB) {
+      return -1;
+    } else {
+      return 1;
+    }
+  });
+
   return (
     <div className="w-full h-auto max-h-full overflow-auto">
       <Button action={() => handleGenerateGrilla()} text="Descargar" />
       <div
         ref={targetRef}
+        style={{ pageBreakBefore: 'always' }}
         className="flex md:px-10 px-0 md:py-10 py-4 flex-col items-start justify-start gap-4"
       >
         <span className="text-black font-semibold text-3xl">
@@ -123,23 +152,27 @@ const GrillaPDF = ({ llamadoInfo }: Props) => {
           Postulantes:{" "}
         </span>
 
-        {llamadoInfo?.postulantes?.map((item, index) => {
+        {postulantesSort?.map((item, index) => {
           let sumTotal = 0;
-          const puntajeThiPost =
-          puntajes?.find(
+          const puntajeThiPost = puntajes?.find(
             (puntaje: any) => puntaje?.postulanteId == item?.postulante?.id
           );
-          if (puntajeThiPost == null || typeof puntajeThiPost === "undefined" || !puntajeThiPost) {
+          if (
+            puntajeThiPost == null ||
+            typeof puntajeThiPost === "undefined" ||
+            !puntajeThiPost
+          ) {
             return;
           }
           const puntajesOfThisPostulante = puntajeThiPost?.requisitos || [];
 
           return (
             <div
+              style={{ pageBreakBefore: 'avoid' }}
               key={`itemPostulante-${index}`}
               className="w-full h-auto flex border flex-col items-start justify-start gap-5 p-5 rounded-2xl border-gray-400 shadow-md"
             >
-              <span className="text-gray-800 font-semibold text-2xl">
+              <span className="text-gray-800 pb-4 border-b border-b-gray-400 w-full text-center font-semibold text-2xl">
                 {item?.postulante?.nombres} {item?.postulante?.apellidos} -{" "}
                 {item?.postulante?.documento}
               </span>
@@ -159,18 +192,14 @@ const GrillaPDF = ({ llamadoInfo }: Props) => {
 
                 return (
                   <div
-                    className="flex w-full flex-col items-start justify-start gap-4 pl-4"
+                    className="flex w-full flex-col border-l border-l-gray-300 items-start justify-start gap-4 pl-4"
                     key={`etapaId-${etapa?.id}`}
                   >
                     <div className="flex w-full flex-row items-center justify-between">
                       <span className="font-semibold text-lg text-gray-800">
                         Etapa - {etapa?.nombre}
                       </span>
-                      <span className="font-semibold text-[22px] text-gray-800">
-                        Total etapa: {totalEtapa}
-                      </span>
                     </div>
-
                     <div className="w-full h-auto flex flex-row items-start justify-start gap-4 pl-4">
                       {etapa?.subetapas?.map((subetapa) => {
                         let sumOfThisSubetapa = 0;
@@ -185,14 +214,11 @@ const GrillaPDF = ({ llamadoInfo }: Props) => {
                         return (
                           <div
                             key={`subetapa-${subetapa?.nombre}`}
-                            className="flex w-full flex-col items-start gap-4 justify-start"
+                            className="flex border-l border-l-gray-300 pl-4 w-full flex-col items-start gap-4 justify-start"
                           >
                             <div className="w-full h-auto flex flex-row items-center justify-between">
                               <span className="text-lg font-semibold text-gray-800">
                                 Subetapa - {subetapa?.nombre}
-                              </span>
-                              <span className="text-lg font-semibold text-gray-800">
-                                Total subetapa: {sumOfThisSubetapa}
                               </span>
                             </div>
                             <div className="w-full h-auto flex flex-col items-start justify-start gap-2 pl-5">
@@ -205,7 +231,7 @@ const GrillaPDF = ({ llamadoInfo }: Props) => {
                                 return (
                                   <div
                                     key={req?.nombre}
-                                    className="w-full h-auto flex flex-row items-center justify-start"
+                                    className="w-full border-l-gray-300 pl-4 border-l h-auto flex flex-row items-center justify-start"
                                   >
                                     <span className="font-normal text-gray-500">
                                       Requisito - {req?.nombre}:{" "}
@@ -215,20 +241,40 @@ const GrillaPDF = ({ llamadoInfo }: Props) => {
                                 );
                               })}
                             </div>
+                            <span className="text-lg font-semibold text-gray-800">
+                              Total subetapa: {sumOfThisSubetapa}
+                            </span>
                           </div>
                         );
                       })}
                     </div>
+                    <span className="font-semibold text-[18px] text-gray-800">
+                      Total etapa: {totalEtapa}
+                    </span>
                   </div>
                 );
               })}
               <span className="font-semibold text-lg text-gray-700">
-                Puntaje alcanzado total: {sumTotal}
+                Puntaje alcanzado total:{" "}
+                <span
+                  className={clsx(
+                    "border-b-2",
+                    sumTotal > 60 ? "border-green" : "border-red-300"
+                  )}
+                >
+                  {sumTotal}
+                </span>
               </span>
             </div>
           );
         })}
-        {llamadoInfo?.postulantes?.length === 0 && <span>{"El llamado no tiene ningun postulantes, o estos no estan en estado 'Cumple Requisitos'"}</span>}
+        {llamadoInfo?.postulantes?.length === 0 && (
+          <span>
+            {
+              "El llamado no tiene ningun postulantes, o estos no estan en estado 'Cumple Requisitos'"
+            }
+          </span>
+        )}
       </div>
     </div>
   );

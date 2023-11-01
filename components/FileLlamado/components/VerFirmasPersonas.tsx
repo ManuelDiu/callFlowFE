@@ -30,7 +30,7 @@ const VerFirmasArchivoModal = ({ onClose, llamadoInfo, archivo }: Props) => {
       <Container>
         {llamadoInfo?.miembrosTribunal?.map((user) => {
           const hasFirma = archivo?.firmas?.find((firma) => {
-            return firma?.usuario?.id === user?.id;
+            return firma?.usuario?.id === user?.usuario?.id;
           });
           const defaultLabel = hasFirma ? "Firmó" : "No firmó";
 

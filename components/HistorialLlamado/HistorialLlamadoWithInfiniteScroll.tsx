@@ -123,7 +123,7 @@ const HistorialLlamadoWithInfiniteScroll = ({ historiales = [] }: Props) => {
 
   const orderDatosPorDia = Object.keys(datosPorDia || {})?.sort(
     (itemA: any, itemB: any) => {
-      if (itemA > itemB) {
+      if (moment(itemA).isAfter(moment(itemB))) {
         return -1;
       } else {
         return 1;

@@ -44,63 +44,6 @@ export const cols: ColumnItem[] = [
   },
 ];
 
-export const llamadosRecientes = [
-  {
-    name: (
-      <Text
-        text={"Coordinador de Carrera"}
-        className={" text-texto font-bold !text-lg "}
-      />
-    ),
-    status: <Text text={EstadoLlamadoEnum.enEntrevias} />,
-    updatedAt: <Text text={new Date().toDateString()} />,
-    progress: <ProgressBar progress={15} height={10} />,
-  },
-  {
-    name: (
-      <Text
-        text={"Profesor MDL2"}
-        className={" text-texto font-bold !text-lg "}
-      />
-    ),
-    status: <Text text={EstadoLlamadoEnum.enEntrevias} />,
-    updatedAt: <Text text={new Date().toDateString()} />,
-    progress: <ProgressBar progress={25} height={10} />,
-  },
-  {
-    name: (
-      <Text
-        text={"Profesor BD2"}
-        className={" text-texto font-bold !text-lg "}
-      />
-    ),
-    status: <Text text={EstadoLlamadoEnum.enEntrevias} />,
-    updatedAt: <Text text={new Date().toDateString()} />,
-    progress: <ProgressBar progress={75} height={10} />,
-  },
-  {
-    name: (
-      <Text
-        text={"Director ITR"}
-        className={" text-texto font-bold !text-lg "}
-      />
-    ),
-    status: <Text text={EstadoLlamadoEnum.enEntrevias} />,
-    updatedAt: <Text text={new Date().toDateString()} />,
-    progress: <ProgressBar progress={50} height={10} />,
-  },
-  {
-    name: (
-      <Text
-        text={"Profesor Química"}
-        className={" text-texto font-bold !text-lg "}
-      />
-    ),
-    status: <Text text={EstadoLlamadoEnum.enEntrevias} />,
-    updatedAt: <Text text={new Date().toDateString()} />,
-    progress: <ProgressBar progress={30} height={10} />,
-  },
-];
 
 export const postulantesRecientes = [
   {

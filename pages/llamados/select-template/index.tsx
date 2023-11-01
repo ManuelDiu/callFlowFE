@@ -155,7 +155,7 @@ const SelectTemplate = () => {
                   <TitleCargo>
                     {template.cargo?.nombre || "Sin cargo"}
                   </TitleCargo>
-                  <TextEtapas>Etapas: {template?.etapas}</TextEtapas>
+                  <TextEtapas>Etapas: {template?.etapas?.length || 0}</TextEtapas>
                   <div>
                     <Checkbox
                       value={selectedTemplate?.id === template?.id}

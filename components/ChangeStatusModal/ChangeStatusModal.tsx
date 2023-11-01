@@ -69,7 +69,7 @@ const ChnageStatusModal = ({ setOpen, llamadoInfo, onOpenDisponibilidad }: Props
       toast.success("Se cambio el estado correctamente");
       handleSetLoading(false);
       setOpen(false);
-      if (dataToSend.estado === EstadoLlamadoEnum.listoParaEntrevistas) {
+      if (dataToSend.estado === EstadoLlamadoEnum.entrevistas) {
         onOpenDisponibilidad("Antes de irte....No olvides agregar una disponibilidad para las entrevistas")
       }
     } else {

@@ -24,18 +24,18 @@ import ITRBubble from "@/components/Table/components/ITRBubble";
 import { ITR } from "@/enums/ITR";
 
 export const ORDER_LLAMADO_STATUS = [
-  EstadoLlamadoEnum.creado,
-  EstadoLlamadoEnum.enRelevamiento,
-  EstadoLlamadoEnum.listoParaEstudioMerito,
-  EstadoLlamadoEnum.enEstudioMerito,
-  EstadoLlamadoEnum.listoParaEntrevistas,
-  EstadoLlamadoEnum.enEntrevias,
-  EstadoLlamadoEnum.listoParaPsicotecnico,
-  EstadoLlamadoEnum.enPsicotecnico,
-  EstadoLlamadoEnum.listoParaFirmarGrilla,
-  EstadoLlamadoEnum.enProcesoDeFrimaGrilla,
-  EstadoLlamadoEnum.listoParaFirmarActaFinal,
-  EstadoLlamadoEnum.enProcesoDeFrimaActaFinal,
+  EstadoLlamadoEnum.publicacionPendiente,
+  EstadoLlamadoEnum.abierto,
+  EstadoLlamadoEnum.bajarCvs,
+  EstadoLlamadoEnum.conformacionTribunal,
+  EstadoLlamadoEnum.cvsCompartidos,
+  EstadoLlamadoEnum.entrevistas,
+  EstadoLlamadoEnum.psicotecnicoSolicitado,
+  EstadoLlamadoEnum.psicotecnicoCompartido,
+  EstadoLlamadoEnum.pendienteHacerActa,
+  EstadoLlamadoEnum.pendienteHacerFirma,
+  EstadoLlamadoEnum.pendieteSubidaCDC,
+  EstadoLlamadoEnum.pendienteSubidaCDACGA,
   EstadoLlamadoEnum.finalizado,
 ];
 

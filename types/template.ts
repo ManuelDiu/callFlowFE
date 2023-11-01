@@ -5,7 +5,7 @@ export type TemplateList = {
   nombre: string;
   color: string;
   cargo: Cargo;
-  etapas?: number;
+  etapas: EtapaList[];
   activo?: boolean;
 };
 

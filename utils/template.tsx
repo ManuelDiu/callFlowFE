@@ -15,7 +15,7 @@ export const formatTemplatesToShow = (templates: TemplateList[] = []) => {
       nombre: <Text text={template?.nombre} />,
       cargo: <Text text={template?.cargo?.nombre || "Sin Cargo"} />,
       color: <ColorBadge color={template?.color} />,
-      etapas: <Text text={`${template?.etapas || 0}`} />,
+      etapas: <Text text={`${template?.etapas?.length || 0}`} />,
       activo: template?.activo ? (
         <GoCheckCircleFill size={20} color="green" />
       ) : (

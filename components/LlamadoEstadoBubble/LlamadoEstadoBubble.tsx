@@ -4,18 +4,18 @@ import styled from "styled-components";
 import tw from "twin.macro";
 
 const colorVariants: any = {
-  [EstadoLlamadoEnum.creado]: tw`bg-[#3498db]`,
-  [EstadoLlamadoEnum.enRelevamiento]: tw`bg-[#f1c40f]`,
-  [EstadoLlamadoEnum.listoParaEstudioMerito]: tw`bg-[#27ae60]`,
-  [EstadoLlamadoEnum.enEstudioMerito]: tw`bg-[#2ecc71]`,
-  [EstadoLlamadoEnum.listoParaEntrevistas]: tw`bg-[#e74c3c]`,
-  [EstadoLlamadoEnum.enEntrevias]: tw`bg-[#c0392b]`,
-  [EstadoLlamadoEnum.listoParaPsicotecnico]: tw`bg-[#9b59b6]`,
-  [EstadoLlamadoEnum.enPsicotecnico]: tw`bg-[#8e44ad]`,
-  [EstadoLlamadoEnum.listoParaFirmarGrilla]: tw`bg-[#f39c12]`,
-  [EstadoLlamadoEnum.enProcesoDeFrimaGrilla]: tw`bg-[#d35400]`,
-  [EstadoLlamadoEnum.listoParaFirmarActaFinal]: tw`bg-[#3498db]`,
-  [EstadoLlamadoEnum.enProcesoDeFrimaActaFinal]: tw`bg-[#2980b9]`,
+  [EstadoLlamadoEnum.publicacionPendiente]: tw`bg-[#3498db]`,
+  [EstadoLlamadoEnum.abierto]: tw`bg-[#f1c40f]`,
+  [EstadoLlamadoEnum.bajarCvs]: tw`bg-[#27ae60]`,
+  [EstadoLlamadoEnum.conformacionTribunal]: tw`bg-[#2ecc71]`,
+  [EstadoLlamadoEnum.cvsCompartidos]: tw`bg-[#e74c3c]`,
+  [EstadoLlamadoEnum.entrevistas]: tw`bg-[#c0392b]`,
+  [EstadoLlamadoEnum.psicotecnicoSolicitado]: tw`bg-[#9b59b6]`,
+  [EstadoLlamadoEnum.psicotecnicoCompartido]: tw`bg-[#8e44ad]`,
+  [EstadoLlamadoEnum.pendienteHacerActa]: tw`bg-[#f39c12]`,
+  [EstadoLlamadoEnum.pendienteHacerFirma]: tw`bg-[#d35400]`,
+  [EstadoLlamadoEnum.pendieteSubidaCDC]: tw`bg-[#3498db]`,
+  [EstadoLlamadoEnum.pendienteSubidaCDACGA]: tw`bg-[#2980b9]`,
   [EstadoLlamadoEnum.finalizado]: tw`bg-[#2ecc71]`,
   [EstadoLlamadoEnum.eliminado]: tw`bg-[#95a5a6]`,
 };
@@ -39,7 +39,7 @@ interface Props {
 }
 
 const LlamadoEstadoBubble = ({
-  estado = EstadoLlamadoEnum.creado,
+  estado = EstadoLlamadoEnum.abierto,
   customColor,
 }: Props) => {
   return (

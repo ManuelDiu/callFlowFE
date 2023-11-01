@@ -10,18 +10,23 @@ import Button from "@/components/Buttons/Button";
 import { BiPlus, BiTrash } from "react-icons/bi";
 import Table from "@/components/Table/Table";
 import { useMutation, useQuery } from "@apollo/client";
-import {
-  disabledLlamados,
-} from "@/controllers/llamadoController";
+import { disabledLlamados } from "@/controllers/llamadoController";
 import { useGlobal } from "@/hooks/useGlobal";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import appRoutes from "@/routes/appRoutes";
 import ModalConfirmation from "@/components/Modal/components/ModalConfirmation";
 import { toast } from "react-toastify";
-import { deshabilitarTemplates, listarTemplates } from "@/controllers/templateController";
+import {
+  deshabilitarTemplates,
+  listarTemplates,
+} from "@/controllers/templateController";
 import { TemplateList } from "types/template";
 import { Columns, formatTemplatesToShow } from "@/utils/template";
+import Modal from "@/components/Modal/Modal";
+import clsx from "clsx";
+import EtapasList from "@/components/EtapasList/EtapasList";
+import { formatEtapas } from "@/utils/llamadoUtils";
 
 const Container = styled.div`
   ${tw`w-full max-h-full pb-5 h-auto p-5 py-0 flex gap-4 flex-col items-center justify-start`}
@@ -38,16 +43,23 @@ const Templates: NextPage = () => {
   const { handleSetLoading } = useGlobal();
   const { push } = useRouter();
   const [deleteOpen, setDeleteOption] = useState(false);
+  const [selectedTemplate, setSelectedTemplate] = useState<any>(null);
   const [openDeleteConfirmModal, setOpenDeleteConfirmModal] = useState(false);
   const [selecteditemsToDelete, setSelectedItemsToDelete] = useState<
     TemplateList[]
   >([]);
-  const [handleDisabledTemplates, { loading: loadingDelete }] =
-    useMutation(deshabilitarTemplates);
+  const [handleDisabledTemplates, { loading: loadingDelete }] = useMutation(
+    deshabilitarTemplates
+  );
 
   useEffect(() => {
     handleSetLoading(loadingTemplates || loadingDelete);
   }, [loadingTemplates, loadingDelete]);
+
+  const templateInfo = (data?.listarTemplates || [])?.find((item) => item?.id === selectedTemplate?.id)
+
+  const formattedEtapas = formatEtapas(templateInfo?.etapas || []);
+
 
   useEffect(() => {
     setSelectedItemsToDelete([]);
@@ -55,10 +67,19 @@ const Templates: NextPage = () => {
 
   const rows = formatTemplatesToShow(data?.listarTemplates || []);
 
+  const rowsWithActions = rows?.map((item) => {
+    return {
+      ...item,
+      action: () => setSelectedTemplate(item),
+    };
+  });
+
   const handleDelete = async () => {
     const response = await handleDisabledTemplates({
       variables: {
-        templates: selecteditemsToDelete?.map((template) => Number(template?.id)),
+        templates: selecteditemsToDelete?.map((template) =>
+          Number(template?.id)
+        ),
       },
     });
     if (response?.data?.deshabilitarTemplates?.ok) {
@@ -69,6 +90,22 @@ const Templates: NextPage = () => {
       toast.error(response?.data?.deshabilitarTemplates?.message);
     }
   };
+
+  const handleRenderContent = () => {
+    return <div className="w-full h-auto flex flex-col items-start justify-start gap-4">
+      <div className="flex flex-col items-start w-full justify-start gap-2">
+        <span className="font-medium">Nombre: <span className="text-left flex-grow w-full font-normal">{templateInfo?.nombre}</span></span>
+        <span className="font-medium">Cargo: <span className="text-left flex-grow w-full font-normal">{templateInfo?.cargo?.nombre}</span></span>
+        <span className="font-medium flex flex-row gap-2">Color: <div style={{backgroundColor: templateInfo?.color}} className={clsx(`w-6 min-w-[24px] h-6 rounded-lg shadow-sm`)}>{}</div></span>
+        <EtapasList 
+          etapas={formattedEtapas}
+          isView
+          setEtapas={() => null}
+        />
+
+      </div>
+    </div>
+  }
 
   return (
     <>
@@ -111,7 +148,7 @@ const Templates: NextPage = () => {
           multiDisabled={deleteOpen}
           title="Modelos"
           cols={Columns}
-          data={rows}
+          data={rowsWithActions}
           selectedItems={selecteditemsToDelete}
           setSelectedItems={setSelectedItemsToDelete}
         />
@@ -127,6 +164,17 @@ const Templates: NextPage = () => {
             textcancel="Cancelar"
           />
         )}
+        {
+          selectedTemplate && <Modal
+          textok={"Aceptar"}
+          description="Informacion del template"
+          onSubmit={() => setSelectedTemplate(null)}
+          setOpen={() => setSelectedTemplate(null)}
+          content={handleRenderContent()}
+          title={`Template ${templateInfo?.nombre}`}
+          className=""
+        />
+        }
       </Container>
     </>
   );

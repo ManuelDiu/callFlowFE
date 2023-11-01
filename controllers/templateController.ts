@@ -11,7 +11,24 @@ export const listarTemplates = gql`
         id
         nombre
       }
-      etapas
+      etapas {
+        id
+        total
+        puntajeMin
+        plazoDias
+        nombre
+        subetapas {
+          requisitos {
+            puntajeSugerido
+            id
+            nombre
+            excluyente
+          }
+          puntajeTotal
+          puntajeMaximo
+          nombre
+        }
+      }
     }
   }
 `;

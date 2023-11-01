@@ -106,12 +106,11 @@ export type FullLlamadoInfo = {
 };
 
 export const DEFAULT_BADGES_WITH_DIAS_PLAZO = [
-  EstadoLlamadoEnum.listoParaEstudioMerito,
-  EstadoLlamadoEnum.enEstudioMerito,
-  EstadoLlamadoEnum.listoParaEntrevistas,
-  EstadoLlamadoEnum.enEntrevias,
-  EstadoLlamadoEnum.listoParaPsicotecnico,
-  EstadoLlamadoEnum.enPsicotecnico,
+  EstadoLlamadoEnum.entrevistas,
+  EstadoLlamadoEnum.psicotecnicoCompartido,
+  EstadoLlamadoEnum.psicotecnicoSolicitado,
+  EstadoLlamadoEnum.pendienteHacerFirma,
+  EstadoLlamadoEnum.pendienteHacerActa,
 ];
 
 // export const handleGetBadgeColor = (estado: EstadoLlamadoEnum, plazoDias: number) => {

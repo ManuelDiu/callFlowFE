@@ -21,6 +21,7 @@ import FirmarArchivoModal from "./components/FirmarArchivoModal";
 import VerFirmasArchivoModal from "./components/VerFirmasPersonas";
 import AddActaFinalLlamado from "./components/AddActaFinalLlamado";
 import { TipoArchivoFirma } from "@/enums/TipoArchivoFirma";
+import { TipoMiembro } from "@/enums/TipoMiembro";
 
 const Container = styled.div`
   ${tw`w-full h-auto flex flex-col items-start justify-start gap-10`}
@@ -71,17 +72,20 @@ interface Props {
 }
 
 const FileLlamado = ({ llamadoInfo }: Props) => {
+  const { userInfo } = useGlobal();
   const [openModalAdd, setOpenModalAdd] = useState<boolean>();
   const [openAddActa, setOpenAddActa] = useState<boolean>();
   const archivos = llamadoInfo?.archivos;
   const archivosFirma = llamadoInfo?.archivosFirma;
   const { downloadFile } = useDownloadFile();
   const client = useApolloClient();
-  const [selectedFileToFirmar, setSelectedFileToFirmar] =
-    useState<ArchivoFirma>();
+  const [selectedFileToFirmar, setSelectedFileToFirmar] = useState<
+    ArchivoFirma
+  >();
   const { handleSetLoading, isAdmin } = useGlobal();
-  const [openConfirmationDelete, setOpenConfirmationDelete] =
-    useState<boolean>();
+  const [openConfirmationDelete, setOpenConfirmationDelete] = useState<
+    boolean
+  >();
   const [selectedArchivoToDelete, setSelectedArchivoToDelete] = useState<
     Archivo | ArchivoFirma
   >();
@@ -93,6 +97,13 @@ const FileLlamado = ({ llamadoInfo }: Props) => {
     await downloadFile(item.url, item.extension, item?.nombre);
     handleSetLoading(false);
   };
+
+  const isMiembro =
+    typeof llamadoInfo?.miembrosTribunal?.find(
+      (item) =>
+        item?.usuario?.id === userInfo?.id &&
+        item?.tipoMiembro === TipoMiembro.titular
+    ) !== "undefined";
 
   const openFirmarArchivoModal =
     selectedFileToFirmar !== undefined && selectedFileToFirmar !== null;
@@ -233,13 +244,15 @@ const FileLlamado = ({ llamadoInfo }: Props) => {
                   </span>
                 </div>
 
-                <Button
-                  action={() => setSelectedFileToFirmar(archivo)}
-                  icon={<AiOutlinePlus color="white" size={20} />}
-                  variant="fill"
-                  sizeVariant="fit"
-                  text="Firmar"
-                />
+                {isMiembro && (
+                  <Button
+                    action={() => setSelectedFileToFirmar(archivo)}
+                    icon={<AiOutlinePlus color="white" size={20} />}
+                    variant="fill"
+                    sizeVariant="fit"
+                    text="Firmar"
+                  />
+                )}
                 <a href={archivo.url} rel="noreferrer" target="_blank">
                   <ActionWrapper
                     className="!border-green"

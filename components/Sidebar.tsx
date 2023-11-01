@@ -36,7 +36,7 @@ const containerVariants = {
 };
 
 const SidebarLogoContainer = styled.div(() => [
-  tw`flex md:justify-center cursor-pointer justify-between md:px-0 px-5 md:py-0 py-5 w-full md:my-14 text-3xl`,
+  tw`flex md:justify-center cursor-pointer justify-between md:px-0 px-5 md:py-0 py-5 w-full md:my-14 text-3xl `,
 ]);
 
 const IconContainer = styled.div<ContainerProps>(() => [
@@ -65,7 +65,7 @@ const Sidebar: React.FC<SidebarProps> = ({ items }) => {
   return (
     <div
       className={clsx(
-        "transition-all fixed top-0 z-[40] md:w-auto w-screen md:h-screen md:sticky flex items-start justify-start",
+        "transition-all fixed top-0 z-[100] md:w-auto w-screen md:h-screen md:sticky flex items-start justify-start",
         expanded && "h-full"
       )}
     >
@@ -86,7 +86,7 @@ const Sidebar: React.FC<SidebarProps> = ({ items }) => {
       )}
       <nav
         className={clsx(
-          "h-full bg-white transition-all mt-0 margin-0",
+          "h-full md:h-screen bg-white transition-all mt-0 margin-0",
           !isMobile
             ? !expanded
               ? "min-w-[120px] w-[120px]"

@@ -9,7 +9,7 @@ class MyDocument extends Document {
           <meta charSet="utf-8" />
           <link rel="bg" href="/loginBG.png" />
         </Head>
-        <body className="text-blueGray-700 antialiased">
+        <body className="text-blueGray-700">
           <div id="page-transition"></div>
           <Main />
           <NextScript />

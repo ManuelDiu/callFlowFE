@@ -27,7 +27,7 @@ const MainContent = styled.div`
 `;
 
 const ContentPage = styled.div<{withPadding: boolean}>`
-  ${tw`w-full h-auto flex-grow`}
+  ${tw`w-full h-auto flex flex-col flex-grow`}
   ${({ withPadding }) => withPadding && tw`mt-[80px]`}
 `;
 

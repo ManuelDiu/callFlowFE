@@ -3,7 +3,7 @@ import NotFoundPage from "@/components/NotFoundPage/NotFoundPage";
 import Breadcrumb from "@/components/Topbar/Breadcrumb";
 import ProfileBar from "@/components/Topbar/ProfileBar";
 import { useGlobal } from "@/hooks/useGlobal";
-import { useMutation, useQuery } from "@apollo/client";
+import { useApolloClient, useMutation, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
@@ -42,6 +42,9 @@ import AddFileLlamadoModal from "@/components/AddFileToPostulanteModal/AddFileTo
 import AddFilePostulanteModal from "@/components/AddFileToPostulanteModal/AddFileToPostulanteModal";
 import { getLlamadoInfoById } from "@/controllers/llamadoController";
 import Input from "@/components/Inputs/Input";
+import useDownloadFile from "@/hooks/useDownloadFile";
+import { Archivo, ArchivoFirma } from "types/llamado";
+import { deleteArchivo } from "@/controllers/archivoController";
 
 const colorVariants: any = {
   [EstadoPostulanteEnum.cumpleRequisito]: tw`bg-green`,
@@ -119,6 +122,7 @@ const TagEstado = styled.span<{ estado: EstadoPostulanteEnum }>`
 `;
 
 const PostulanteInLlamadoInfo = () => {
+  const { downloadFile } = useDownloadFile();
   const { userInfo, handleSetLoading } = useGlobal();
   const [showInfoModal, setShowInfoModal] = useState(false);
   const [showChangeStateModal, setShowChangeStateModal] = useState(false);
@@ -127,6 +131,7 @@ const PostulanteInLlamadoInfo = () => {
   const { query } = useRouter();
   const llamadoId = Number(query?.llamadoId || 0);
   const postulanteId = Number(query?.postulanteId || 0);
+  const [handleDeleteArchivo] = useMutation(deleteArchivo);
 
   const { data, loading } = useQuery<{
     infoPostulanteEnLlamado?: PostulanteLlamadoFull;
@@ -141,6 +146,13 @@ const PostulanteInLlamadoInfo = () => {
   const [cambiarEstadoPostulanteTribunal] = useMutation(
     cambiarEstadoPostulanteLlamadoTribunal
   );
+  const [openConfirmationDelete, setOpenConfirmationDelete] = useState<
+    boolean
+  >();
+  const [selectedArchivoToDelete, setSelectedArchivoToDelete] = useState<
+    Archivo | ArchivoFirma
+  >();
+  const client = useApolloClient();
 
   const cambiarEstadoPostulForm = useForm<CambiarEstadoPostulanteForm>({
     resolver: yupResolver(cambiarEstadoPostulanteValidationSchema()),
@@ -254,6 +266,45 @@ const PostulanteInLlamadoInfo = () => {
       }
 
       handleSetLoading(false);
+    }
+  };
+
+  const handleDownload = async (item: Archivo) => {
+    handleSetLoading(true);
+    await downloadFile(item.url, item.extension, item?.nombre);
+    handleSetLoading(false);
+  };
+
+  const deleteFile = async () => {
+    try {
+      const resp = await handleDeleteArchivo({
+        variables: {
+          archivoId: selectedArchivoToDelete?.id,
+        },
+        refetchQueries: [
+          {
+            query: infoPostulanteEnLlamado,
+            variables: {
+              llamadoId: Number(llamadoId),
+              postulanteId: Number(postulanteId),
+            },
+          },
+          {
+            query: getLlamadoInfoById,
+            variables: {
+              llamadoId: Number(llamadoId),
+            },
+          },
+        ],
+      });
+      if (resp?.data?.deleteArchivo?.ok === true) {
+        toast.success("Archivo eliminado correctamente");
+      } else {
+        toast.error("Error al eliminar archivo");
+      }
+      setOpenConfirmationDelete(false);
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -412,7 +463,7 @@ const PostulanteInLlamadoInfo = () => {
                       <a href={archivo.url} rel="noreferrer" target="_blank">
                         <ActionWrapper
                           className="!border-green"
-                          //   onClick={() => handleDownload(archivo)}
+                          onClick={() => handleDownload(archivo)}
                         >
                           <GoDownload color="#37B63C" size={20} />
                         </ActionWrapper>
@@ -420,8 +471,8 @@ const PostulanteInLlamadoInfo = () => {
                       <ActionWrapper
                         className="!border-red-500"
                         onClick={() => {
-                          //   setOpenConfirmationDelete(true);
-                          //   setSelectedArchivoToDelete(archivo);
+                          setOpenConfirmationDelete(true);
+                          setSelectedArchivoToDelete(archivo);
                         }}
                       >
                         <BsTrash color="red" size={20} />
@@ -442,6 +493,18 @@ const PostulanteInLlamadoInfo = () => {
           />
         )}
       </MainContainer>
+      {openConfirmationDelete && (
+        <ModalConfirmation
+          variant="red"
+          textok="Si, eliminar archivo"
+          textcancel="Cancelar"
+          onSubmit={() => deleteFile()}
+          onCancel={() => setOpenConfirmationDelete(false)}
+          setOpen={setOpenConfirmationDelete}
+          title="Estas seguro que deseas eliminar a este archivo?"
+          description="Si eliminas a este archivo, no tendras mas acceso al mismo dentro del sistema"
+        />
+      )}
     </Container>
   );
 };

@@ -47,14 +47,14 @@ const SubEtapaListGrilla = ({
     });
     setSubEtapas(newSubEtapas);
   };
-  let sumOfRequisitos = 0;
 
   useEffect(() => {
     handleErrores();
   }, [subetapas]);
-
+  
   const handleErrores = () => {
     subetapas?.map((subEtapa) => {
+      let sumOfRequisitos = 0;
       subEtapa?.requisitos?.forEach((req: any) => {
         sumOfRequisitos += Number(req.puntaje);
       });
@@ -67,7 +67,10 @@ const SubEtapaListGrilla = ({
     });
   };
   return subetapas?.map((subEtapa, index) => {
-    sumOfRequisitos = 0;
+    let sumOfReqInThisEtapa = 0;
+    subEtapa?.requisitos?.forEach((req: any) => {
+      sumOfReqInThisEtapa += Number(req.puntaje);
+    });
     handleErrores();
 
     return (
@@ -78,7 +81,7 @@ const SubEtapaListGrilla = ({
           </span>
           <div className="flex flex-col items-end">
             <span className="!text-[20px]">{`Subtotal Actual: ${
-              sumOfRequisitos || 0
+              sumOfReqInThisEtapa || 0
             }`}</span>
             <span className="!text-[20px]">{`Puntaje Máximo: ${
               subEtapa?.puntajeMaximo || 0
@@ -86,7 +89,7 @@ const SubEtapaListGrilla = ({
           </div>
         </div>
         <div className="w-full">
-          {Number(sumOfRequisitos) > Number(subEtapa?.puntajeMaximo) && (
+          {Number(sumOfReqInThisEtapa) > Number(subEtapa?.puntajeMaximo) && (
             <OneLineError
               message={
                 "La suma de los puntajes de los requisitos no puede superar el máximo de la subetapa."

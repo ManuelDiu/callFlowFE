@@ -90,7 +90,6 @@ const CompletarPuntajesPostulante = () => {
   const [errores, setErrores] = useState<boolean>(false);
   const { query } = useRouter();
   const llamadoId = Number(query?.llamadoId || 0);
-  console.log("aloha")
   const postulanteId = Number(query?.postulanteId || 0);
 
   const { data, loading, error } = useQuery<{
@@ -100,17 +99,21 @@ const CompletarPuntajesPostulante = () => {
       llamadoId: llamadoId,
       postulanteId: postulanteId,
     },
-    fetchPolicy: "no-cache",
+    // fetchPolicy: "no-cache",
   });
 
-  const { data: etapaData, loading: etapaDataLoading, error: errorGetEtapaActual } = useQuery<{
+  const {
+    data: etapaData,
+    loading: etapaDataLoading,
+    error: errorGetEtapaActual,
+  } = useQuery<{
     getEtapaActualPostInLlamado?: CurrentEtapaData;
   }>(getEtapaActualPostInLlamado, {
     variables: {
       llamadoId: llamadoId,
       postulanteId: postulanteId,
     },
-    fetchPolicy: "no-cache",
+    // fetchPolicy: "no-cache",
   });
 
   const [subetapas, setSubetapas] = useState<SubEtapaGrilla[] | []>([]);
@@ -137,9 +140,9 @@ const CompletarPuntajesPostulante = () => {
   useEffect(() => {
     if (error) {
       handleSetLoading(false);
-      toast.error("Permisos insuficientes")
+      toast.error("Permisos insuficientes");
     }
-  }, [error])
+  }, [error]);
 
   useEffect(() => {
     handleSetLoading(loading || etapaDataLoading);
@@ -356,7 +359,6 @@ const CompletarPuntajesPostulante = () => {
               {`Etapa ${etapa?.currentEtapa} / ${etapa?.cantEtapas}`}
             </span>
             <Button
-              // icon={<TbArrowsExchange color="#4318FF" size={15} />}
               variant="outline"
               sizeVariant="fit"
               text="Modificar una etapa anterior"
@@ -365,7 +367,6 @@ const CompletarPuntajesPostulante = () => {
             />
             {currentEtapa !== etapaActualReal && (
               <Button
-                // icon={<TbArrowsExchange color="#4318FF" size={15} />}
                 variant="outline"
                 sizeVariant="fit"
                 text="Volver a la etapa actual"

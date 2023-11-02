@@ -68,7 +68,7 @@ const RequisitoListGrilla = ({
             value={requisito?.puntaje}
           />
         </div>
-        {requisito?.excluyente ?? <span>Este requisito es excluyente.</span>}
+        {requisito?.excluyente && <span className="text-sm">Este requisito es excluyente.</span>}
       </Container>
     );
   });

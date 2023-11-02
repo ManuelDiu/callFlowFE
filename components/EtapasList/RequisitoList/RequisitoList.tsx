@@ -57,7 +57,7 @@ const RequisitoList = ({ requisitos, setRequisitos, isView = false }: Props) => 
         <Row>
           <Input
           disabled={isView}
-            label="Nombre"
+            label="Nombre Requisito"
             placeholder="Ingrese un nombre de requisito"
             type="string"
             className="flex-grow w-full"

@@ -97,7 +97,7 @@ const SubEtapaList = ({ subetapas, setSubEtapas, isView = false }: Props) => {
       <Container className="modalOpen group" key={`etapa-${index}`}>
         <Row>
           <Input
-            label="Nombre"
+            label="Nombre Subetapa"
             placeholder="Ingrese un nombre de subetapa"
             type="string"
             className="flex-grow w-full"
@@ -130,8 +130,8 @@ const SubEtapaList = ({ subetapas, setSubEtapas, isView = false }: Props) => {
         </Row>
         <Row>
           <Input
-            label="Puntaje maximo"
-            placeholder="Puntaje maximo"
+            label="Puntaje máximo"
+            placeholder="Puntaje máximo"
             type="number"
             min={0}
             className="flex-grow w-full"

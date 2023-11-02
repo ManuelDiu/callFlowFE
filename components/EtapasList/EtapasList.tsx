@@ -99,7 +99,7 @@ const EtapasList = ({ etapas, setEtapas, isView = false }: Props) => {
       <Container className="modalOpen group" key={`etapa-${index}`}>
         <Row>
           <Input
-            label="Nombre"
+            label="Nombre Etapa"
             placeholder="Ingrese un nombre de etapa"
             type="string"
             className="flex-grow w-full"
@@ -132,8 +132,8 @@ const EtapasList = ({ etapas, setEtapas, isView = false }: Props) => {
         </Row>
         <Row>
           <Input
-            label="Plazo Dias"
-            placeholder="Ingrese un plazo de dias"
+            label="Plazo Días"
+            placeholder="Ingrese un plazo de días"
             type="number"
             className="flex-grow w-full"
             required

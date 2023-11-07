@@ -27,11 +27,13 @@ import {
   crearLlamadoValidationSchema,
 } from "@/forms/CrearLlamadoForm";
 import { useGlobal } from "@/hooks/useGlobal";
+import appRoutes from "@/routes/appRoutes";
 import { formatCargosToDropdown } from "@/utils/cargo";
 import { emptyEtapa } from "@/utils/etapa";
 import { DEFAULT_USER_IMAGE, formatSolicitantes } from "@/utils/userUtils";
 import { useMutation, useQuery, useSubscription } from "@apollo/client";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -64,6 +66,7 @@ const Row = styled.div`
 `;
 
 const AgregarTemplate = () => {
+  const router = useRouter();
   const { data: solicitantesData, loading: loadingSolicitantes } = useQuery<{
     listarSolicitantes: Solicitante[];
   }>(listarSolicitantes);
@@ -347,6 +350,7 @@ const AgregarTemplate = () => {
           },
         });
         if (respose?.data?.crearLlamado?.ok === true) {
+          router?.push(appRoutes.llamados());
           toast.success("Llamado creado correctamente");
         } else {
           toast.error(

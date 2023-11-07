@@ -39,7 +39,9 @@ const ActionRow = styled.div`
 const Templates: NextPage = () => {
   const { data, loading: loadingTemplates } = useQuery<{
     listarTemplates: TemplateList[];
-  }>(listarTemplates);
+  }>(listarTemplates, {
+    fetchPolicy: "no-cache"
+  });
   const { handleSetLoading } = useGlobal();
   const { push } = useRouter();
   const [deleteOpen, setDeleteOption] = useState(false);

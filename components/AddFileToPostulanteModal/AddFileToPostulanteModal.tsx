@@ -23,7 +23,7 @@ import {
 import {
   addFileToPostulante, infoPostulanteEnLlamado,
 } from "@/controllers/postulanteController";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import ModalConfirmation from "../Modal/components/ModalConfirmation";
 import { Archivo } from "types/llamado";
 

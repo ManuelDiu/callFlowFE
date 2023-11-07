@@ -21,6 +21,11 @@ export type LlamadoList = {
   progreso: number;
 };
 
+export type PaginationLlamado = {
+  llamados: LlamadoList[],
+  totalPages: number,
+}
+
 export type Cambio = {
   cambio: boolean;
   nombre: EstadoLlamadoEnum;

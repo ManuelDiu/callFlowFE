@@ -19,6 +19,31 @@ export const listarLlamados = gql`
   }
 `;
 
+export const listarLlamadosPaged = gql`
+  query listarLlamadosPaged(
+    $filters: ListarLlamadoInputQuery
+    $pagination: PaginationInput
+  ) {
+    listarLlamadosPaged(filters: $filters, pagination: $pagination) {
+      totalPages
+      llamados {
+        id
+        ultimaModificacion
+        ref
+        postulantes
+        progreso
+        itr
+        nombre
+        cupos
+        estado
+        cargo {
+          nombre
+        }
+      }
+    }
+  }
+`;
+
 export const listLlamadosByUser = gql`
   query ListarLlamadosByUser($userId: Int!) {
     listarLlamadosByUser(userId: $userId) {

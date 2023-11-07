@@ -13,16 +13,16 @@ import { Columns, formatLlamadosToTable } from "@/utils/llamadoUtils";
 import { useMutation, useQuery } from "@apollo/client";
 import {
   disabledLlamados,
-  listarLlamados,
+  listarLlamadosPaged,
 } from "@/controllers/llamadoController";
-import { LlamadoList } from "types/llamado";
+import { LlamadoList, PaginationLlamado } from "types/llamado";
 import { useGlobal } from "@/hooks/useGlobal";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import appRoutes from "@/routes/appRoutes";
 import Modal from "@/components/Modal/Modal";
 import ModalConfirmation from "@/components/Modal/components/ModalConfirmation";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import { AiOutlineFilter } from "react-icons/ai";
 import LlamadoFiltro from "@/components/LlamadoFiltro/LlamadoFiltro";
 import useLlamadoFilters from "@/hooks/useLlamadoFilters";
@@ -36,17 +36,25 @@ const ActionRow = styled.div`
 `;
 
 const Llamados: NextPage = () => {
-  const { filtersToBackend, getFiltrosLength } = useLlamadoFilters();
+  const { filtersToBackend, getFiltrosLength, offset, currentPage, handleChangeCurrentpage } = useLlamadoFilters();
 
   const {
     data,
     loading: loadingLlamados,
     refetch,
   } = useQuery<{
-    listarLlamados: LlamadoList[];
-  }>(listarLlamados, {
-    variables: {},
+    listarLlamadosPaged: PaginationLlamado;
+  }>(listarLlamadosPaged, {
+    variables: {
+      pagination: {
+        offset: offset,
+        currentPage: currentPage,
+      },
+    },
+    fetchPolicy: "no-cache",
   });
+  const totalPages = data?.listarLlamadosPaged?.totalPages;
+
   const { handleSetLoading, isAdmin } = useGlobal();
   const [openFilters, setOpenFilters] = useState(false);
   const { push } = useRouter();
@@ -66,7 +74,7 @@ const Llamados: NextPage = () => {
     setSelectedItemsToDelete([]);
   }, [deleteOpen]);
 
-  const rows = formatLlamadosToTable(data?.listarLlamados || []);
+  const rows = formatLlamadosToTable(data?.listarLlamadosPaged?.llamados || []);
 
   const handleDelete = async () => {
     const response = await handleDisabledLlamados({
@@ -132,6 +140,11 @@ const Llamados: NextPage = () => {
           />
         </ActionRow>
         <Table
+          currentPage={currentPage}
+          setCurrentPage={handleChangeCurrentpage}
+          withPagination
+          offset={offset}
+          totalPages={totalPages}
           multiDisabled={deleteOpen}
           title="Llamados"
           cols={Columns}
@@ -154,13 +167,31 @@ const Llamados: NextPage = () => {
 
         {openFilters && (
           <LlamadoFiltro
-            refetch={() =>
-              {
-                refetch({
-                  filters: filtersToBackend,
-                })
-              }
-            }
+            refetch={() => {
+              refetch({
+                pagination: {
+                  offset: offset,
+                  page: currentPage,
+                },
+                filters: filtersToBackend,
+              });
+            }}
+            onClear={() => {
+              refetch({
+                pagination: {
+                  offset: offset,
+                  page: currentPage,
+                },
+                filters: {
+                  selectedCategorias: [],
+                  selectedCargos: [],
+                  selectedPostulantes: [],
+                  selectedUsuarios: [],
+                  selectedEstados: [],
+                  selectedITRs: [],
+                },
+              });
+            }}
             setOpen={setOpenFilters}
           />
         )}

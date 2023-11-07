@@ -21,7 +21,7 @@ import {
   addFileToLlamado,
   getLlamadoInfoById,
 } from "@/controllers/llamadoController";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import ModalConfirmation from "../Modal/components/ModalConfirmation";
 import { Archivo } from "types/llamado";
 

@@ -139,7 +139,7 @@ const Dropdown = ({
     const exists = selectedValues?.find((item) => item?.id === itm?.id);
     if (exists) {
       if (!multiSelect) {
-        setSelectedValues([]);
+        // setSelectedValues([]);
       } else {
         const newItems = selectedValues?.filter((item) => item?.id !== itm?.id);
         setSelectedValues(newItems);

@@ -10,13 +10,11 @@ import Sidebar from "../Sidebar";
 import { items, itemsTribunalOrCordinador } from "utils/sidebar";
 import styled from "styled-components";
 import tw from "twin.macro";
-import { ToastContainer } from "react-toastify";
 import Spinner from "../Spinner/Spinner";
-import Breadcrumb from "@/components/Topbar/Breadcrumb";
-import ProfileBar from "@/components/Topbar/ProfileBar";
 import { Roles } from "@/enums/Roles";
 import NotFoundPage from "../NotFoundPage/NotFoundPage";
 import { useWindowDimensions } from "@/hooks/useWindowDimensions";
+import { Toaster } from "react-hot-toast";
 
 interface Props {
   children: any;
@@ -107,21 +105,7 @@ const CheckTokenWrapper = ({ children }: Props) => {
       {loading && <Spinner />}
 
       {!isPublicPath && <Sidebar items={isAdmin ? items : itemsTribunalOrCordinador} />}
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        className="z-[5000000]"
-        theme="light"
-      />
-      {/* Same as */}
-      <ToastContainer />
+      <Toaster />
       <ContentPage withPadding={!isPublicPath && isMobile}>
         {invalidPath ? <NotFoundPage /> : children}
       </ContentPage>

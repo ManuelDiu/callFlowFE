@@ -42,11 +42,12 @@ const RoundedVariants = {
 };
 
 
-const ButtonComp = styled.button<{ variant: ButtonVariant; size: SizeVariant, rounded: RoundedVariant }>`
+const ButtonComp = styled.button<{ variant: ButtonVariant; size: SizeVariant, rounded: RoundedVariant, disabled: boolean }>`
   ${tw`text-white transition-all text-sm border-2 font-bold px-4 py-[8px] shadow flex flex-row gap-x-2 items-center justify-start outline-none focus:outline-none ease-linear transition-all duration-150`}
   ${({ variant }) => ButtonVariants[variant]}
   ${({ size }) => SizeVariants[size]}
   ${({ rounded }) => RoundedVariants[rounded]}
+  ${({ disabled }) => disabled ? tw`opacity-[0.5]`: tw`opacity-[1]`}
 `;
 
 const Button = ({

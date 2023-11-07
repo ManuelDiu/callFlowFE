@@ -14,7 +14,7 @@ import { BsTrash } from "react-icons/bs";
 import ModalConfirmation from "@/components/Modal/components/ModalConfirmation";
 import { useApolloClient, useMutation } from "@apollo/client";
 import { deleteArchivo } from "@/controllers/archivoController";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import { getLlamadoInfoById } from "@/controllers/llamadoController";
 import Text from "../Table/components/Text";
 import FirmarArchivoModal from "./components/FirmarArchivoModal";
@@ -22,6 +22,7 @@ import VerFirmasArchivoModal from "./components/VerFirmasPersonas";
 import AddActaFinalLlamado from "./components/AddActaFinalLlamado";
 import { TipoArchivoFirma } from "@/enums/TipoArchivoFirma";
 import { TipoMiembro } from "@/enums/TipoMiembro";
+import { isLlamadoDisabled } from "@/utils/llamadoUtils";
 
 const Container = styled.div`
   ${tw`w-full h-auto flex flex-col items-start justify-start gap-10`}
@@ -82,6 +83,8 @@ const FileLlamado = ({ llamadoInfo }: Props) => {
   const [selectedFileToFirmar, setSelectedFileToFirmar] = useState<
     ArchivoFirma
   >();
+  const isDeleted = isLlamadoDisabled(llamadoInfo);
+
   const { handleSetLoading, isAdmin } = useGlobal();
   const [openConfirmationDelete, setOpenConfirmationDelete] = useState<
     boolean
@@ -153,15 +156,16 @@ const FileLlamado = ({ llamadoInfo }: Props) => {
         <div className="flex gap-2 md:flex-row flex-col md:my-0 my-4 flex-grow items-center justify-end">
           {isAdmin && (
             <Button
-              action={() => setOpenModalAdd(!openModalAdd)}
+              action={!isDeleted ? () => setOpenModalAdd(!openModalAdd) : () => null}
               icon={<AiOutlinePlus color="white" size={20} />}
               variant="fill"
               text="Agregar archivo"
+              disabled={isDeleted}
             />
           )}
           {isAdmin && (
             <Button
-              action={() => {
+              action={!isDeleted ? () => {
                 const existsActaFinal = llamadoInfo?.archivosFirma?.find(
                   (archivo) => archivo?.nombre === TipoArchivoFirma.actaFinal
                 );
@@ -186,9 +190,10 @@ const FileLlamado = ({ llamadoInfo }: Props) => {
                     setOpenAddActa(!openAddActa);
                   }
                 }
-              }}
+              }: () => null}
               icon={<AiOutlinePlus color="#4318FF" size={20} />}
               variant="outline"
+              disabled={isDeleted}
               text="Agregar Acta Final"
             />
           )}

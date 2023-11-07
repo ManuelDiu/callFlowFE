@@ -6,6 +6,8 @@ import NotFoundImage from "@/public/images/NotFound.svg";
 import Text from "./Text";
 import Checkbox from "@/components/Inputs/Checkbox";
 import { useRouter } from "next/router";
+import Dropdown from "@/components/Inputs/Dropdown";
+import { range } from "ramda";
 
 interface PropsTable {
   cols: ColumnItem[];
@@ -15,6 +17,10 @@ interface PropsTable {
   multiDisabled?: boolean;
   selectedItems?: any;
   setSelectedItems?: any;
+  withPagination: any;
+  currentPage: any;
+  totalPages: any;
+  setCurrentPage: any;
 }
 
 const Container = styled.div`
@@ -49,6 +55,10 @@ const MobileTable = ({
   multiDisabled,
   selectedItems,
   setSelectedItems,
+  withPagination,
+currentPage,
+totalPages,
+setCurrentPage,
 }: PropsTable) => {
   const { push } = useRouter();
   const handleAddItem = (val: any, selectedItem: any) => {
@@ -64,19 +74,47 @@ const MobileTable = ({
 
   return (
     <Container>
+      {withPagination && (
+        <div className="w-full h-auto flex flex-col items-start justify-start gap-4">
+          <span>
+            Estas viendo la pagina {currentPage}/{totalPages}
+          </span>
+          <div className="w-full">
+            <Dropdown
+              multiSelect={false}
+              defaultValue={[]}
+              placeholder="Seleccione una pagina"
+              onChange={(val: any) => val && setCurrentPage(val?.value)}
+              required
+              items={range(1, (totalPages || 0) + 1)?.map((item) => {
+                return {
+                  label: (
+                    <span key={`paginationDropdownItem-${item}`}>
+                      Pagina {item}
+                    </span>
+                  ),
+                  value: item,
+                };
+              })}
+              //   inputFormName={crearLlamadoFormFields.solicitante}
+            />
+          </div>
+        </div>
+      )}
       <Title>{title}</Title>
 
       {data?.map((item, index) => {
         return (
           <Item
-          onClick={() =>
-            item?.action && !multiDisabled
-              ? item.action()
-              : item?.href && !multiDisabled
-              ? push(item?.href || "#")
-              : null
-          }
-          key={`mobileTable-index-${index}`}>
+            onClick={() =>
+              item?.action && !multiDisabled
+                ? item.action()
+                : item?.href && !multiDisabled
+                ? push(item?.href || "#")
+                : null
+            }
+            key={`mobileTable-index-${index}`}
+          >
             {cols?.map((col, indexCol) => (
               <ItemCol
                 className={clsx(

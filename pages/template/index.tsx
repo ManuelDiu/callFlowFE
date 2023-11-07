@@ -16,7 +16,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import appRoutes from "@/routes/appRoutes";
 import ModalConfirmation from "@/components/Modal/components/ModalConfirmation";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import {
   deshabilitarTemplates,
   listarTemplates,

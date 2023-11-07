@@ -113,7 +113,7 @@ const ProfileBar: NextPage = () => {
       <InputContainer>
         <input
           type="text"
-          placeholder="Buscar"
+          placeholder="Buscar llamados y usuarios"
           className="text-slate-700 w-full px-3 py-2 bg-[#F4F7FE] rounded-l-full rounded-r-full focus:ring-textogris ring-2 ring-transparent outline-none transition-all"
           value={searchbarContent}
           onFocus={() => setFocus(true)}
@@ -165,6 +165,10 @@ const ProfileBar: NextPage = () => {
                   );
                 }
               })}
+
+              {
+                results?.length === 0 && <span>Sin resultados</span>
+              }
           </ResultsContainer>
         )}
       </InputContainer>

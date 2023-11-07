@@ -31,7 +31,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import Modal from "@/components/Modal/Modal";
 import ModificarEstadoPostulanteForm from "@/components/ModificarEstadoPostulanteForm/ModificarEstadoPostulanteForm";
 import { EstadoPostulanteEnum } from "@/enums/EstadoPostulanteEnum";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import LlamadoInfoCard from "@/components/LlamadoInfoCard/LlamadoInfoCard";
 import { Roles } from "@/enums/Roles";
 import ModalConfirmation from "@/components/Modal/components/ModalConfirmation";

@@ -18,7 +18,7 @@ import { UserList } from "types/usuario";
 import { useMutation, useQuery } from "@apollo/client";
 import { getUserInfoById, updateUserInfo } from "@/controllers/userController";
 import ModalConfirmation from "@/components/Modal/components/ModalConfirmation";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import Button from "@/components/Buttons/Button";
 import useUploadImage from "@/hooks/useUploadImage";
 import NotFoundPage from "@/components/NotFoundPage/NotFoundPage";

@@ -13,6 +13,7 @@ import {
   formatEtapas,
   formatPostulantes,
   formatTribunales,
+  isLlamadoDisabled,
 } from "@/utils/llamadoUtils";
 import ListOfUsers from "../ListOfUsers/ListOfUsers";
 import { useEffect, useState } from "react";
@@ -97,7 +98,7 @@ interface Props {
   llamadoInfo: FullLlamadoInfo;
 }
 
-const DEFAULT_VER_DISPONIBILIDAD_TITLE = "Ver disponibilidad del tribunal"
+const DEFAULT_VER_DISPONIBILIDAD_TITLE = "Ver disponibilidad del tribunal";
 
 const LlamadoInfoContent = ({ llamadoInfo }: Props) => {
   const [openCambiarEstadoModal, setOpenCambarEstadoModal] = useState(false);
@@ -107,10 +108,13 @@ const LlamadoInfoContent = ({ llamadoInfo }: Props) => {
   const [previewGrilla, setPreviewGrilla] = useState(false);
   const [selectedTribunalToEdit, setSelectedTribunalToEdit] =
     useState<any>(null);
-  const [disponibilidadTitle, setDisponibilidadTitle] = useState(DEFAULT_VER_DISPONIBILIDAD_TITLE)
+  const [disponibilidadTitle, setDisponibilidadTitle] = useState(
+    DEFAULT_VER_DISPONIBILIDAD_TITLE
+  );
 
   const { userInfo } = useGlobal();
   const miembrosTribunal = llamadoInfo.miembrosTribunal || [];
+  const isDeleted = isLlamadoDisabled(llamadoInfo);
 
   const isMiembro =
     typeof miembrosTribunal?.find(
@@ -132,9 +136,9 @@ const LlamadoInfoContent = ({ llamadoInfo }: Props) => {
 
   useEffect(() => {
     if (!verDisponibilidad) {
-      setDisponibilidadTitle(DEFAULT_VER_DISPONIBILIDAD_TITLE)
+      setDisponibilidadTitle(DEFAULT_VER_DISPONIBILIDAD_TITLE);
     }
-  }, [verDisponibilidad])
+  }, [verDisponibilidad]);
 
   const handleGetStatusBadge = () => {
     return (
@@ -174,22 +178,20 @@ const LlamadoInfoContent = ({ llamadoInfo }: Props) => {
     );
   };
 
-  console.log("isMiembro", isMiembro);
-
   const handleOpenEditModal = (item: any) => {
     setSelectedTribunalToEdit(item);
   };
 
   const onOpenDisponibilidad = (text: string) => {
     setVerDisponibilidad(true);
-    setDisponibilidadTitle(text)
-  }
+    setDisponibilidadTitle(text);
+  };
 
   return (
     <Container>
       {openCambiarEstadoModal && (
         <ChnageStatusModal
-        onOpenDisponibilidad={onOpenDisponibilidad}
+          onOpenDisponibilidad={onOpenDisponibilidad}
           llamadoInfo={llamadoInfo}
           setOpen={setOpenCambarEstadoModal}
         />
@@ -214,7 +216,8 @@ const LlamadoInfoContent = ({ llamadoInfo }: Props) => {
           <Button
             icon={<AiOutlineFileAdd color="white" size={18} />}
             text="Generar Grilla"
-            action={handleGenerateGrilla}
+            disabled={isDeleted}
+            action={!isDeleted ? () => handleGenerateGrilla() : () => null}
           />
         )}
         {/* {Check} */}
@@ -223,7 +226,12 @@ const LlamadoInfoContent = ({ llamadoInfo }: Props) => {
             icon={<TbArrowsExchange color="#4318FF" size={18} />}
             variant="outline"
             text="Cambiar estado"
-            action={() => setOpenCambarEstadoModal(!openCambiarEstadoModal)}
+            disabled={isDeleted}
+            action={
+              !isDeleted
+                ? () => setOpenCambarEstadoModal(!openCambiarEstadoModal)
+                : () => null
+            }
           />
         )}
 
@@ -231,8 +239,11 @@ const LlamadoInfoContent = ({ llamadoInfo }: Props) => {
           <Button
             variant="red"
             text="Renunciar al llamado"
-            action={() =>
-              setOpenRenunciarLlamadoModal(!openRenunciarLlamadoModal)
+            disabled={isDeleted}
+            action={
+              !isDeleted
+                ? () => setOpenRenunciarLlamadoModal(!openRenunciarLlamadoModal)
+                : () => null
             }
           />
         )}
@@ -241,7 +252,8 @@ const LlamadoInfoContent = ({ llamadoInfo }: Props) => {
           icon={<BiCalendar color="#4318FF" size={18} />}
           variant="outline"
           text="Disponibilidad tribunal"
-          action={() => setVerDisponibilidad(!verDisponibilidad)}
+          disabled={isDeleted}
+          action={!isDeleted ? () => setVerDisponibilidad(!verDisponibilidad): () => null}
         />
       </ActionsContainer>
 

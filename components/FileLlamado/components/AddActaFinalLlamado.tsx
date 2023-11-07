@@ -10,7 +10,7 @@ import { useGlobal } from "@/hooks/useGlobal";
 import useUploadImage from "@/hooks/useUploadImage";
 import { useMutation } from "@apollo/client";
 import { useState } from "react";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import styled from "styled-components";
 import tw from "twin.macro";
 import { ArchivoFirma, FullLlamadoInfo } from "types/llamado";

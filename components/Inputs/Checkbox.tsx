@@ -33,7 +33,9 @@ const Checkbox = ({
   const toggleChecked = () => {
     if (!disabled) {
       setChecked(!checked);
-      setValue(!checked);
+      if (setValue) {
+        setValue(!checked);
+      }
     }
   };
 

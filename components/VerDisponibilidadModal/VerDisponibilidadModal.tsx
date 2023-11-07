@@ -13,7 +13,7 @@ import {
 } from "@/controllers/disponibilidadController";
 import { useGlobal } from "@/hooks/useGlobal";
 import { DisponibilidadList } from "types/disponibilidad";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import ActionsList from "../Table/components/ActionsList";
 import Text from "../Table/components/Text";
 

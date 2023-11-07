@@ -56,7 +56,6 @@ export const formatLlamadosToTable = (llamados: LlamadoList[] = []) => {
 
 export const formatPostulantes = (postulantes: LlamadoPostulante[]) => {
   return postulantes?.map((postulante, index) => {
-    console.log("postulante", postulante);
     return {
       id: postulante.postulante.id,
       index: index,

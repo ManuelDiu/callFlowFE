@@ -7,7 +7,7 @@ import {
   puntajesLlamado,
 } from "@/controllers/llamadoController";
 import Button from "../Buttons/Button";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import useUploadImage from "@/hooks/useUploadImage";
 import { useGlobal } from "@/hooks/useGlobal";
 import { addArchivoFirmaToLlamado } from "@/controllers/archivoController";

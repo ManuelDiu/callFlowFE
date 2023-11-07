@@ -11,7 +11,7 @@ import {
 } from "@/controllers/llamadoController";
 import { useGlobal } from "@/hooks/useGlobal";
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 const moment = require("moment");
 require("moment/locale/es");
 const HtmlToReactParser = require("html-to-react").Parser;
@@ -78,7 +78,7 @@ const HistorialLlamadoWithInfiniteScroll = ({ historiales = [] }: Props) => {
   const { handleSetLoading } = useGlobal();
   const [dataToShow, setDataToShow] = useState<any[]>([]);
   const [currentIndex, setCurrentIndex] = useState<number>(1);
-  const offsetSize = Math.round(historiales?.length / default_offset);
+  const offsetSize = Math.ceil(historiales?.length / default_offset);
   const hasMore = currentIndex < offsetSize;
 
   const formatHistoriales = dataToShow?.map((item) => {

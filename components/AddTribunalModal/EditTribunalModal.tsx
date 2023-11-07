@@ -19,7 +19,7 @@ import {
 import { listarMiembrosTribunal } from "@/controllers/userController";
 import Input from "../Inputs/Input";
 import { TipoMiembro } from "@/enums/TipoMiembro";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import { cambiarMiembroTribunal, getLlamadoInfoById } from "@/controllers/llamadoController";
 
 interface Props {

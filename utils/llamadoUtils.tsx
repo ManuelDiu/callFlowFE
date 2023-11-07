@@ -8,7 +8,7 @@ import { HiOutlineKey } from "react-icons/hi";
 import { MdNumbers, MdOutlineWorkOutline } from "react-icons/md";
 import { PiUsersThreeBold } from "react-icons/pi";
 import { GiProgression } from "react-icons/gi";
-import { LlamadoList, LlamadoPostulante, TribunalLlamado } from "types/llamado";
+import { FullLlamadoInfo, LlamadoList, LlamadoPostulante, TribunalLlamado } from "types/llamado";
 import Text from "@/components/Table/components/Text";
 import moment from "moment";
 import LlamadoEstadoBubble from "@/components/LlamadoEstadoBubble/LlamadoEstadoBubble";
@@ -22,6 +22,7 @@ import { TipoArchivoItem } from "types/tipoArchivo";
 import { BsFillPinAngleFill } from "react-icons/bs";
 import ITRBubble from "@/components/Table/components/ITRBubble";
 import { ITR } from "@/enums/ITR";
+import { EstadoPostulanteEnum } from "@/enums/EstadoPostulanteEnum";
 
 export const ORDER_LLAMADO_STATUS = [
   EstadoLlamadoEnum.publicacionPendiente,
@@ -177,4 +178,9 @@ export const formatFileTypeToDropdown = (fileTypes: TipoArchivoItem[]) => {
       value: fileType.id
     }
   })
+}
+
+
+export const isLlamadoDisabled = (llamado: FullLlamadoInfo) => {
+  return llamado?.estadoActual?.nombre === EstadoLlamadoEnum.eliminado || llamado?.estadoActual?.nombre === EstadoLlamadoEnum.finalizado;
 }

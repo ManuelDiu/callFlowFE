@@ -13,7 +13,7 @@ import { useRouter } from "next/router";
 import { forgetPasswordValidation } from "@/forms/ForgetPassword";
 import { useMutation } from "@apollo/client";
 import { forgetPassword } from "@/controllers/authControllers";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import tw from "twin.macro";
 import styled from "styled-components";
 import { useWindowDimensions } from "@/hooks/useWindowDimensions";

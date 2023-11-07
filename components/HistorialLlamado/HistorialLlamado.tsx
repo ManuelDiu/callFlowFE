@@ -10,7 +10,7 @@ import {
 } from "@/controllers/llamadoController";
 import { useGlobal } from "@/hooks/useGlobal";
 import { useEffect } from "react";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 const moment = require('moment');
 require('moment/locale/es');
 const HtmlToReactParser = require('html-to-react').Parser;

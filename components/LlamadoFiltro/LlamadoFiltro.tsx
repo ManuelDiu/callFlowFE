@@ -41,9 +41,10 @@ const Column = styled.span`
 interface Props {
   setOpen: any;
   refetch?: any;
+  onClear: any;
 }
 
-const LlamadoFiltro = ({ setOpen, refetch }: Props) => {
+const LlamadoFiltro = ({ setOpen, refetch, onClear }: Props) => {
   const {
     selectedCategorias,
     selectedCargos,
@@ -98,7 +99,7 @@ const LlamadoFiltro = ({ setOpen, refetch }: Props) => {
     handleChangeFilter("selectedPostulantes", []);
     handleChangeFilter("selectedUsuarios", []);
     handleChangeFilter("selectedEstados", []);
-    applyFilters();
+    onClear();
     setOpen(false);
   };
 

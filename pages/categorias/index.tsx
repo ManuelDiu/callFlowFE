@@ -35,7 +35,7 @@ import {
 import Button from "@/components/Buttons/Button";
 import Modal from "@/components/Modal/Modal";
 import AddCategoryForm from "@/components/AddCategoryForm/AddCategoryForm";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import ModalConfirmation from "@/components/Modal/components/ModalConfirmation";
 
 const cols: ColumnItem[] = [

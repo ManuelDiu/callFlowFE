@@ -8,6 +8,9 @@ import { useRouter } from "next/router";
 import Checkbox from "../Inputs/Checkbox";
 import MobileTable from "./components/MobileTable";
 import { useWindowDimensions } from "@/hooks/useWindowDimensions";
+import Dropdown from "../Inputs/Dropdown";
+import { range } from "ramda";
+
 interface PropsTable {
   cols: ColumnItem[];
   title: string;
@@ -16,10 +19,15 @@ interface PropsTable {
   multiDisabled?: boolean;
   selectedItems?: any;
   setSelectedItems?: any;
+  withPagination?: boolean;
+  currentPage?: number;
+  setCurrentPage?: any;
+  totalPages?: number;
+  offset?: number;
 }
 
 const Container = styled.div`
-  ${tw`w-full h-auto transition-all flex overflow-hidden pt-4 pb-4 flex-col gap-3 items-start justify-start bg-white shadow-md rounded-[20px]`}
+  ${tw`w-full h-auto transition-all flex overflow-visible pt-4 pb-4 flex-col gap-3 items-start justify-start bg-white shadow-md rounded-[20px]`}
 `;
 
 const Title = styled.span`
@@ -66,6 +74,11 @@ const Table = ({
   multiDisabled,
   setSelectedItems,
   selectedItems,
+  withPagination,
+  totalPages,
+  currentPage,
+  setCurrentPage,
+  offset,
 }: PropsTable) => {
   const { push } = useRouter();
   const { isMobile } = useWindowDimensions();
@@ -91,12 +104,43 @@ const Table = ({
         multiDisabled={multiDisabled}
         setSelectedItems={setSelectedItems}
         selectedItems={selectedItems}
+        withPagination={withPagination}
+        currentPage={currentPage}
+        totalPages={totalPages}
+        setCurrentPage={setCurrentPage}
       />
     );
   }
 
   return (
     <Container>
+      {withPagination && (
+        <div className=" w-full h-auto flex flex-col items-start justify-start gap-4">
+          <span>
+            Estas viendo la pagina {currentPage}/{totalPages}
+          </span>
+          <div className="w-full">
+            <Dropdown
+              multiSelect={false}
+              defaultValue={[]}
+              placeholder="Seleccione una pagina"
+              onChange={(val: any) => val && setCurrentPage(val?.value)}
+              required
+              items={range(1, (totalPages || 0) + 1)?.map((item) => {
+                return {
+                  label: (
+                    <span key={`paginationDropdownItem-${item}`}>
+                      Pagina {item}
+                    </span>
+                  ),
+                  value: item,
+                };
+              })}
+              //   inputFormName={crearLlamadoFormFields.solicitante}
+            />
+          </div>
+        </div>
+      )}
       <Title>{title}</Title>
       <HeaderRow>
         {multiDisabled && <CellSelect isExpanded={multiDisabled} />}

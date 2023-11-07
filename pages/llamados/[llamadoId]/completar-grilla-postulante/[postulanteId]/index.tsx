@@ -21,7 +21,7 @@ import { PostulanteLlamadoFull } from "types/postulante";
 import Image from "next/image";
 import Button from "@/components/Buttons/Button";
 import { EstadoPostulanteEnum } from "@/enums/EstadoPostulanteEnum";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import ModalConfirmation from "@/components/Modal/components/ModalConfirmation";
 import { DEFAULT_USER_IMAGE } from "@/utils/userUtils";
 import SubEtapaListGrilla from "@/components/EtapasList/SubEtapaList/SubEtapaListGrilla";

@@ -21,7 +21,7 @@ import { useGlobal } from "hooks/useGlobal";
 import Input from "@/components/Inputs/Input";
 import { useRouter } from "next/router";
 import { resetPasswordValidation } from "@/forms/ResetPassword";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import styled from "styled-components";
 import tw from "twin.macro";
 import Image from "next/image";

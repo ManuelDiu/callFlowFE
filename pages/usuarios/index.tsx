@@ -41,7 +41,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import OneLineError from "@/components/OneLineError/OneLineError";
 import { DEFAULT_SELECT_ROLES_ERROR_MESSAGE } from "@/utils/errors";
 import useUploadImage from "@/hooks/useUploadImage";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import ModalConfirmation from "@/components/Modal/components/ModalConfirmation";
 import { useUsersOrder } from "@/hooks/useUsersOrder";
 import { ITR } from "@/enums/ITR";

@@ -35,7 +35,7 @@ import {
 } from "@/controllers/postulanteController";
 import Button from "@/components/Buttons/Button";
 import Modal from "@/components/Modal/Modal";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import ModalConfirmation from "@/components/Modal/components/ModalConfirmation";
 import {
   CreatePostulanteForm,

@@ -3,11 +3,12 @@ import { RootState } from "@/store/store";
 import { useSelector } from "react-redux";
 
 const useLlamadoFilters = () => {
-  const { filters } = useSelector(
+  const { filters, offset, currentPage } = useSelector(
     (state: RootState) => state.LlamadoFilterSlice
   );
 
-  const { handleChangeFilter } = useLlamadoFilterActions();
+  const { handleChangeFilter, handleChangeCurrentpage, handleChangeOffset } =
+    useLlamadoFilterActions();
 
   const selectedCategorias = filters?.selectedCategorias;
   const selectedCargos = filters?.selectedCargos;
@@ -16,12 +17,12 @@ const useLlamadoFilters = () => {
   const selectedEstados = filters?.selectedEstados;
   const selectedITRs = filters?.selectedITRs;
 
-  const formatedSelectedCategorias = filters?.selectedCategorias
-  const formatedSelectedCargos = filters?.selectedCargos
-  const formatedSelectedPostulantes = filters?.selectedPostulantes
-  const formatedSelectedUsuarios = filters?.selectedUsuarios
-  const formatedSelectedEstados = filters?.selectedEstados
-  const formatedSelectedITRs = filters?.selectedITRs
+  const formatedSelectedCategorias = filters?.selectedCategorias;
+  const formatedSelectedCargos = filters?.selectedCargos;
+  const formatedSelectedPostulantes = filters?.selectedPostulantes;
+  const formatedSelectedUsuarios = filters?.selectedUsuarios;
+  const formatedSelectedEstados = filters?.selectedEstados;
+  const formatedSelectedITRs = filters?.selectedITRs;
 
   const filtersToBackend = {
     selectedCategorias: formatedSelectedCategorias,
@@ -50,7 +51,7 @@ const useLlamadoFilters = () => {
       lenth += 1;
     }
     return lenth;
-  }
+  };
 
   return {
     selectedCategorias,
@@ -61,8 +62,12 @@ const useLlamadoFilters = () => {
     handleChangeFilter,
     selectedITRs,
     filters,
+    handleChangeCurrentpage,
+    handleChangeOffset,
     getFiltrosLength,
     filtersToBackend,
+    offset,
+    currentPage,
   };
 };
 

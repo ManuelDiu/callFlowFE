@@ -15,7 +15,7 @@ import { useGlobal } from "@/hooks/useGlobal";
 import { useMutation } from "@apollo/client";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import styled from "styled-components";
 import tw from "twin.macro";
 import DatePicker from "react-date-picker";

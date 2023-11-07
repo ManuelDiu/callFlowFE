@@ -14,7 +14,7 @@ import {
   cambiarEstadoLlamado,
   getLlamadoInfoById,
 } from "@/controllers/llamadoController";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import { useGlobal } from "@/hooks/useGlobal";
 import { Roles } from "@/enums/Roles";
 

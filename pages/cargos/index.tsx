@@ -40,7 +40,7 @@ import {
 import Button from "@/components/Buttons/Button";
 import Modal from "@/components/Modal/Modal";
 import AddCargoForm from "@/components/AddCargoForm/AddCargoForm";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import ModalConfirmation from "@/components/Modal/components/ModalConfirmation";
 
 const cols: ColumnItem[] = [

@@ -6,7 +6,7 @@ import {
   listarDisponibilidad,
 } from "@/controllers/disponibilidadController";
 import { useGlobal } from "@/hooks/useGlobal";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import ModalConfirmation from "../Modal/components/ModalConfirmation";
 import Input from "../Inputs/Input";
 import { useForm } from "react-hook-form";

@@ -12,16 +12,18 @@ type StatisticsCardProps = {
 const Card = styled.div`
   ${tw`flex items-center justify-start w-full py-2 px-5 bg-white rounded-3xl shadow-md`}
 `;
+
 const Icon = styled.div`
   ${tw`flex items-center justify-start p-5 bg-[#F4F7FE] rounded-full `}
 `;
+
 const Content = styled.div`
   ${tw`flex flex-col items-start justify-center px-5 py-3 `}
 `;
 
 const StatCard = ({ icon, title, content }: StatisticsCardProps) => {
   return (
-    <Card>
+    <Card data-testid="StatCard">
       <Icon>
         {icon}
       </Icon>

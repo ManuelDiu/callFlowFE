@@ -65,6 +65,7 @@ const ModalConfirmation = ({
   textok,
   variant,
   textcancel,
+  ...props
 }: Props) => {
   const getIcon = () => {
     switch (variant) {
@@ -78,7 +79,7 @@ const ModalConfirmation = ({
   };
 
   return (
-    <Container className="modalOpen">
+    <Container data-testid="ModalConfirmation" className="modalOpen">
       <ModalContainer>
         <Content>
           <Row>

@@ -80,7 +80,7 @@ const AddPostulanteModal = ({
 
   const handleRenderContent = () => {
     return (
-      <Container className="">
+      <Container data-testid="Container" className="">
         <Dropdown
           defaultValue={[]}
           label="Postulante"

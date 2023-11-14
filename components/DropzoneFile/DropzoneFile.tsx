@@ -22,7 +22,9 @@ const DropzoneFile = ({ setFile, isInvalid, accept }: Props) => {
   };
 
   return (
-    <div className="flex items-center justify-center w-full">
+    <div 
+    data-testid={`dropzone${isInvalid ? "-invalid": ''}`}
+    className="flex items-center justify-center w-full">
       <label
         htmlFor="dropzone-file"
         className={clsx("flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600",
@@ -63,6 +65,7 @@ const DropzoneFile = ({ setFile, isInvalid, accept }: Props) => {
         <input
           onChange={handleChangeFile}
           id="dropzone-file"
+          data-testid="DropzoneFile"
           type="file"
           accept={accept}
           className="hidden"

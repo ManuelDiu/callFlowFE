@@ -156,6 +156,7 @@ const Dropdown = ({
 
   return (
     <div
+      data-testid={`${label}${isInvalid ? "-invalid": ''}`}
       className={clsx("flex flex-col gap-1 w-full", disabled && "opacity-50")}
     >
       <div className="flex flex-col w-full relative">

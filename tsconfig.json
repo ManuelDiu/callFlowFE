@@ -29,6 +29,6 @@
       "@/hooks/*": ["hooks/*"],
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/templates/test.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/templates/test.js", "components/AddCargoForm/AddCargoForm.test.js", "components/AddCargoForm/AddCargoForm.test.jsx", "components/AddPostulanteModal/AddPostulanteModal.test.jsx", "components/Tabs/Tabs.test.jsx"],
   "exclude": ["node_modules"]
 }

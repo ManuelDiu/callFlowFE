@@ -188,7 +188,7 @@ const LlamadoInfoContent = ({ llamadoInfo }: Props) => {
   };
 
   return (
-    <Container>
+    <Container data-testid="LlamadoInfoContent">
       {openCambiarEstadoModal && (
         <ChnageStatusModal
           onOpenDisponibilidad={onOpenDisponibilidad}

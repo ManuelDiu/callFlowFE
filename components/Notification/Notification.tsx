@@ -30,7 +30,7 @@ const Notification = ({
   usesButtons = false,
 }: NotificationItem) => {
   return (
-    <MainContainer>
+    <MainContainer data-testid="Notification">
       <TitleAndTimestampContainer>
         <span className="font-black text-2xl text-texto">{title}</span>
         <span className="text-textogris">{time as string}</span>

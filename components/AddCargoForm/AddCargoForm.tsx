@@ -14,7 +14,7 @@ import { Cargo } from "types/cargo";
 
 interface Props {
   normalErrors?: string[];
-  selectedCategory: Cargo | undefined;
+  selectedCargo: Cargo | undefined;
 }
 
 const Container = styled.div`
@@ -25,7 +25,7 @@ const ErrorList = styled.div`
   ${tw`w-full h-auto flex flex-col gap-1`}
 `;
 
-const AddCargoForm = ({ normalErrors = [], selectedCategory }: Props) => {
+const AddCargoForm = ({ normalErrors = [], selectedCargo }: Props) => {
   const createCargoForm = useForm<CreateCargoForm>({
     resolver: yupResolver(cargoValidationSchema()),
   });
@@ -37,16 +37,16 @@ const AddCargoForm = ({ normalErrors = [], selectedCategory }: Props) => {
   } = useFormContext();
 
   useEffect(() => {
-    if (selectedCategory) {
-      setValue(CreateCargoFormFields.nombre, selectedCategory.nombre);
+    if (selectedCargo) {
+      setValue(CreateCargoFormFields.nombre, selectedCargo.nombre);
     }
-  }, [selectedCategory]);
+  }, [selectedCargo]);
 
   const formatErrors = errors as any;
 
   return (
     <FormProvider {...createCargoForm}>
-      <Container>
+      <Container data-testid="Container">
         <Input
           label="Nombre"
           placeholder="Ingrese un nombre para el cargo"

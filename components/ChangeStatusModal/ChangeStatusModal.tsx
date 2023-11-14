@@ -28,7 +28,11 @@ interface Props {
   onOpenDisponibilidad: any;
 }
 
-const ChnageStatusModal = ({ setOpen, llamadoInfo, onOpenDisponibilidad }: Props) => {
+const ChnageStatusModal = ({
+  setOpen,
+  llamadoInfo,
+  onOpenDisponibilidad,
+}: Props) => {
   const etapas = llamadoInfo?.etapas;
   const etapaActual = llamadoInfo?.etapaActual;
   const estadoActual = llamadoInfo?.estadoActual;
@@ -70,7 +74,9 @@ const ChnageStatusModal = ({ setOpen, llamadoInfo, onOpenDisponibilidad }: Props
       handleSetLoading(false);
       setOpen(false);
       if (dataToSend.estado === EstadoLlamadoEnum.entrevistas) {
-        onOpenDisponibilidad("Antes de irte....No olvides agregar una disponibilidad para las entrevistas")
+        onOpenDisponibilidad(
+          "Antes de irte....No olvides agregar una disponibilidad para las entrevistas"
+        );
       }
     } else {
       toast.error(
@@ -125,6 +131,7 @@ const ChnageStatusModal = ({ setOpen, llamadoInfo, onOpenDisponibilidad }: Props
   return (
     <>
       <Modal
+        data-testid="ChangeStatusModal"
         textok={"Cambiar estado"}
         description="Permite transicional el estado del llamado asi como la etapa en la cual se encuentra el mismo"
         textcancel="Cancelar"
@@ -135,8 +142,9 @@ const ChnageStatusModal = ({ setOpen, llamadoInfo, onOpenDisponibilidad }: Props
         title="Transicionar estado del llamado"
         className="!overflow-visible"
       />
-           {openConfirmationModal && (
+      {openConfirmationModal && (
         <ModalConfirmation
+          data-testid="ModalConfirmation"
           variant="red"
           textok="Si, cambiar"
           textcancel="Cancelar"

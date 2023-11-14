@@ -9,7 +9,7 @@ const Container = styled.div`
 
 const NotFoundPage = () => {
   return (
-    <Container>
+    <Container data-testid="NotFoundPage">
       <img src={NotFoundImage?.src} className="object-cover h-[400px] w-auto" />
       <Text className="!text-[30px] !leading-[34px]" text="Oops!... No encontramos esta pagina" />
     </Container>

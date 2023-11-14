@@ -6,7 +6,6 @@ import appRoutes from "@/routes/appRoutes";
 import { useEffect, useState } from "react";
 import { useGlobal } from "@/hooks/useGlobal";
 import OneLineError from "../OneLineError/OneLineError";
-import { TribunalInfo } from "types/usuario";
 import Input from "../Inputs/Input";
 import DropzoneFile from "../DropzoneFile/DropzoneFile";
 import Dropdown from "../Inputs/Dropdown";
@@ -24,6 +23,7 @@ import {
 import toast from "react-hot-toast";
 import ModalConfirmation from "../Modal/components/ModalConfirmation";
 import { Archivo } from "types/llamado";
+import React from "react";
 
 interface Props {
   setOpen: any;
@@ -43,20 +43,20 @@ const ErrorContainer = styled.span`
 `;
 
 const AddFileLlamadoModal = ({ setOpen, archivos }: Props) => {
+  const [error, setError] = React.useState<string | null>(null);
+  const [name, setName] = React.useState("");
+  const [formSubmitted, setFormSubmitted] = React.useState(false);
+  const [selectedFile, setSelectedFile] = React.useState<File>();
+  const [selectedFileType, setSelectedFileType] = React.useState<number>();
+  const [existsWithSameType, setExistsWithSameType] = React.useState(false);
   const { handleSetLoading } = useGlobal();
   const { query } = useRouter();
   const llamadoId = query?.llamadoId;
-  const [error, setError] = useState<string | null>(null);
-  const [name, setName] = useState("");
-  const [formSubmitted, setFormSubmitted] = useState(false);
-  const [selectedFile, setSelectedFile] = useState<File>();
-  const [selectedFileType, setSelectedFileType] = useState<number>();
+  const { handleUpload } = useUploadImage({});
   const { data, loading: loadingTipoArchivo } = useQuery<{
     listTiposArchivo: TipoArchivoItem[];
   }>(listTiposArchivo);
-  const { handleUpload } = useUploadImage({});
   const [handleAddFile] = useMutation(addFileToLlamado);
-  const [existsWithSameType, setExistsWithSameType] = useState(false);
 
   const fileTypes = data?.listTiposArchivo;
   const selectedFileTypeInfo = fileTypes?.find(
@@ -138,7 +138,7 @@ const AddFileLlamadoModal = ({ setOpen, archivos }: Props) => {
           type="text"
           min={1}
           required
-          onChange={(val: any) => setName(val?.target?.value || 0)}
+          onChange={(val: any) => setName(val?.target?.value)}
         />
         <Dropdown
           defaultValue={[]}
@@ -167,6 +167,7 @@ const AddFileLlamadoModal = ({ setOpen, archivos }: Props) => {
   return (
     <>
       <Modal
+        data-testid="Container"
         textok={"Agregar"}
         description="Permite agregar nuevos archivos en un llamado, con cualquier extensión."
         textcancel="Cancelar"

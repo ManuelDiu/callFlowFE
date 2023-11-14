@@ -4,7 +4,7 @@ interface Props {
 
 const OneLineError = ({ message }: Props) => {
   return (
-    <div className="flex gap-2 items-center text-red-600">
+    <div data-testid="OneLineError" className="flex gap-2 items-center text-red-600">
       <svg
         width="18"
         height="18"

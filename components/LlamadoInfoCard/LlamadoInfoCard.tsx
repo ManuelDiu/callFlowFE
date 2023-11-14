@@ -25,7 +25,7 @@ const Row = styled.div`
 
 const LlamadoInfoCard = ({ llamadoInfo }: Props) => {
   return (
-    <LlamadoInfoSection>
+    <LlamadoInfoSection data-testid="LlamadoInfo">
       <span className="self-start text-xl text-texto font-bold">
         Datos del Llamado
       </span>

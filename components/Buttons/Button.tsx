@@ -64,6 +64,7 @@ const Button = ({
 }: ButtonProps) => {
   return (
     <ButtonComp
+      data-testid="Button"
       className={className}
       size={sizeVariant}
       variant={variant}

@@ -11,7 +11,7 @@ interface Props {
 }
 
 const ColorBadge = ({ color, className }: Props) => {
-  return <Container className={className} style={{ backgroundColor: color }} />;
+  return <Container data-testid="ColorBadge" className={className} style={{ backgroundColor: color }} />;
 };
 
 export default ColorBadge;

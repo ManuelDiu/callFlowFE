@@ -87,7 +87,7 @@ const AddUserForm = ({ setFile, normalErrors = [], selectedUser }: Props) => {
 
   return (
     <FormProvider {...createUserForm}>
-      <Container>
+      <Container data-testid="Container">
         <Row>
           <ImageSelectorContainer>
             <AvatarSelector

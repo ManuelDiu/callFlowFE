@@ -6,7 +6,7 @@ interface Props {
 
 const WarningLine = ({ message }: Props) => {
   return (
-    <div className="flex gap-2 items-center">
+    <div data-testid="WarningLine" className="flex gap-2 items-center">
       <ImWarning color="#958C00" size={26} />
       <p className="text-[#BBB002] max-w-full overflow-hidden truncate">{message || "Error"}</p>
     </div>

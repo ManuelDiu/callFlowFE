@@ -1,13 +1,13 @@
 import { checkToken } from "@/controllers/authControllers";
 import appRoutes from "@/routes/appRoutes";
 import { useMutation } from "@apollo/client";
-import { useGlobal } from "hooks/useGlobal";
+import { useGlobal } from "@/hooks/useGlobal";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { UsuarioInfo } from "types/usuario";
-import { public_routes, tribunal_routes } from "utils/routes";
+import { public_routes, tribunal_routes } from "@/utils/routes";
 import Sidebar from "../Sidebar";
-import { items, itemsTribunalOrCordinador } from "utils/sidebar";
+import { items, itemsTribunalOrCordinador } from "@/utils/sidebar";
 import styled from "styled-components";
 import tw from "twin.macro";
 import Spinner from "../Spinner/Spinner";
@@ -101,7 +101,7 @@ const CheckTokenWrapper = ({ children }: Props) => {
   }
 
   return (
-    <MainContent>
+    <MainContent data-testid="CheckTokenWrapper">
       {loading && <Spinner />}
 
       {!isPublicPath && <Sidebar items={isAdmin ? items : itemsTribunalOrCordinador} />}

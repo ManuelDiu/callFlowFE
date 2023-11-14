@@ -8,7 +8,7 @@ const Container = styled.div`
 
 const Spinner = () => {
 
-    return <Container>
+    return <Container data-testid="Spinner">
         <RingLoader color="#4318FF" size={150} />
     </Container>
 }

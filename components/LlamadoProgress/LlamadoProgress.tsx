@@ -16,7 +16,7 @@ interface Props {
 const LlamadoProgress = ({ progress = 0 }: Props) => {
 
   return (
-    <Container>
+    <Container data-testid="LlamadoProgress">
       <ProgressIndicator style={{ width: `${progress}%` }}/>
     </Container>
   );

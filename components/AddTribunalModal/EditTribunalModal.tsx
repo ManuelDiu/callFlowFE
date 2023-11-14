@@ -104,7 +104,7 @@ const EditTribunalModal = ({ setOpen, selectedUser, llamadoId }: Props) => {
 
   const handleRenderContent = () => {
     return (
-      <Container className="">
+      <Container data-testid="Container" className="">
         {selectedUser?.id && (
           <Dropdown
             listenDefaultValue

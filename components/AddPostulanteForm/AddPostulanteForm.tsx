@@ -57,7 +57,7 @@ const AddPostulanteForm = ({
 
   return (
     <FormProvider {...createPostulanteForm}>
-      <Container>
+      <Container data-testid="Container">
         <Input
           label="Nombres"
           placeholder="Ingrese nombres"

@@ -34,7 +34,7 @@ const Tabs = ({ items }: Props) => {
   }, [items])
 
   return (
-    <Container>
+    <Container data-testid="Tabs">
       <ListItems>
         {items?.map((item) => {
           const isActive = item?.index === activeItem?.index;

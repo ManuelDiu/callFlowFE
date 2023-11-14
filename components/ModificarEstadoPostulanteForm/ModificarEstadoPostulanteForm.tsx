@@ -1,13 +1,9 @@
 import styled from "styled-components";
 import tw from "twin.macro";
-import Input from "../Inputs/Input";
 import { FormProvider, useForm, useFormContext } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useEffect, useState } from "react";
 import OneLineError from "../OneLineError/OneLineError";
-import { TipoArchivoItem } from "types/tipoArchivo";
 import Dropdown from "../Inputs/Dropdown";
-import { TipoArchivoOrigen } from "@/enums/TipoArchivoOrigen";
 import { CambiarEstadoPostulanteForm, cambiarEstadoPostulanteValidationSchema, CambiarEstadoPostulanteFormFields } from "@/forms/CambiarEstadoPostulanteForm";
 import { EstadoPostulanteEnum } from "@/enums/EstadoPostulanteEnum";
 
@@ -46,7 +42,7 @@ const ModificarEstadoPostulanteForm = ({
   ];
   return (
     <FormProvider {...cambiarEstadoPostulForm}>
-      <Container>
+      <Container data-testid="ModificarEstadoPostulanteForm">
         <Dropdown
           label="Nuevo estado"
           isInvalid={!!errors[CambiarEstadoPostulanteFormFields.nuevoEstado]?.message}

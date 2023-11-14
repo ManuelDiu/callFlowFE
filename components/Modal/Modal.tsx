@@ -58,15 +58,17 @@ const Modal = ({
   textcancel,
   className,
   modalClassname,
+  ...props
 }: Props) => {
 
     return (
-    <Container className={clsx("modalOpen")}>
+    <Container data-testid="Modal" {...props} className={clsx("modalOpen")}>
       <ModalContainer className={className}>
         <Content>
           <TitleContainer>
             <Title>{title}</Title>
             <GrClose
+              data-testid="CloseButton"
               onClick={() => setOpen(false)}
               className="cursor-pointer absolute right-5 top-5"
               color="#A3AED0"

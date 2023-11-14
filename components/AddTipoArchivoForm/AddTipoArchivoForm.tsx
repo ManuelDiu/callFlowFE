@@ -52,7 +52,7 @@ const AddTipoArchivoForm = ({
 
   return (
     <FormProvider {...createTipoArchivoForm}>
-      <Container>
+      <Container data-testid="Container">
         <Input
           label="Nombre"
           placeholder="Ingrese un nombre para el tipo de archivo"

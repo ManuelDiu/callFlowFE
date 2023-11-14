@@ -70,7 +70,7 @@ const ModifyProfileInfoForm = ({
 
   return (
     <FormProvider {...createUserForm}>
-      <Container>
+      <Container data-testid="ModifyProfileInfoForm">
         <Row>
           <Col>
             <Input

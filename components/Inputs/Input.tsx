@@ -66,7 +66,7 @@ const Input = ({
   const id = generarId();
 
   return (
-    <div className="flex flex-col w-full">
+    <div data-testid={`${label}${isInvalid ? "-invalid": ''}`} className="flex flex-col w-full">
       {label && (
         <label
           htmlFor={id}

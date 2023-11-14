@@ -104,7 +104,7 @@ const LlamadoFiltro = ({ setOpen, refetch, onClear }: Props) => {
   };
 
   return (
-    <Container className="modalOpen filterOpen">
+    <Container data-testid="LlamadoFiltro" className="modalOpen filterOpen">
       <MdClose
         size={30}
         className="absolute right-5 top-5 cursor-pointer"

@@ -152,7 +152,7 @@ const PostulantesResumen = ({ llamadoInfo }: Props) => {
   // console.log("data is", data)
 
   return (
-    <div className="w-full h-auto transition-all flex overflow-auto pt-4 pb-4 flex-col gap-3 items-start justify-start bg-white shadow-md rounded-[20px]">
+    <div data-testid="PostulanteResumenContent" className="w-full h-auto transition-all flex overflow-auto pt-4 pb-4 flex-col gap-3 items-start justify-start bg-white shadow-md rounded-[20px]">
       {/* <Button action={() => handleGenerateGrilla()} text="Descargar" /> */}
       <div
         ref={targetRef}

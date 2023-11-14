@@ -49,7 +49,7 @@ const AddCategoryForm = ({
 
   return (
     <FormProvider {...createCategoryForm}>
-      <Container>
+      <Container data-testId="Container">
         <Input
           label="Nombre"
           placeholder="Ingrese un nombre para la categoría"

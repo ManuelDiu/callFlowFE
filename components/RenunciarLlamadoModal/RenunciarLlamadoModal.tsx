@@ -109,6 +109,7 @@ const RenunciarLlamadoModal = ({ setOpen, llamadoId }: Props) => {
   return (
     <>
       <ModalConfirmation
+        data-testid="RenunciarLlamadoModal"
         variant="red"
         textok="Si, renunciar"
         textcancel="Cancelar"

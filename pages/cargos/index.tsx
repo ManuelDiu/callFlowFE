@@ -282,7 +282,7 @@ const Cargos = () => {
             content={
               <FormProvider {...createCargForm}>
                 <AddCargoForm
-                  selectedCategory={selectedCargoToEdit}
+                  selectedCargo={selectedCargoToEdit}
                   normalErrors={normalErrors}
                 />
               </FormProvider>

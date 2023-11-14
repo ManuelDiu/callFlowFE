@@ -108,7 +108,7 @@ const AddTribunalModal = ({
 
   const handleRenderContent = () => {
     return (
-      <Container className="">
+      <Container data-testid="Container" className="">
         <Dropdown
           defaultValue={[]}
           label="Miembros del tribunal"

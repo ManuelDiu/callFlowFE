@@ -39,7 +39,7 @@ const OptionSelector = ({ options, isInvalid, onChange }: Props) => {
   }, [selectedOption])
 
   return (
-    <Container>
+    <Container data-testid="OptionSelector">
       {options?.map((item, index) => {
         const isSelected = item?.value === selectedOption?.value;
 

@@ -39,6 +39,7 @@ const AddCargoForm = ({ normalErrors = [], selectedCargo }: Props) => {
   useEffect(() => {
     if (selectedCargo) {
       setValue(CreateCargoFormFields.nombre, selectedCargo.nombre);
+      setValue(CreateCargoFormFields.tips, selectedCargo.tips);
     }
   }, [selectedCargo]);
 

@@ -79,7 +79,7 @@ const NotificationMenu = ({ showNotificationMenu }: NotificationMenuProps) => {
       >
         {historiales?.length === 0 && !loadingHistoriales && (
           <span className="w-full text-left">
-            No se encontraron historiales
+            No se encontró actividad reciente
           </span>
         )}
         {historiales?.length > 0 && <span className="font-semibold mb-4 text-gray-800 text-2xl">Notificaciones</span>}

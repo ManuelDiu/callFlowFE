@@ -132,9 +132,9 @@ const LlamadoFiltro = ({ setOpen, refetch, onClear }: Props) => {
         <Dropdown
           multiSelect
           defaultValue={selectedCategorias}
-          label="Categorias"
+          label="Categorías"
           //   isInvalid={}
-          placeholder="Seleccione una categoria para filtrar"
+          placeholder="Seleccione una categoría para filtrar"
           onChange={(val: any) => handleChangeFilter("selectedCategorias", val?.map((item: any) => item?.value))}
           required
           items={

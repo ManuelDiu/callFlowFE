@@ -19,6 +19,8 @@ import Checkbox from "@/components/Inputs/Checkbox";
 import Button from "@/components/Buttons/Button";
 import OneLineError from "@/components/OneLineError/OneLineError";
 import { useRouter } from "next/router";
+import Text from "@/components/Table/components/Text";
+import NotFoundImage from "@/public/images/NotFound.svg";
 
 const Content = styled.div`
   ${tw`w-full transition-all p-5 h-auto flex flex-col items-center justify-center`}
@@ -60,7 +62,7 @@ const TextEtapas = styled.div`
 
 const options: OptionSelectorItem[] = [
   {
-    label: "Usar un template",
+    label: "Usar un modelo",
     value: 0,
     image: <TbTemplate color="#4318FF" size={50} />,
   },
@@ -78,10 +80,14 @@ const SelectTemplate = () => {
   const [selectedTemplate, setSelectedTemplate] = useState<
     TemplateList | undefined
   >();
-  const { handleSetLoading, handleSetTemplate, handleClearTemplate } = useGlobal();
+  const {
+    handleSetLoading,
+    handleSetTemplate,
+    handleClearTemplate,
+  } = useGlobal();
   const { data, loading: loadingTemplates } = useQuery(listarTemplates);
   const [error, setError] = useState<string | undefined>();
-    const { push } = useRouter();
+  const { push } = useRouter();
 
   const templates = data?.listarTemplates as TemplateList[];
 
@@ -91,21 +97,21 @@ const SelectTemplate = () => {
 
   useEffect(() => {
     if (selectedTemplate) {
-        setError(undefined)
+      setError(undefined);
     }
-  }, [selectedTemplate])
+  }, [selectedTemplate]);
 
   const handleSubmit = () => {
     if (selectedOpt?.value === 0 && !selectedTemplate) {
-      setError("Debes seleccioanr un template");
+      setError("Debes seleccionar un template");
       return;
     }
     if (!selectedOpt) {
-      setError("Debes seleccioanr una opcion");
+      setError("Debes seleccionar una opción");
       return;
     }
     if (selectedOpt?.value === 0 && selectedTemplate) {
-        handleSetTemplate(selectedTemplate);
+      handleSetTemplate(selectedTemplate);
     } else {
       handleClearTemplate();
     }
@@ -121,11 +127,11 @@ const SelectTemplate = () => {
       <Container>
         <Title>Selecciona como quieres crear el llamado</Title>
         <Description>
-          Selecciona como quieres crear el llamado, si usas un template , no
-          tendras que generar las etapas nuevamente, en caso contrario puedes
-          generar el llamado desde cero. Si el template no existe ,{" "}
+          Elige como quieres crear el llamado, si usas un modelo, no
+          tendrás que generar las etapas nuevamente, en caso contrario puedes
+          generar el llamado desde cero. Si el modelo no existe,{" "}
           <Link href={appRoutes.agregarTemplate()}>
-            <span className="text-principal cursor-pointer">crealo aqui</span>
+            <span className="text-principal cursor-pointer">crealo aquí.</span>
           </Link>
         </Description>
 
@@ -136,39 +142,50 @@ const SelectTemplate = () => {
         />
 
         {selectedOpt?.value === 0 && (
-          <Title className="mt-10">Lista de templates</Title>
+          <Title className="mt-10">Lista de modelos</Title>
         )}
         {selectedOpt?.value === 0 && (
           <ListTemplates>
-            {templates?.map((template) => {
-              if (!template?.activo) {
-                return;
-              }
-              const selected = template?.id === selectedTemplate?.id;
-              return (
-                <TemplateItem selected={selected} key={template?.id}>
-                  <ColorBadge
-                    className="!w-[50px] !rounded-lg !h-[50px] !min-w-[50px]"
-                    color={template?.color}
-                  />
-                  <TitleTemplate>{template?.nombre}</TitleTemplate>
-                  <TitleCargo>
-                    {template.cargo?.nombre || "Sin cargo"}
-                  </TitleCargo>
-                  <TextEtapas>Etapas: {template?.etapas?.length || 0}</TextEtapas>
-                  <div>
-                    <Checkbox
-                      value={selectedTemplate?.id === template?.id}
-                      setValue={(val?: any) =>
-                        val
-                          ? setSelectedTemplate(template)
-                          : setSelectedTemplate(undefined)
-                      }
+            {templates?.length > 0 ? (
+              templates?.map((template) => {
+                if (!template?.activo) {
+                  return;
+                }
+                const selected = template?.id === selectedTemplate?.id;
+                return (
+                  <TemplateItem selected={selected} key={template?.id}>
+                    <ColorBadge
+                      className="!w-[50px] !rounded-lg !h-[50px] !min-w-[50px]"
+                      color={template?.color}
                     />
-                  </div>
-                </TemplateItem>
-              );
-            })}
+                    <TitleTemplate>{template?.nombre}</TitleTemplate>
+                    <TitleCargo>
+                      {template.cargo?.nombre || "Sin cargo"}
+                    </TitleCargo>
+                    <TextEtapas>
+                      Etapas: {template?.etapas?.length || 0}
+                    </TextEtapas>
+                    <div>
+                      <Checkbox
+                        value={selectedTemplate?.id === template?.id}
+                        setValue={(val?: any) =>
+                          val
+                            ? setSelectedTemplate(template)
+                            : setSelectedTemplate(undefined)
+                        }
+                      />
+                    </div>
+                  </TemplateItem>
+                );
+              })
+            ) : (
+              <div className="w-full h-auto flex flex-col items-start justify-center gap-4">
+                <Text
+                  className="!text-[20px] !leading-[24px] h-auto!"
+                  text={`Ups... Al parecer no hay modelos en el sistema.`}
+                />
+              </div>
+            )}
           </ListTemplates>
         )}
         {error && (

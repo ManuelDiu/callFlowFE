@@ -133,7 +133,7 @@ const Templates: NextPage = () => {
             variant="outline"
             icon={<BiTrash size={20} fontWeight={700} color="#4318FF" />}
             text={
-              !deleteOpen ? "Habilitar seleccion" : "Deshabilitar seleccion"
+              !deleteOpen ? "Habilitar selección" : "Deshabilitar selección"
             }
             action={() => setDeleteOption(!deleteOpen)}
             className="w-auto"

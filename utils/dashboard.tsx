@@ -18,7 +18,7 @@ export const chartData = [
 ];
 
 export const chartOptions = {
-  is3D: true,
+  // is3D: true,
 };
 
 export const cols: ColumnItem[] = [
@@ -43,7 +43,6 @@ export const cols: ColumnItem[] = [
     key: "progreso",
   },
 ];
-
 
 export const postulantesRecientes = [
   {

@@ -114,33 +114,6 @@ const Table = ({
 
   return (
     <Container>
-      {withPagination && (
-        <div className=" w-full h-auto flex flex-col items-start justify-start gap-4">
-          <span>
-            Estas viendo la pagina {currentPage}/{totalPages}
-          </span>
-          <div className="w-full">
-            <Dropdown
-              multiSelect={false}
-              defaultValue={[]}
-              placeholder="Seleccione una pagina"
-              onChange={(val: any) => val && setCurrentPage(val?.value)}
-              required
-              items={range(1, (totalPages || 0) + 1)?.map((item) => {
-                return {
-                  label: (
-                    <span key={`paginationDropdownItem-${item}`}>
-                      Pagina {item}
-                    </span>
-                  ),
-                  value: item,
-                };
-              })}
-              //   inputFormName={crearLlamadoFormFields.solicitante}
-            />
-          </div>
-        </div>
-      )}
       <Title>{title}</Title>
       <HeaderRow>
         {multiDisabled && <CellSelect isExpanded={multiDisabled} />}
@@ -210,6 +183,33 @@ const Table = ({
         )}
       </Content>
       {others}
+      {withPagination && data?.length > 0 && (
+        <div className="w-full h-auto flex items-center justify-between gap-4 px-5 xl:px-10 pt-4 border-t-2">
+          <span>
+            Estás viendo la página {currentPage}/{totalPages}
+          </span>
+          <div className="w-1/2 xl:w-1/5">
+            <Dropdown
+              multiSelect={false}
+              defaultValue={[]}
+              placeholder="Cambiar página"
+              onChange={(val: any) => val && setCurrentPage(val?.value)}
+              required
+              writable={false}
+              items={range(1, (totalPages || 0) + 1)?.map((item) => {
+                return {
+                  label: (
+                    <span key={`paginationDropdownItem-${item}`}>
+                      Página {item}
+                    </span>
+                  ),
+                  value: item,
+                };
+              })}
+            />
+          </div>
+        </div>
+      )}
     </Container>
   );
 };

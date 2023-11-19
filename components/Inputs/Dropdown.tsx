@@ -97,7 +97,9 @@ const Dropdown = ({
         })
       : [];
 
-  const [selectedValues, setSelectedValues] = useState<any[]>(defaultValuesFormatted);
+  const [selectedValues, setSelectedValues] = useState<any[]>(
+    defaultValuesFormatted
+  );
 
   useEffect(() => {
     if (listenDefaultValue) {
@@ -156,7 +158,7 @@ const Dropdown = ({
 
   return (
     <div
-      data-testid={`${label}${isInvalid ? "-invalid": ''}`}
+      data-testid={`${label}${isInvalid ? "-invalid" : ""}`}
       className={clsx("flex flex-col gap-1 w-full", disabled && "opacity-50")}
     >
       <div className="flex flex-col w-full relative">
@@ -169,7 +171,11 @@ const Dropdown = ({
             {required && <span className="text-principal">*</span>}
           </label>
         )}
-        <InputContainer isInvalid={isInvalid}>
+        <InputContainer
+          isInvalid={isInvalid}
+          className={!disabled && !writable ? "cursor-pointer" : ""}
+          onClick={() => !disabled && !writable && setExpanded(!expanded)}
+        >
           {multiSelect ? (
             <StyledInput
               name={inputFormName}

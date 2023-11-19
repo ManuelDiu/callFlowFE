@@ -12,7 +12,7 @@ import { range } from "ramda";
 interface PropsTable {
   cols: ColumnItem[];
   title: string;
-  data?: any[];
+  data: any[];
   others?: any;
   multiDisabled?: boolean;
   selectedItems?: any;
@@ -74,23 +74,23 @@ setCurrentPage,
 
   return (
     <Container>
-      {withPagination && (
+      {withPagination && data?.length > 0 && (
         <div className="w-full h-auto flex flex-col items-start justify-start gap-4">
           <span>
-            Estas viendo la pagina {currentPage}/{totalPages}
+            Estás viendo la página {currentPage}/{totalPages}
           </span>
           <div className="w-full">
             <Dropdown
               multiSelect={false}
               defaultValue={[]}
-              placeholder="Seleccione una pagina"
+              placeholder="Cambiar página"
               onChange={(val: any) => val && setCurrentPage(val?.value)}
               required
               items={range(1, (totalPages || 0) + 1)?.map((item) => {
                 return {
                   label: (
                     <span key={`paginationDropdownItem-${item}`}>
-                      Pagina {item}
+                      Página {item}
                     </span>
                   ),
                   value: item,

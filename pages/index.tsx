@@ -5,13 +5,12 @@ import tw from "twin.macro";
 import Notification from "@/components/Notification/Notification";
 import Breadcrumb from "@/components/Topbar/Breadcrumb";
 import ProfileBar from "@/components/Topbar/ProfileBar";
-import { IoMdStats } from "react-icons/io";
+import { IoMdPersonAdd, IoMdStats } from "react-icons/io";
 import StatCard from "@/components/Card/StatCard";
 import {
   chartData,
   chartOptions,
   cols,
-  llamadosRecientes,
   postulantesRecientes,
 } from "@/utils/dashboard";
 import Table from "@/components/Table/Table";
@@ -34,6 +33,7 @@ import { formatLlamadosToTable } from "@/utils/llamadoUtils";
 import Image from "next/image";
 import { DEFAULT_USER_IMAGE } from "@/utils/userUtils";
 import moment from "moment";
+import { MdOutlineLockClock } from "react-icons/md";
 
 const Topbar = styled.div`
   ${tw`flex md:flex-row flex-col gap-2  justify-between p-5 w-full h-max`}
@@ -191,17 +191,11 @@ const Home: NextPage = () => {
             }
           />
         )}
-        {/* <Notification
-          title="¡Acción requerida!"
-          text="El miembro del tribunal Jael cambió el estado del postulante Manuel de “No Cumple Requisitos“ a “Cumple Requisitos“ en el llamado “Llamado Pasantes UTEC”"
-          time={"hace 3 días"}
-          usesButtons
-        /> */}
         <FilterContainer>
           <div className="max-w-full truncate flex flex-col">
             <h3 className="text-texto font-semibold">Estadísticas</h3>
             <span className="text-sm text-textogris">
-              Esta informacion es de los ultimos 3 meses, puedes cambiarlo{" "}
+              Esta información por defecto, está acotada a los últimos 3 meses, puedes cambiarlo{" "}
               <br />
               en el siguiente filtro
             </span>
@@ -236,19 +230,19 @@ const Home: NextPage = () => {
         </FilterContainer>
         <Statistics>
           <StatCard
-            title="Llamados en Proceso"
+            title="Llamados en proceso"
             content={data?.llamadosEnProceso}
             icon={<IoMdStats className="text-principal" size={24} />}
           />
           <StatCard
-            title="Llamados Finalizados"
+            title="Llamados finalizados"
             content={data?.llamadosFinalizados}
-            icon={<IoMdStats className="text-principal" size={24} />}
+            icon={<MdOutlineLockClock className="text-principal" size={24} />}
           />
           <StatCard
             title="Nuevos postulantes"
             content={data?.nuevosPostulantes}
-            icon={<IoMdStats className="text-principal" size={24} />}
+            icon={<IoMdPersonAdd className="text-principal" size={24} />}
           />
         </Statistics>
         <TableContainer>
@@ -257,35 +251,37 @@ const Home: NextPage = () => {
             cols={cols}
             data={formatLlamadosTableInfo}
             others={
-              <div className="flex justify-center w-full">
+              formatLlamadosTableInfo.length > 0 && (<div className="flex justify-center w-full">
                 <button
                   onClick={() => router.push(appRoutes.llamados())}
                   className="font-medium text-principal rounded-full px-4 py-1 bg-principal/5"
                 >
                   Ver más
                 </button>
-              </div>
+              </div>)
             }
           />
         </TableContainer>
         <BottomSection>
           <ChartWrapper>
             <h3 className="text-texto font-semibold">Cargos</h3>
+            <div className="self-center">
             <Chart
               chartType="PieChart"
-              width="100%"
+              width="500px"
               height="300px"
               data={[
                 ["Cargo", "Cantidad de Llamados"],
                 ...formatCantidadCargos,
               ]}
               options={chartOptions}
-            />
+              />
+              </div>
           </ChartWrapper>
           <PostulantesContainer>
             <div className="flex items-center justify-between">
               <Text
-                text="Postulantes creados recientemente en estos llamados"
+                text="Postulantes creados recientemente en éstos llamados"
                 className="text-texto !text-2xl font-bold"
               />
               <Button

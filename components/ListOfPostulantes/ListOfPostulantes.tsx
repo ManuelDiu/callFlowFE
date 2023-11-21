@@ -9,6 +9,8 @@ import Input from "../Inputs/Input";
 import { ChangeEvent, useEffect, useState } from "react";
 import NotFoundImage from "@/public/images/NotFound.svg";
 import Text from "../Table/components/Text";
+import { useGlobal } from "@/hooks/useGlobal";
+import { Roles } from "@/enums/Roles";
 
 interface Props {
   title: string;
@@ -47,6 +49,7 @@ const ListOfPostulantes = ({
 }: Props) => {
   const [query, setQuery] = useState<string>("");
   const queryNotEmpty = query !== "" && query;
+  const { userInfo } = useGlobal();
 
   const filteredPostulantes =
     queryNotEmpty && postulantesLlamadoFound
@@ -117,6 +120,7 @@ const ListOfPostulantes = ({
               options={optionsToItem}
               showCurrEtapa={showCurrEtapa}
               label={item?.label}
+              isAllowedToChange={!userInfo?.roles.includes(Roles.cordinador)} // si es coordinador no puede modificar los puntajes.
             />
           );
         })
@@ -144,6 +148,7 @@ const ListOfPostulantes = ({
               options={optionsToItem}
               showCurrEtapa={showCurrEtapa}
               label={item?.label}
+              isAllowedToChange={!userInfo?.roles.includes(Roles.cordinador)} // si es coordinador no puede modificar los puntajes.
             />
           );
         })

@@ -25,6 +25,7 @@ interface Props {
   llamadoId?: number;
   postulanteId?: number;
   etapaActual?: EtapaPostulante;
+  isAllowedToChange?: boolean;
 }
 
 const Container = styled.div`
@@ -95,6 +96,7 @@ const PostulanteInfoLine = ({
   showCurrEtapa = false,
   etapaActual,
   label,
+  isAllowedToChange = true,
 }: Props) => {
   const [openOptions, setOpenOptions] = useState(false);
   const { push } = useRouter();
@@ -135,17 +137,19 @@ const PostulanteInfoLine = ({
               <Bubble></Bubble>
               <Text>{etapaActual?.nombre}</Text>
             </BubbleContainer>
-            <Button
-              icon={<TbArrowsExchange color="#4318FF" size={18} />}
-              variant="outline"
-              text="Modificar Puntajes"
-              className="!z-[20]"
-              action={() =>
-                push(
-                  appRoutes.completarGrillaPostulante(llamadoId, postulanteId)
-                )
-              }
-            />
+            {isAllowedToChange && (
+              <Button
+                icon={<TbArrowsExchange color="#4318FF" size={18} />}
+                variant="outline"
+                text="Modificar Puntajes"
+                className="!z-[20]"
+                action={() =>
+                  push(
+                    appRoutes.completarGrillaPostulante(llamadoId, postulanteId)
+                  )
+                }
+              />
+            )}
           </ActionsContainer>
         )}
         {label && (

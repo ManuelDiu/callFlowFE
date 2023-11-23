@@ -476,7 +476,7 @@ const AgregarTemplate = () => {
           inputFormName={crearLlamadoFormFields.itr}
         />
         {!loadingCargos && !loadingTemplate && <Dropdown
-          defaultValue={[defaultCargo?.value || 0]}
+          defaultValue={defaultCargo?.value ? [defaultCargo?.value] : []}
           label="Cargo"
           isInvalid={!!errors[crearLlamadoFormFields.cargo]?.message}
           placeholder="Seleccione un cargo"

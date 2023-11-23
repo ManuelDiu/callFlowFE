@@ -16,7 +16,7 @@ export function useGlobal() {
   };
   const isAdmin = userInfo?.roles?.includes(Roles.admin);
   const isSolicitante = userInfo?.roles?.includes(Roles.cordinador);
-
+  const isTribunal = userInfo?.roles?.includes(Roles.tribunal);
 
   return {
     userInfo,
@@ -31,5 +31,6 @@ export function useGlobal() {
     handleClearTemplate,
     isAdmin,
     isSolicitante,
+    isTribunal
   };
 }

@@ -19,7 +19,7 @@ interface Props {
 }
 
 const Container = styled.div`
-  ${tw`w-full max-w-[230px] h-auto max-w-full relative overflow-visible flex flex-row items-center justify-start gap-1`}
+  ${tw`w-full max-w-[230px] h-auto max-w-full relative overflow-visible flex md:flex-row flex-col items-center justify-start gap-1`}
 `;
 
 const ImageContainer = styled.div`
@@ -43,7 +43,7 @@ const DotContainer = styled.button`
 `;
 
 const OptionsContainer = styled.div`
-  ${tw`w-[250px] bg-white absolute right-0 p-4 rounded-lg top-full shadow-md border border-textogris h-auto flex flex-col items-center justify-start gap-1`}
+  ${tw`md:w-[250px] w-[120px] bg-white absolute right-0 p-4 rounded-lg top-full shadow-md border border-textogris h-auto flex flex-col items-center justify-start gap-1`}
 `;
 
 const OptionLabel = styled.p`
@@ -103,7 +103,7 @@ const UserInfoLine = ({
           />
         </DotContainer>
       )}
-      {label && <div className={clsx("absolute right-4 top-4", labelClass)}>
+      {label && <div className={clsx("md:absolute md:mt-0 mt-4 right-4 top-4", labelClass)}>
         {label}
         </div>}
     </Container>

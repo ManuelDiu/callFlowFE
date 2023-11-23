@@ -43,7 +43,7 @@ import AddFilePostulanteModal from "@/components/AddFileToPostulanteModal/AddFil
 import { getLlamadoInfoById } from "@/controllers/llamadoController";
 import Input from "@/components/Inputs/Input";
 import useDownloadFile from "@/hooks/useDownloadFile";
-import { Archivo, ArchivoFirma } from "types/llamado";
+import { Archivo, ArchivoFirma, FullLlamadoInfo } from "types/llamado";
 import { deleteArchivo } from "@/controllers/archivoController";
 
 const colorVariants: any = {
@@ -123,13 +123,30 @@ const TagEstado = styled.span<{ estado: EstadoPostulanteEnum }>`
 
 const PostulanteInLlamadoInfo = () => {
   const { downloadFile } = useDownloadFile();
-  const { userInfo, handleSetLoading } = useGlobal();
+  const { userInfo, handleSetLoading, isSolicitante, isTribunal, isAdmin } =
+    useGlobal();
   const [showInfoModal, setShowInfoModal] = useState(false);
   const [showChangeStateModal, setShowChangeStateModal] = useState(false);
   const [openModalAdd, setOpenModalAdd] = useState<boolean>();
   const [description, setDescription] = useState<string>("");
   const { query } = useRouter();
   const llamadoId = Number(query?.llamadoId || 0);
+  const { data: llamaodData, loading: loadingLlamadoInfo } = useQuery<{
+    getLlamadoById?: FullLlamadoInfo;
+  }>(getLlamadoInfoById, {
+    variables: {
+      llamadoId: llamadoId,
+    },
+  });
+  const fullLlamadoInfo = llamaodData?.getLlamadoById;
+
+  const soyTribunal =
+    fullLlamadoInfo?.miembrosTribunal?.find((item) => {
+      return item.usuario.id === userInfo?.id;
+    }) !== undefined;
+
+  console.log("soyTribunal", soyTribunal);
+
   const postulanteId = Number(query?.postulanteId || 0);
   const [handleDeleteArchivo] = useMutation(deleteArchivo);
 
@@ -146,9 +163,8 @@ const PostulanteInLlamadoInfo = () => {
   const [cambiarEstadoPostulanteTribunal] = useMutation(
     cambiarEstadoPostulanteLlamadoTribunal
   );
-  const [openConfirmationDelete, setOpenConfirmationDelete] = useState<
-    boolean
-  >();
+  const [openConfirmationDelete, setOpenConfirmationDelete] =
+    useState<boolean>();
   const [selectedArchivoToDelete, setSelectedArchivoToDelete] = useState<
     Archivo | ArchivoFirma
   >();
@@ -410,13 +426,15 @@ const PostulanteInLlamadoInfo = () => {
                 <span className="md:w-1/2 mt-4 w-full text-center text-sm font-medium">
                   {data?.infoPostulanteEnLlamado?.descripcion || "No tiene"}
                 </span>
-                <Button
-                  text="Transicionar Estado"
-                  variant="outline"
-                  action={() => setShowChangeStateModal(true)}
-                  className="!py-2 !text-base mt-3"
-                  sizeVariant="fit"
-                />
+                {(soyTribunal || isAdmin) && (
+                  <Button
+                    text="Transicionar Estado"
+                    variant="outline"
+                    action={() => setShowChangeStateModal(true)}
+                    className="!py-2 !text-base mt-3"
+                    sizeVariant="fit"
+                  />
+                )}
               </div>
             </NameAndStats>
           </TopSection>
@@ -426,12 +444,14 @@ const PostulanteInLlamadoInfo = () => {
               <span className="self-start text-xl text-texto font-bold">
                 Archivos del postulante en este llamado
               </span>
-              <Button
-                action={() => setOpenModalAdd(!openModalAdd)}
-                icon={<AiOutlinePlus color="white" size={20} />}
-                variant="fill"
-                text="Agregar archivo"
-              />
+              {isAdmin && (
+                <Button
+                  action={() => setOpenModalAdd(!openModalAdd)}
+                  icon={<AiOutlinePlus color="white" size={20} />}
+                  variant="fill"
+                  text="Agregar archivo"
+                />
+              )}
             </div>
             {/* TODO: Agregar archivo al postulante front y back */}
             <List>

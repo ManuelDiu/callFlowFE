@@ -23,17 +23,17 @@ import { FullLlamadoInfo } from "types/llamado";
 import PostulantesResumen from "@/components/PostulantesResumenContent/PostulantesResumenContent";
 
 const Container = styled.div`
-${tw`w-full px-5 pb-4 h-auto flex flex-col items-center justify-start gap-4`}
+  ${tw`w-full px-5 pb-4 h-auto flex flex-col items-center justify-start gap-4`}
 `;
 
 const EtapaListContent = styled.div`
-${tw`w-full h-auto flex items-center flex-col gap-4 justify-center mt-5`}
+  ${tw`w-full h-auto flex items-center flex-col gap-4 justify-center mt-5`}
 `;
 
 const LlamadoInfo = () => {
   const { query } = useRouter();
   const llamadoId = Number(query?.llamadoId || 0);
-  
+
   const { data, loading } = useQuery<{ getLlamadoById?: FullLlamadoInfo }>(
     getLlamadoInfoById,
     {
@@ -42,11 +42,19 @@ const LlamadoInfo = () => {
       },
     }
   );
-  const { handleSetLoading } = useGlobal();
+  const { handleSetLoading, userInfo } = useGlobal();
 
   const isLoading = loading;
   const llamadoInfo = data?.getLlamadoById;
   const notExistsLlamado = !llamadoInfo?.id;
+
+  const loggedUserRenuncio = llamadoInfo?.miembrosTribunal?.find(
+    (miembro: any) => {
+      return (
+        miembro.usuario?.id === userInfo?.id && miembro.motivoRenuncia !== ""
+      );
+    }
+  );
 
   useEffect(() => {
     handleSetLoading(isLoading);
@@ -56,7 +64,7 @@ const LlamadoInfo = () => {
     return null;
   }
 
-  if (notExistsLlamado) {
+  if (notExistsLlamado || loggedUserRenuncio) {
     return <NotFoundPage />;
   }
 
@@ -71,7 +79,12 @@ const LlamadoInfo = () => {
     {
       index: 2,
       title: "Historial",
-      content: <HistorialLlamado llamadoId={llamadoInfo?.id} historiales={llamadoInfo?.historiales || []} />,
+      content: (
+        <HistorialLlamado
+          llamadoId={llamadoInfo?.id}
+          historiales={llamadoInfo?.historiales || []}
+        />
+      ),
     },
     {
       index: 3,
@@ -81,18 +94,22 @@ const LlamadoInfo = () => {
     {
       index: 4,
       title: "Etapas",
-      content: <EtapaListContent>
-        <EtapasList isView etapas={formattedEtapas} setEtapas={null} />
-      </EtapaListContent>,
+      content: (
+        <EtapaListContent>
+          <EtapasList isView etapas={formattedEtapas} setEtapas={null} />
+        </EtapaListContent>
+      ),
     },
     {
       index: 5,
       title: "Postulantes",
-      content: <PostulantesListContent
-      title="Listado de postulantes"
-      llamadoId={llamadoId}
-      postulantes={formatPostulantes(llamadoInfo?.postulantes)}
-    />,
+      content: (
+        <PostulantesListContent
+          title="Listado de postulantes"
+          llamadoId={llamadoId}
+          postulantes={formatPostulantes(llamadoInfo?.postulantes)}
+        />
+      ),
     },
     {
       index: 6,

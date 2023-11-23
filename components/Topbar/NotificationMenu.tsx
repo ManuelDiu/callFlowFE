@@ -49,6 +49,7 @@ type NotificationItem = {
 
 type NotificationMenuProps = {
   showNotificationMenu: boolean;
+  setHasNotifications: any;
   // items: NotificationItem[];
 };
 
@@ -56,14 +57,33 @@ const Divider = styled.div(() => [
   tw`h-0 my-2.5 mx-12 border border-solid border-gray-200 `,
 ]);
 
-const NotificationMenu = ({ showNotificationMenu }: NotificationMenuProps) => {
+const NotificationMenu = ({
+  showNotificationMenu,
+  setHasNotifications,
+}: NotificationMenuProps) => {
   const { data, loading: loadingHistoriales } = useQuery<{
     listarAllHistoriales: HistorialLlamadoType[];
   }>(listarAllHistoriales, {
-    fetchPolicy: "no-cache"
+    fetchPolicy: "no-cache",
   });
   const { handleSetLoading } = useGlobal();
   const historiales = data?.listarAllHistoriales || [];
+
+  useEffect(() => {
+    if (historiales?.length > 0) {
+      const hasWithActions = historiales?.filter((item) => {
+        return (
+          item?.cambio &&
+          (item?.cambio?.cambio === null || item?.cambio?.cambio === undefined)
+        );
+      });
+      if (hasWithActions?.length > 0) {
+        setHasNotifications(true);
+      } else {
+        setHasNotifications(false);
+      }
+    }
+  }, [historiales]);
 
   useEffect(() => {
     handleSetLoading(loadingHistoriales);
@@ -82,7 +102,11 @@ const NotificationMenu = ({ showNotificationMenu }: NotificationMenuProps) => {
             No se encontró actividad reciente
           </span>
         )}
-        {historiales?.length > 0 && <span className="font-semibold mb-4 text-gray-800 text-2xl">Notificaciones</span>}
+        {historiales?.length > 0 && (
+          <span className="font-semibold mb-4 text-gray-800 text-2xl">
+            Notificaciones
+          </span>
+        )}
         {historiales?.length > 0 && (
           <HistorialLlamadoWithInfiniteScroll historiales={historiales} />
         )}

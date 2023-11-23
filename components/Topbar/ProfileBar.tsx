@@ -199,7 +199,7 @@ const ProfileBar: NextPage = () => {
               }`}
             />
           </button>
-          <NotificationMenu showNotificationMenu={showNotificationMenu} />
+          <NotificationMenu setHasNotifications={setHasNotifications} showNotificationMenu={showNotificationMenu} />
         </div>
         <button
           className={"p-2 rounded-full"}

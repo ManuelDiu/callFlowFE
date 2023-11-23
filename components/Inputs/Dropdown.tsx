@@ -40,7 +40,7 @@ const containerVariants = {
 };
 
 const StyledInput = styled.input<ContainerProps>(() => [
-  tw`flex h-full flex-grow w-full outline-none`,
+  tw`flex text-xs h-full flex-grow w-full outline-none`,
   ({ variant = "normal" }) => containerVariants[variant], // Grab the variant style via a prop
 ]);
 
@@ -62,7 +62,7 @@ const SelectedItems = styled.div`
 `;
 
 const LabelSelect = styled.div`
-  ${tw`flex min-w-fit flex-grow w-full font-semibold text-[14px]`}
+  ${tw`flex flex-grow max-w-full truncate min-w-fit flex-grow w-full font-semibold text-[12px]`}
 `;
 
 const SelectedItemTag = styled.div`
@@ -214,7 +214,7 @@ const Dropdown = ({
           )}
 
           <button
-            className="px-4 cursor-pointer border-0 outline-none"
+            className="px-4 min-w-[40px] cursor-pointer border-0 outline-none"
             onClick={() => !disabled && setExpanded(!expanded)}
           >
             <FiChevronDown

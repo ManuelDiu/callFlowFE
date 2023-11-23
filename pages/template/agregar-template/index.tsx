@@ -32,7 +32,7 @@ import tw from "twin.macro";
 import { Cargo } from "types/cargo";
 import { CategoriaItem } from "types/categoria";
 import { Etapa } from "types/etapa";
-import { crearTemplate } from "@/controllers/templateController";
+import { crearTemplate, listarTemplates } from "@/controllers/templateController";
 
 const Container = styled.div`
   ${tw`w-full px-5 pb-4 h-auto flex flex-col gap-5 items-center justify-start`}
@@ -242,7 +242,13 @@ const AgregarTemplate = () => {
           variables: {
             crearTemplateInfo2: dataToSend,
           },
-        });
+          refetchQueries: [
+            {
+              query: listarTemplates,
+            },
+          ],
+        },);
+
         if (respose?.data?.crearTemplate?.ok === true) {
           toast.success("Modelos creado correctamente");
         } else {

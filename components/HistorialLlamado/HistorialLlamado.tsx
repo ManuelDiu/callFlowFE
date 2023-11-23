@@ -134,7 +134,7 @@ const HistorialLlamadoComp = ({ historiales }: Props) => {
       if (resp?.data?.cambiarCambioLlamado?.ok) {
         toast.success("Estado actualizado correctamente");
       } else {
-        toast.success("Error al actualizar estado");
+        toast.error("Error al actualizar estado");
       }
     } catch (error: any) {
       toast.success(error?.message || "Error al actualizar estado");

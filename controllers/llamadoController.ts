@@ -317,6 +317,7 @@ export const cambiarCambioLlamado = gql`
   mutation ($info: LlamadoChangeCambioInput) {
     cambiarCambioLlamado(info: $info) {
       message
+      ok
     }
   }
 `;

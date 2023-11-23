@@ -8,7 +8,12 @@ import { HiOutlineKey } from "react-icons/hi";
 import { MdNumbers, MdOutlineWorkOutline } from "react-icons/md";
 import { PiUsersThreeBold } from "react-icons/pi";
 import { GiProgression } from "react-icons/gi";
-import { FullLlamadoInfo, LlamadoList, LlamadoPostulante, TribunalLlamado } from "types/llamado";
+import {
+  FullLlamadoInfo,
+  LlamadoList,
+  LlamadoPostulante,
+  TribunalLlamado,
+} from "types/llamado";
 import Text from "@/components/Table/components/Text";
 import moment from "moment";
 import LlamadoEstadoBubble from "@/components/LlamadoEstadoBubble/LlamadoEstadoBubble";
@@ -23,6 +28,8 @@ import { BsFillPinAngleFill } from "react-icons/bs";
 import ITRBubble from "@/components/Table/components/ITRBubble";
 import { ITR } from "@/enums/ITR";
 import { EstadoPostulanteEnum } from "@/enums/EstadoPostulanteEnum";
+import toast from "react-hot-toast";
+import Modal from "@/components/Modal/Modal";
 
 export const ORDER_LLAMADO_STATUS = [
   EstadoLlamadoEnum.publicacionPendiente,
@@ -86,30 +93,38 @@ export const Columns: ColumnItem[] = [
 ];
 
 export const formatLlamadosToTable = (llamados: LlamadoList[] = []) => {
-  const newOrder = [...llamados].sort((itemA: LlamadoList, itemB: LlamadoList) => {
-    if (itemA?.estado === EstadoLlamadoEnum.eliminado && itemB?.estado !== EstadoLlamadoEnum.eliminado) {
-      return 1;
-    } else {
-      return -1;
+  const newOrder = [...llamados].sort(
+    (itemA: LlamadoList, itemB: LlamadoList) => {
+      if (
+        itemA?.estado === EstadoLlamadoEnum.eliminado &&
+        itemB?.estado !== EstadoLlamadoEnum.eliminado
+      ) {
+        return 1;
+      } else {
+        return -1;
+      }
     }
-  })
+  );
 
   return newOrder?.map((llamado) => {
     return {
       id: llamado?.id,
       nombre: <Text text={llamado?.nombre} />,
       estado: <LlamadoEstadoBubble estado={llamado?.estado} />,
-      ultimaModificacion: <Text text={moment(llamado?.ultimaModificacion).format("DD, MMM, YYYY") } />,
+      ultimaModificacion: (
+        <Text
+          text={moment(llamado?.ultimaModificacion).format("DD, MMM, YYYY")}
+        />
+      ),
       ref: <Text text={llamado?.ref} />,
       cupos: <Text text={llamado?.cupos?.toString() || "0"} />,
       cargo: <Text text={llamado?.cargo?.nombre} />,
       itr: <ITRBubble itr={llamado?.itr as ITR} />,
       progreso: <LlamadoProgress progress={llamado?.progreso || 0} />,
-      href: appRoutes.llamadoInfoPage(llamado?.id)
+      href: appRoutes.llamadoInfoPage(llamado?.id),
     };
   });
 };
-
 
 export const formatEtapas = (etapas: EtapaList[]) => {
   const formatEtapas = etapas?.map((etapa, indexE) => {
@@ -137,7 +152,7 @@ export const formatEtapas = (etapas: EtapaList[]) => {
     };
   });
   return formatEtapas;
-}
+};
 
 export const formatPostulantes = (postulantes: LlamadoPostulante[]) => {
   return postulantes?.map((postulante, index) => {
@@ -147,7 +162,7 @@ export const formatPostulantes = (postulantes: LlamadoPostulante[]) => {
       imageUrl: DEFAULT_USER_IMAGE,
       name: `${postulante.postulante.nombres} ${postulante.postulante.apellidos}`,
       lastName: postulante.postulante.documento,
-      label: postulante?.estadoActual?.nombre || "Sin estado"
+      label: postulante?.estadoActual?.nombre || "Sin estado",
     };
   });
 };
@@ -163,24 +178,47 @@ export const formatTribunales = (tribunales: TribunalLlamado[]) => {
       imageUrl: tribunal?.usuario?.imageUrl || DEFAULT_USER_IMAGE,
       name: `${tribunal?.usuario?.name} ${tribunal?.usuario?.lastName}`,
       lastName: `Tribunal - ${tribunal.orden} ${tribunal.tipoMiembro}`,
-      label: tribunal?.motivoRenuncia !== "" && <div style={{ background: "rgb(248 113 113 / var(--tw-bg-opacity))"}} className="px-3 font-medium py-2 rounded-full text-white shadow-sm">
-        Renincio
-      </div>
+      label: tribunal?.motivoRenuncia !== "" && (
+        <div className="flex flex-col gap-2">
+          <div
+            onClick={() =>
+              toast.custom(
+                <div className="w-full flex items-center justify-center bg-black/30 inset-0 h-screen md:absolute z-[555]">
+                  <div className="w-[400px] max-h-[300px] overflow-auto h-auto px-5 py-4 rounded-lg shadow-sm bg-white flex flex-col gap-4">
+                    <span>
+                      Motivo renuncia tribunal : {tribunal.usuario.name}
+                    </span>
+                    <span>Motivo: {tribunal.motivoRenuncia}</span>
+                  </div>
+                </div>,
+                {
+                  duration: 3000,
+                }
+              )
+            }
+            style={{ background: "rgb(248 113 113 / var(--tw-bg-opacity))" }}
+            className="px-3 font-medium py-2 rounded-full text-white shadow-sm"
+          >
+            Renunció - Ver motivo
+          </div>
+        </div>
+      ),
     };
   });
 };
-
 
 export const formatFileTypeToDropdown = (fileTypes: TipoArchivoItem[]) => {
   return fileTypes?.map((fileType) => {
     return {
       label: fileType.nombre,
-      value: fileType.id
-    }
-  })
-}
-
+      value: fileType.id,
+    };
+  });
+};
 
 export const isLlamadoDisabled = (llamado: FullLlamadoInfo) => {
-  return llamado?.estadoActual?.nombre === EstadoLlamadoEnum.eliminado || llamado?.estadoActual?.nombre === EstadoLlamadoEnum.finalizado;
-}
+  return (
+    llamado?.estadoActual?.nombre === EstadoLlamadoEnum.eliminado ||
+    llamado?.estadoActual?.nombre === EstadoLlamadoEnum.finalizado
+  );
+};

@@ -11,6 +11,9 @@ import NotFoundImage from "@/public/images/NotFound.svg";
 import Text from "../Table/components/Text";
 import { useGlobal } from "@/hooks/useGlobal";
 import { Roles } from "@/enums/Roles";
+import { getLlamadoInfoById } from "@/controllers/llamadoController";
+import { useQuery } from "@apollo/client";
+import { FullLlamadoInfo } from "types/llamado";
 
 interface Props {
   title: string;
@@ -49,7 +52,24 @@ const ListOfPostulantes = ({
 }: Props) => {
   const [query, setQuery] = useState<string>("");
   const queryNotEmpty = query !== "" && query;
-  const { userInfo } = useGlobal();
+  const { userInfo, isAdmin, handleSetLoading } = useGlobal();
+
+  const { data: llamaodData, loading: loadingLlamadoInfo } = useQuery<{
+    getLlamadoById?: FullLlamadoInfo;
+  }>(getLlamadoInfoById, {
+    variables: {
+      llamadoId: llamadoId,
+    },
+  });
+  const fullLlamadoInfo = llamaodData?.getLlamadoById;
+
+  useEffect(() => {
+    handleSetLoading(loadingLlamadoInfo);
+  }, [loadingLlamadoInfo]);
+
+  const soyTribunal = fullLlamadoInfo?.miembrosTribunal?.find((item) => {
+    return item.usuario.id === userInfo?.id;
+  }) !== undefined;
 
   const filteredPostulantes =
     queryNotEmpty && postulantesLlamadoFound
@@ -120,7 +140,10 @@ const ListOfPostulantes = ({
               options={optionsToItem}
               showCurrEtapa={showCurrEtapa}
               label={item?.label}
-              isAllowedToChange={!userInfo?.roles.includes(Roles.cordinador)} // si es coordinador no puede modificar los puntajes.
+              isAllowedToChange={
+                userInfo?.roles.includes(Roles.admin) ||
+                userInfo?.roles.includes(Roles.tribunal)
+              } // si es coordinador no puede modificar los puntajes.
             />
           );
         })
@@ -148,7 +171,7 @@ const ListOfPostulantes = ({
               options={optionsToItem}
               showCurrEtapa={showCurrEtapa}
               label={item?.label}
-              isAllowedToChange={!userInfo?.roles.includes(Roles.cordinador)} // si es coordinador no puede modificar los puntajes.
+              isAllowedToChange={soyTribunal || isAdmin} // si es coordinador no puede modificar los puntajes.
             />
           );
         })
@@ -160,7 +183,9 @@ const ListOfPostulantes = ({
           />
           <Text
             className="!text-[20px] !leading-[24px] h-full!"
-            text={"No se encontraron postulantes que cumplan con los requisitos."}
+            text={
+              "No se encontraron postulantes que cumplan con los requisitos."
+            }
           />
         </div>
       )}

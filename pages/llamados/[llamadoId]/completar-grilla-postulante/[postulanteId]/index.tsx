@@ -357,7 +357,7 @@ const CompletarPuntajesPostulante = () => {
             <span className="font-black text-2xl text-texto">
               {etapa?.nombre}
             </span>
-            <span className="font-medium text-lg text-textogris">
+            <span className="mb-2 font-medium text-lg text-textogris">
               {`Etapa ${etapa?.currentEtapa} / ${etapa?.cantEtapas}`}
             </span>
             <Button

@@ -171,7 +171,7 @@ const Llamados: NextPage = () => {
               refetch({
                 pagination: {
                   offset: offset,
-                  page: currentPage,
+                  currentPage: currentPage,
                 },
                 filters: filtersToBackend,
               });
@@ -180,7 +180,7 @@ const Llamados: NextPage = () => {
               refetch({
                 pagination: {
                   offset: offset,
-                  page: currentPage,
+                  currentPage: currentPage,
                 },
                 filters: {
                   selectedCategorias: [],

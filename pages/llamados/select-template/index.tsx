@@ -158,8 +158,8 @@ const SelectTemplate = () => {
                       className="!w-[50px] !rounded-lg !h-[50px] !min-w-[50px]"
                       color={template?.color}
                     />
-                    <TitleTemplate>{template?.nombre}</TitleTemplate>
-                    <TitleCargo>
+                    <TitleTemplate title={template?.nombre}>{template?.nombre}</TitleTemplate>
+                    <TitleCargo title={template?.cargo?.nombre}>
                       {template.cargo?.nombre || "Sin cargo"}
                     </TitleCargo>
                     <TextEtapas>

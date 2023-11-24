@@ -141,7 +141,7 @@ const ModificarInformacion: FC = () => {
     <>
       {openConfirmationModal && (
         <ModalConfirmation
-          variant="red"
+          variant="yellow"
           textok="Si, actualizar usuario"
           textcancel="Cancelar"
           onSubmit={handleSubmit(handleNext)}

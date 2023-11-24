@@ -86,6 +86,7 @@ const Input = ({
           placeholder={placeholder}
           autoComplete={autoComplete}
           onChange={onChange}
+          accept={accept}
           {...register(inputFormName)}
           {...otros}
         />

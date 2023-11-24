@@ -11,7 +11,7 @@ const TextContent = styled.span`
 `;
 
 const Text = ({ text, className }: Props) => {
-  return <TextContent className={className}>{text || "Vacio"}</TextContent>;
+  return <TextContent className={className} title={text || "Vacío"}>{text || "Vacío"}</TextContent>;
 };
 
 export default Text;

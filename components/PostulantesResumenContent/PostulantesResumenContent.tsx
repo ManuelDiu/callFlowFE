@@ -19,6 +19,7 @@ import { ColumnItem } from "types/table";
 import { EstadoPostulanteEnum } from "@/enums/EstadoPostulanteEnum";
 import NotFoundImage from "@/public/images/NotFound.svg";
 import Text from "../Table/components/Text";
+import clsx from "clsx";
 
 // TODO: DE USO TEMPORAL, traer mínimo o settear uno global para eliminarla.
 const MINIMO_LLAMADO_GLOBAL: number = 60;
@@ -49,13 +50,13 @@ const Row = styled.div<{ cumple: boolean | undefined }>`
 `;
 
 const Cell = styled.div`
-  ${tw`w-full h-full gap-y-1 transition-all flex flex-col max-w-full overflow-clip bg-transparent ml-2 justify-center`}
+  ${tw`w-full h-full gap-y-1 transition-all flex flex-col max-w-full bg-transparent ml-2 justify-center`}
 `;
 
 const UnderlinedText = styled.span<{ cumpleminimo: boolean | undefined }>`
-  ${tw`underline ml-2`}
+  ${tw`rounded-lg p-1 ml-2`}
   ${({ cumpleminimo = false }) =>
-    cumpleminimo ? tw`decoration-green` : tw`decoration-red-500`}
+    cumpleminimo ? tw`bg-green/60` : tw`bg-red-500/60`}
 `;
 
 const PostulantesResumen = ({ llamadoInfo }: Props) => {
@@ -152,7 +153,10 @@ const PostulantesResumen = ({ llamadoInfo }: Props) => {
   // console.log("data is", data)
 
   return (
-    <div data-testid="PostulanteResumenContent" className="w-full h-auto transition-all flex overflow-auto pt-4 pb-4 flex-col gap-3 items-start justify-start bg-white shadow-md rounded-[20px]">
+    <div
+      data-testid="PostulanteResumenContent"
+      className="w-full h-auto transition-all flex overflow-auto pt-4 pb-4 flex-col gap-3 items-start justify-start bg-white shadow-md rounded-[20px]"
+    >
       {/* <Button action={() => handleGenerateGrilla()} text="Descargar" /> */}
       <div
         ref={targetRef}
@@ -198,8 +202,8 @@ const PostulantesResumen = ({ llamadoInfo }: Props) => {
                               key={`subetapa-${subetapa?.nombre}`}
                               className="w-full flex flex-col items-start gap-4 justify-start"
                             >
-                              <div className="flex flex-col">
-                                <span className="font-semibold text-textoGray break-words">
+                              <div className="flex flex-col w-full">
+                                <span className="font-semibold text-textoGray break-words" title={`${subetapa?.nombre}: ${subetapa.total}`}>
                                   {`${subetapa?.nombre}: ${subetapa.total}`}
                                 </span>
                               </div>
@@ -227,7 +231,17 @@ const PostulantesResumen = ({ llamadoInfo }: Props) => {
                 })}
                 <Cell className="pt-5 md:text-center self-center md:py-0 font-semibold text-lg text-gray-700">
                   <span className="break-words">
-                    Total en el llamado {item.total}
+                    Total en el llamado{" "}
+                    <span
+                      className={clsx(
+                        "p-1 rounded-lg",
+                        item.total >= MINIMO_LLAMADO_GLOBAL
+                          ? "bg-green/60"
+                          : "bg-red-500/60"
+                      )}
+                    >
+                      {item.total}
+                    </span>
                   </span>
                 </Cell>
               </Row>

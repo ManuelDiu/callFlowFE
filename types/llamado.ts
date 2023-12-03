@@ -85,6 +85,11 @@ export type LlamadoPostulante = {
   estadoActual: PostulanteEstado;
 };
 
+export type AgregarPostulanteALlamadoData = {
+  llamadoId: number;
+  postulanteId: number;
+};
+
 export type FullLlamadoInfo = {
   id: number;
   nombre: string;

@@ -33,6 +33,7 @@ import {
   RequisitoGrillaInput,
   SubEtapaGrilla,
 } from "types/etapa";
+import { Roles } from "@/enums/Roles";
 
 const colorVariants: any = {
   [EstadoPostulanteEnum.cumpleRequisito]: tw`bg-green`,
@@ -116,7 +117,7 @@ const CompletarPuntajesPostulante = () => {
     // fetchPolicy: "no-cache",
   });
 
-  console.log("data", data)
+  console.log("data", data);
 
   const [subetapas, setSubetapas] = useState<SubEtapaGrilla[] | []>([]);
 
@@ -129,6 +130,8 @@ const CompletarPuntajesPostulante = () => {
 
   // Guardo la etapa en la que se está posicionado en la vista, pero no tiene por qué ser la actual "real".
   let currentEtapa: number = etapa?.currentEtapa || 1;
+
+  const isAdmin = userInfo?.roles?.includes(Roles.admin) || false;
 
   const notExistsPostulanteInLlamado = !postulanteInLlamadoInfo?.id;
 
@@ -360,13 +363,15 @@ const CompletarPuntajesPostulante = () => {
             <span className="mb-2 font-medium text-lg text-textogris">
               {`Etapa ${etapa?.currentEtapa} / ${etapa?.cantEtapas}`}
             </span>
-            <Button
-              variant="outline"
-              sizeVariant="fit"
-              text="Modificar una etapa anterior"
-              className="!z-[20]"
-              action={handleRetrocederEtapa}
-            />
+            {isAdmin && (
+              <Button
+                variant="outline"
+                sizeVariant="fit"
+                text="Modificar una etapa anterior"
+                className="!z-[20]"
+                action={handleRetrocederEtapa}
+              />
+            )}
             {currentEtapa !== etapaActualReal && (
               <Button
                 variant="outline"

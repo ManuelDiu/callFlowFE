@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import tw from "twin.macro";
-import { FullLlamadoInfo } from "types/llamado";
+import { AgregarPostulanteALlamadoData, FullLlamadoInfo } from "types/llamado";
 import Button from "../Buttons/Button";
 import { AiOutlineFileAdd } from "react-icons/ai";
 import { TbArrowsExchange } from "react-icons/tb";
@@ -29,6 +29,12 @@ import GrillaPDF from "../GrillaPDF/GrillaPDF";
 import AddTribunalModal from "../AddTribunalModal/AddTribunalModal";
 import EditTribunalModal from "../AddTribunalModal/EditTribunalModal";
 import ITRBubble from "../Table/components/ITRBubble";
+import { EstadoLlamadoEnum } from "@/enums/EstadoLlamadoEnum";
+import { agregarPostulanteALlamadoExistente } from "@/controllers/llamadoController";
+import { useMutation } from "@apollo/client";
+import AddPostulanteModal from "../AddPostulanteModal/AddPostulanteModal";
+import { SortUserInfo } from "types/usuario";
+import toast from "react-hot-toast";
 
 const Container = styled.div`
   ${tw`w-full h-auto flex flex-col items-start justify-start gap-4`}
@@ -96,11 +102,18 @@ const CategoriaBadge = styled.div`
 
 interface Props {
   llamadoInfo: FullLlamadoInfo;
+  query: any;
 }
 
 const DEFAULT_VER_DISPONIBILIDAD_TITLE = "Ver disponibilidad del tribunal";
 
-const LlamadoInfoContent = ({ llamadoInfo }: Props) => {
+const LlamadoInfoContent = ({ llamadoInfo, query }: Props) => {
+  const [openPostulantesModal, setOpenPostulantesModal] = useState(false);
+  const [selectedPostulantes, setSelectedPostulantes] = useState<
+    SortUserInfo[]
+  >([]);
+  const { handleSetLoading } = useGlobal();
+
   const [openCambiarEstadoModal, setOpenCambarEstadoModal] = useState(false);
   const [verDisponibilidad, setVerDisponibilidad] = useState(false);
   const [openRenunciarLlamadoModal, setOpenRenunciarLlamadoModal] =
@@ -115,6 +128,8 @@ const LlamadoInfoContent = ({ llamadoInfo }: Props) => {
   const { userInfo } = useGlobal();
   const miembrosTribunal = llamadoInfo.miembrosTribunal || [];
   const isDeleted = isLlamadoDisabled(llamadoInfo);
+
+  const [agregarPostulante] = useMutation(agregarPostulanteALlamadoExistente);
 
   const isMiembro =
     typeof miembrosTribunal?.find(
@@ -187,6 +202,43 @@ const LlamadoInfoContent = ({ llamadoInfo }: Props) => {
     setDisponibilidadTitle(text);
   };
 
+  const handleAddPostulante = (data: SortUserInfo) => {
+    // setSelectedPostulantes([...selectedPostulantes, data]);
+    addPostToLlamado(data.id);
+  };
+
+  const addPostToLlamado = async (postulanteId: number) => {
+    const data: AgregarPostulanteALlamadoData = {
+      llamadoId: llamadoInfo?.id,
+      postulanteId: postulanteId,
+    };
+    handleSetLoading(true);
+    const resp = await agregarPostulante({
+      variables: {
+        data: data,
+      },
+      refetchQueries: [
+        {
+          query: query,
+          variables: {
+            llamadoId: llamadoInfo?.id,
+          },
+        },
+      ],
+    });
+    if (resp?.data?.agregarPostulanteALlamadoExistente?.ok === true) {
+      toast.success("Postulante agregado correctamente.");
+      handleSetLoading(false);
+    } else {
+      resp?.data?.agregarPostulanteALlamadoExistente.message
+        ? toast.error(resp?.data?.agregarPostulanteALlamadoExistente.message)
+        : toast.error(
+            "Error inesperado al intentar agregar el postulante al llamado."
+          );
+      handleSetLoading(false);
+    }
+  };
+
   return (
     <Container data-testid="LlamadoInfoContent">
       {openCambiarEstadoModal && (
@@ -253,7 +305,11 @@ const LlamadoInfoContent = ({ llamadoInfo }: Props) => {
           variant="outline"
           text="Disponibilidad tribunal"
           disabled={isDeleted}
-          action={!isDeleted ? () => setVerDisponibilidad(!verDisponibilidad): () => null}
+          action={
+            !isDeleted
+              ? () => setVerDisponibilidad(!verDisponibilidad)
+              : () => null
+          }
         />
       </ActionsContainer>
 
@@ -296,7 +352,9 @@ const LlamadoInfoContent = ({ llamadoInfo }: Props) => {
           <LlamadoInfoLine>
             <LlamadoInfoKey>Etapa</LlamadoInfoKey>
             <div className="w-full flex-grow max-w-full overflow-hidden h-auto flex flex-col gap-1">
-              <LlamadoInfoValue title={handleGetEtapaBadge() as string ?? ""}>{handleGetEtapaBadge()}</LlamadoInfoValue>
+              <LlamadoInfoValue title={(handleGetEtapaBadge() as string) ?? ""}>
+                {handleGetEtapaBadge()}
+              </LlamadoInfoValue>
               {llamadoInfo?.etapaActual && (
                 <span className="text-sm text-gray-900 font-medium">
                   Plazo de dias de esta etapa:{" "}
@@ -336,6 +394,12 @@ const LlamadoInfoContent = ({ llamadoInfo }: Props) => {
         title="Listado de postulantes"
         llamadoId={llamadoInfo?.id}
         selectedUsers={formatPostulantes(llamadoInfo?.postulantes)}
+        onAddClick={
+          llamadoInfo?.estadoActual.nombre ===
+          EstadoLlamadoEnum.publicacionPendiente
+            ? () => setOpenPostulantesModal(!openPostulantesModal)
+            : undefined
+        }
       />
       <ListOfUsers
         onEdit={handleOpenEditModal}
@@ -375,6 +439,14 @@ const LlamadoInfoContent = ({ llamadoInfo }: Props) => {
         <RenunciarLlamadoModal
           llamadoId={llamadoInfo?.id}
           setOpen={setOpenRenunciarLlamadoModal}
+        />
+      )}
+
+      {openPostulantesModal && (
+        <AddPostulanteModal
+          selectedUsers={selectedPostulantes}
+          addPostulanteToList={handleAddPostulante}
+          setOpen={setOpenPostulantesModal}
         />
       )}
     </Container>

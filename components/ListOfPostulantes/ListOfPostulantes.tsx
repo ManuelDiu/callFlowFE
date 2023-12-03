@@ -34,7 +34,7 @@ const Row = styled.div`
 `;
 
 const PlusContainer = styled.button`
-  ${tw`bg-principalLight border-none rounded-[10px] p-[8px] flex items-center justify-center`}
+  ${tw`bg-principalLight border-none rounded-[10px] p-[8px] flex items-center justify-center h-max w-max`}
 `;
 
 const Title = styled.span`
@@ -101,7 +101,7 @@ const ListOfPostulantes = ({
     <Container>
       <Row>
         <Title>{title}</Title>
-        <div className="w-max">
+        <div className="flex items-center gap-2 w-max">
           <Input
             placeholder="Nombre o documento"
             type="string"
@@ -111,12 +111,12 @@ const ListOfPostulantes = ({
               setQuery(e?.target?.value);
             }}
           />
-        </div>
         {onAddClick && (
           <PlusContainer onClick={() => onAddClick()}>
             <BsPlusCircleFill size={26} color="#4318FF" />
           </PlusContainer>
         )}
+        </div>
       </Row>
       {!postulantesLlamadoFound ? (
         filteredUsers?.map((item, index) => {

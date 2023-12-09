@@ -74,6 +74,15 @@ export const createLlamado = gql`
   }
 `;
 
+export const agregarPostulanteALlamadoExistente = gql`
+  mutation ($data: AgregarPostulanteALlamadoInput) {
+    agregarPostulanteALlamadoExistente(data: $data) {
+      ok
+      message
+    }
+  }
+`;
+
 export const llamadoSubscriptionCreated = gql`
   subscription {
     llamadoCreado {

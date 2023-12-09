@@ -74,7 +74,7 @@ const LlamadoInfo = () => {
     {
       index: 1,
       title: "Información del llamado",
-      content: <LlamadoInfoContent llamadoInfo={llamadoInfo} />,
+      content: <LlamadoInfoContent query={getLlamadoInfoById} llamadoInfo={llamadoInfo} />,
     },
     {
       index: 2,

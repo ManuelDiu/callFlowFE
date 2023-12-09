@@ -55,12 +55,14 @@ const CurrentItemIndicator = styled.div(() => [
 const Sidebar: React.FC<SidebarProps> = ({ items }) => {
   const router = useRouter();
   const { userInfo } = useGlobal();
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(true);
   const { isMobile } = useWindowDimensions();
 
   useEffect(() => {
-    setExpanded(false);
-  }, [isMobile, router.pathname]);
+    if(!expanded){
+      setExpanded(false);
+    }
+  }, [isMobile]);
 
   return (
     <div

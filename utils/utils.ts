@@ -6,6 +6,7 @@ export type DropDownItem = {
   id?: any;
   customBadge?: any;
   disabled?: boolean;
+  searchQuery?: string;
 };
 
 

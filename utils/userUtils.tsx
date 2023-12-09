@@ -95,6 +95,7 @@ export const formatListMiembrosTribunal = (
           userlastName={tribunal?.documento}
         />
       ),
+      searchQuery: `${tribunal?.name} ${tribunal.lastName} ${tribunal?.documento}`,
       value: tribunal.id,
     };
   });

@@ -85,6 +85,7 @@ const AddPostulanteModal = ({
           defaultValue={[]}
           label="Postulante"
           //   isInvalid={}
+          writable
           placeholder="Seleccione un postulante"
           onChange={(val: any) => setSelectedPostulante(val?.value)}
           required

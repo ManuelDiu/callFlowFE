@@ -119,7 +119,12 @@ const Dropdown = ({
   const hasQuery = query !== "" && query;
   const formatItems = hasQuery
     ? itemsWithId?.filter((item) =>
-        item?.label?.toLowerCase()?.includes(query?.toLowerCase())
+        typeof item?.label === "string"
+          ? item?.label?.toLowerCase()?.includes(query?.toLowerCase())
+          : item?.searchQuery
+              ?.toLowerCase()
+              .trim()
+              ?.includes(query?.toLowerCase().trim())
       )
     : itemsWithId;
 
@@ -188,7 +193,7 @@ const Dropdown = ({
                 setQuery(val);
               }}
             />
-          ) : typeof selectedValues[0]?.label === "string" && writable ? (
+          ) : (typeof selectedValues[0]?.label === "string" || (items?.length > 0 && (typeof items[0]?.searchQuery === "string"))) && writable ? (
             <StyledInput
               name={inputFormName}
               id={id}

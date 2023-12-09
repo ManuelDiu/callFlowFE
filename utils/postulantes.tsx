@@ -16,6 +16,7 @@ export const formatPostulantesToDropdown = (
           userlastName={postulante?.documento}
         />
       ),
+      searchQuery: `${postulante?.nombres} ${postulante?.apellidos} ${postulante?.documento}`,
       value: postulante.id,
     };
   });

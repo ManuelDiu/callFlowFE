@@ -340,6 +340,7 @@ const LlamadoInfoContent = ({ llamadoInfo }: Props) => {
       <ListOfUsers
         onEdit={handleOpenEditModal}
         title="Miembros del tribunal"
+        isTribunal
         selectedUsers={formatTribunales(llamadoInfo?.miembrosTribunal)}
       />
 

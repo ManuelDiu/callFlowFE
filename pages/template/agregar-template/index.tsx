@@ -349,7 +349,7 @@ const AgregarTemplate = () => {
             </ListSuggestions>
           }
           title="Tienes items por revisar"
-          className="!mt-[20%]"
+          className=""
         />
       )}
     </Container>

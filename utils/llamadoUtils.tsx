@@ -172,6 +172,7 @@ export const formatTribunales = (tribunales: TribunalLlamado[]) => {
     return {
       index: index,
       id: tribunal?.id,
+      userId: tribunal?.usuario?.id,
       motivoRenuncia: tribunal.motivoRenuncia,
       orden: tribunal.orden,
       tipoMiembro: tribunal.tipoMiembro,

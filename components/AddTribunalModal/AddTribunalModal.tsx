@@ -173,7 +173,7 @@ const AddTribunalModal = ({
       setOpen={setOpen}
       content={handleRenderContent()}
       title="Agregar miembro del tribunal"
-      className="!mt-[20%]"
+      className=""
     />
   );
 };

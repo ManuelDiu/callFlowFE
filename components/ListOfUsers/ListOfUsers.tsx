@@ -4,13 +4,17 @@ import { BsPlusCircleFill } from "react-icons/bs";
 import UserInfoLine from "../Table/components/UserInfoLine";
 import { DEFAULT_USER_IMAGE } from "@/utils/userUtils";
 import { OptionsItem } from "@/utils/utils";
+import Link from "next/link";
+import appRoutes from "@/routes/appRoutes";
+import { useRouter } from "next/router";
 
 interface Props {
   title: string;
   selectedUsers: any[];
   onAddClick?: any;
-  onRemove?: any,
-  onEdit?: any,
+  onRemove?: any;
+  onEdit?: any;
+  isTribunal?: boolean;
 }
 
 const Container = styled.div`
@@ -35,14 +39,19 @@ const ListOfUsers = ({
   onAddClick,
   onRemove,
   onEdit,
+  isTribunal = false,
 }: Props) => {
+  const { push } = useRouter();
+
   return (
     <Container>
       <Row>
         <Title>{title}</Title>
-        {onAddClick && <PlusContainer onClick={() => onAddClick()}>
-          <BsPlusCircleFill size={26} color="#4318FF" />
-        </PlusContainer>}
+        {onAddClick && (
+          <PlusContainer onClick={() => onAddClick()}>
+            <BsPlusCircleFill size={26} color="#4318FF" />
+          </PlusContainer>
+        )}
       </Row>
       {selectedUsers?.map((item, index) => {
         const optionsToItem: OptionsItem[] = [
@@ -53,22 +62,30 @@ const ListOfUsers = ({
           onEdit && {
             text: "Editar",
             onClick: () => {
-              onEdit(item)
-            }
+              onEdit(item);
+            },
           },
         ];
 
         return (
-          <UserInfoLine
-            className="shadow-md w-full rounded-2xl p-4 cursor-pointer"
+          <div
+            onClick={() => push(isTribunal ? appRoutes.userProfilePage(item?.userId) : "#")}
+            className="w-full"
             key={`userInfoLine-${index}`}
-            userImage={item?.imageUrl}
-            userName={item?.name}
-            userlastName={item?.lastName}
-            withDot={onRemove !== undefined && onRemove !== null || onEdit !== undefined && onEdit !== null}
-            options={optionsToItem}
-            label={item?.label}
-          />
+          >
+            <UserInfoLine
+              className="shadow-md w-full rounded-2xl p-4 cursor-pointer"
+              userImage={item?.imageUrl}
+              userName={item?.name}
+              userlastName={item?.lastName}
+              withDot={
+                (onRemove !== undefined && onRemove !== null) ||
+                (onEdit !== undefined && onEdit !== null)
+              }
+              options={optionsToItem}
+              label={item?.label}
+            />
+          </div>
         );
       })}
     </Container>

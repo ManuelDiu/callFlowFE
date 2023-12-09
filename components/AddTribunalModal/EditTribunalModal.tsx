@@ -174,7 +174,7 @@ const EditTribunalModal = ({ setOpen, selectedUser, llamadoId }: Props) => {
       setOpen={setOpen}
       content={handleRenderContent()}
       title="Agregar miembro del tribunal"
-      className="!mt-[20%]"
+      className=""
     />
   );
 };

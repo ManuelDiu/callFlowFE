@@ -76,8 +76,8 @@ const UserInfoLine = ({
         />
       </ImageContainer>
       <TextContainer>
-        <Name>{userName}</Name>
-        <LastName>{userlastName}</LastName>
+        <Name title={userName}>{userName}</Name>
+        <LastName title={userlastName}>{userlastName}</LastName>
       </TextContainer>
       {withDot && (
         <DotContainer>
@@ -88,7 +88,10 @@ const UserInfoLine = ({
                   <OptionLabel
                     className="transition-all bg-transparent hover:bg-slate-100"
                     key={`opt-${index}`}
-                    onClick={() => opt?.onClick && handleClickItem(opt)}
+                    onClick={(e) => {
+                      e?.stopPropagation();
+                      opt?.onClick && handleClickItem(opt)
+                    }}
                   >
                     {opt?.text}
                   </OptionLabel>
@@ -97,7 +100,10 @@ const UserInfoLine = ({
             </OptionsContainer>
           )}
           <SlOptionsVertical
-            onClick={() => setOpenOptions(!openOptions)}
+            onClick={(e) => {
+              e?.stopPropagation();
+              setOpenOptions(!openOptions)
+            }}
             color="#A3AED0"
             size={20}
           />

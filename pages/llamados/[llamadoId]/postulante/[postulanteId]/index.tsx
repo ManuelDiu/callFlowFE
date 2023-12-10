@@ -145,7 +145,6 @@ const PostulanteInLlamadoInfo = () => {
       return item.usuario.id === userInfo?.id;
     }) !== undefined;
 
-  console.log("soyTribunal", soyTribunal);
 
   const postulanteId = Number(query?.postulanteId || 0);
   const [handleDeleteArchivo] = useMutation(deleteArchivo);

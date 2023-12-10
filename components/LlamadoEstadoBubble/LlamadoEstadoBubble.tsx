@@ -48,7 +48,7 @@ const LlamadoEstadoBubble = ({
       style={customColor ? { background: `${customColor}`}: {}}
     >
       <Bubble />
-      <Text>{estado || "Creado"}</Text>
+      <Text title={estado || "Creado"}>{estado || "Creado"}</Text>
     </Container>
   );
 };

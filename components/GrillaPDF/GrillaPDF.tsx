@@ -96,7 +96,6 @@ const GrillaPDF = ({ llamadoInfo }: Props) => {
     }
   };
 
-  console.log("asdsad", llamadoInfo)
   const postulantesLoaded = [...(llamadoInfo?.postulantes ?? [])];
   const postulantesSort = postulantesLoaded?.sort((postA, postB) => {
     const puntajeThiPostA = puntajes?.find(

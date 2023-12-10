@@ -117,8 +117,6 @@ const CompletarPuntajesPostulante = () => {
     // fetchPolicy: "no-cache",
   });
 
-  console.log("data", data);
-
   const [subetapas, setSubetapas] = useState<SubEtapaGrilla[] | []>([]);
 
   const postulanteInLlamadoInfo = data?.infoPostulanteEnLlamado;

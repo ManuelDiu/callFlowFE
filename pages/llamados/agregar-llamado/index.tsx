@@ -438,7 +438,7 @@ const AgregarTemplate = () => {
         </Row>
         <Row>
           <Input
-            label="Cantidad de horas"
+            label="Cantidad de horas(Semanales)"
             placeholder="Ingrese las cantidad de horas"
             type="number"
             register={register}

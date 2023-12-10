@@ -147,7 +147,7 @@ const SubEtapaList = ({ subetapas, setSubEtapas, isView = false }: Props) => {
             value={subEtapa?.puntajeMaximo}
           />
           <Cell className="pl-4">
-            <Text className="!text-[20px]" text={`Total: ${sumOfRequisitos || 0}`} />
+            <Text className="!text-[20px]" text={`Total subetapa: ${sumOfRequisitos || 0}`} />
           </Cell>
         </Row>
         <div className="w-full">

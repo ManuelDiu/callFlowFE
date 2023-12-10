@@ -37,7 +37,7 @@ const InputContainer = styled.div`
 `;
 
 const ResultsContainer = styled.div`
-  ${tw`absolute bg-white w-[300px] max-h-[300px] overflow-auto top-full p-4 rounded-lg shadow-sm border border-gray-300 `}
+  ${tw`absolute bg-white md:w-[550px] w-[300px] md:max-h-[550px] max-w-[300px] overflow-auto top-full p-4 rounded-lg shadow-sm border border-gray-300 right-0 `}
 `;
 
 const ProfileButtonContainer = styled.div(() => [
@@ -139,10 +139,12 @@ const ProfileBar: NextPage = () => {
                       href={appRoutes.llamadoInfo(res?.id)}
                     >
                       <div className="w-full gap-2 px-4 py-2 rounded-lg cursor-pointer transition-all hover:bg-gray-100 h-auto flex flex-row items-center justify-start">
-                        <span className="text-base font-medium text-gray-800">
+                        <span className="text-base font-medium max-w-[60%] min-w-[60%] truncate text-gray-800">
                           {res?.nombre}
                         </span>
+                        <div className="w-full flex flex-grow">
                         <ITRBubble itr={res?.itr} />
+                        </div>
                       </div>
                     </Link>
                   );

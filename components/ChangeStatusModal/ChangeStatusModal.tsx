@@ -89,7 +89,7 @@ const ChnageStatusModal = ({
   };
 
   const handleNext = () => {
-    if (!selectedEtapa || !selectedEstado) {
+    if (!selectedEtapa && !selectedEstado) {
       setError("Debes seleccionar una etapa y un estado para continuar");
       return;
     }

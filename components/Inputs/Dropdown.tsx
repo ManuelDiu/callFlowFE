@@ -193,7 +193,7 @@ const Dropdown = ({
                 setQuery(val);
               }}
             />
-          ) : (typeof selectedValues[0]?.label === "string" || (items?.length > 0 && (typeof items[0]?.searchQuery === "string"))) && writable ? (
+          ) : (typeof selectedValues[0]?.label === "string" || (items?.length > 0 && (typeof items[0]?.searchQuery === "string"))) && selectedValues?.length === 0 && writable ? (
             <StyledInput
               name={inputFormName}
               id={id}

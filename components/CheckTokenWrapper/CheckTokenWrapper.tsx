@@ -24,7 +24,7 @@ const MainContent = styled.div`
   ${tw`w-screen h-auto min-w-full min-h-full flex flex-row items-start justify-start`}
 `;
 
-const ContentPage = styled.div<{withPadding: boolean}>`
+const ContentPage = styled.div<{ withPadding: boolean }>`
   ${tw`w-full h-auto flex flex-col flex-grow`}
   ${({ withPadding }) => withPadding && tw`mt-[80px]`}
 `;
@@ -104,8 +104,12 @@ const CheckTokenWrapper = ({ children }: Props) => {
     <MainContent data-testid="CheckTokenWrapper">
       {loading && <Spinner />}
 
-      {!isPublicPath && <Sidebar items={isAdmin ? items : itemsTribunalOrCordinador} />}
-      <Toaster />
+      {!isPublicPath && (
+        <Sidebar items={isAdmin ? items : itemsTribunalOrCordinador} />
+      )}
+      <div className="z-[9999999]">
+        <Toaster containerClassName="z-[]" />
+      </div>
       <ContentPage withPadding={!isPublicPath && isMobile}>
         {invalidPath ? <NotFoundPage /> : children}
       </ContentPage>

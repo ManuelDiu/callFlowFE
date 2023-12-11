@@ -323,6 +323,8 @@ const PostulanteInLlamadoInfo = () => {
     }
   };
 
+  console.log("data?.infoPostulanteEnLlamado", data?.infoPostulanteEnLlamado)
+
   return (
     <Container>
       {showChangeStateModal && (
@@ -422,9 +424,9 @@ const PostulanteInLlamadoInfo = () => {
                 <span className="text-lg font-medium mt-5">
                   Descripción del por que está en este estado:
                 </span>
-                <span className="md:w-1/2 mt-4 w-full text-center text-sm font-medium">
-                  {data?.infoPostulanteEnLlamado?.descripcion || "No tiene"}
-                </span>
+                {<span className="md:w-1/2 mt-4 w-full text-center text-sm font-medium">
+                  {(data?.infoPostulanteEnLlamado?.descripcion) || "No tiene"}
+                </span>}
                 {(soyTribunal || isAdmin) && (
                   <Button
                     text="Transicionar Estado"
